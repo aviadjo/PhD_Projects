@@ -5,8 +5,8 @@
  */
 package Dataset_Creation;
 
-import Feature_Extraction.Abstract_Feature_Extractor;
-import Math.Math_Calc;
+import Feature_Extraction.AFeatureExtractor;
+import Math.MathCalc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -16,7 +16,7 @@ import javafx.util.Pair;
  *
  * @author Aviad
  */
-public class Dataset_CSV_Builder<T> {
+public class DatasetCSVBuilder<T> {
 
     public enum Clasification {
 
@@ -43,7 +43,7 @@ public class Dataset_CSV_Builder<T> {
      * @param suffix_class add suffix column identifying the class of the record
      * @return CSV string which represent the dataset
      */
-    public String Build_Database_CSV(ArrayList<T> elements, Abstract_Feature_Extractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
+    public String Build_Database_CSV(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
         StringBuilder dataset_CSV = new StringBuilder();
         String element_features_vector_CSV;
 
@@ -67,7 +67,7 @@ public class Dataset_CSV_Builder<T> {
      * @param suffix_class add suffix column identifying the class of the record
      * @return CSV string which represent the element features vector
      */
-    public String Get_Features_Vector_CSV(T element, Abstract_Feature_Extractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
+    public String Get_Features_Vector_CSV(T element, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
         Map<String, Integer> element_features_TF = Feature_Extractor.Extract_Features_TF_From_Single_Element(element);
         StringBuilder features_vector_CSV = new StringBuilder();
 
@@ -105,7 +105,7 @@ public class Dataset_CSV_Builder<T> {
             } else if (representation == Feature_Representation.TFIDF) {
                 num_of_elements_contain_the_feature = selected_feature_pair.getValue();
                 feature_occurrences_in_element = (element_features_TF.containsKey(selected_feature)) ? element_features_TF.get(selected_feature) : 0;
-                TFIDF = Math_Calc.Get_TFIDF(feature_occurrences_in_element, num_of_occurrences_of_most_common_feature, total_elements_num, num_of_elements_contain_the_feature);
+                TFIDF = MathCalc.Get_TFIDF(feature_occurrences_in_element, num_of_occurrences_of_most_common_feature, total_elements_num, num_of_elements_contain_the_feature);
                 cell_value = TFIDF + ",";
             }
             features_vector_CSV.append(cell_value);

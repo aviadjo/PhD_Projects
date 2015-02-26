@@ -14,7 +14,7 @@ import org.mapdb.HTreeMap;
  *
  * @author Aviad
  */
-public abstract class Abstract_Feature_Selector implements IFeature_Selector {
+public abstract class AFeatureSelector implements IFeatureSelector {
 
     /**
      * Return ArrayList of features selected from the given features list using

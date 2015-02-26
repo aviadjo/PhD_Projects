@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Aviad
  */
-public class File_Writer {
+public class FileWriter {
 
     /**
      * Write a given string to file

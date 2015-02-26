@@ -14,7 +14,7 @@ import org.mapdb.HTreeMap;
  *
  * @author Aviad
  */
-public interface IFeature_Selector {
+public interface IFeatureSelector {
 
     /**
      * Return ArrayList of features selected from the given features list using

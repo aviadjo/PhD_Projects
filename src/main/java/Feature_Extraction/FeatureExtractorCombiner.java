@@ -15,7 +15,7 @@ import org.mapdb.HTreeMap;
  *
  * @author Aviad
  */
-public class Collective_Feature_Extractor<T> {
+public class FeatureExtractorCombiner<T> {
 
     /**
      * Return Map<String, Integer> which contain all the feature extracted from
@@ -28,7 +28,7 @@ public class Collective_Feature_Extractor<T> {
      * all given elements (using the given Feature Extractor) and their Document
      * Frequency (DF)
      */
-    public HTreeMap<String, Integer> Extract_Features_DF_From_Elements(ArrayList<T> elements, Abstract_Feature_Extractor<T> Feature_Extractor) {
+    public HTreeMap<String, Integer> Extract_Features_DF_From_Elements(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor) {
         Map<String, Integer> element_features_TF = new HashMap<>();
         HTreeMap<String, Integer> elements_features_DF = MapDB.Get_HTreeMap_String_Integer();
 

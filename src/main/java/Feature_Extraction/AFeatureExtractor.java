@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Aviad
  */
-public abstract class Abstract_Feature_Extractor<T> implements IFeature_Extractor<T> {
+public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T> {
 
     /**
      * Return list of features (and occurrences) extracted from the given source

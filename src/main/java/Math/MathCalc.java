@@ -13,7 +13,7 @@ import org.apache.commons.math3.util.FastMath;
  *
  * @author Aviad
  */
-public class Math_Calc {
+public class MathCalc {
 
     /**
      * Return Logarithm of the given number in the given base
@@ -76,7 +76,7 @@ public class Math_Calc {
      */
     public static double Get_TFIDF(int feature_occurrences_in_element, int num_of_occurrences_of_most_common_feature, int num_of_elements, int num_of_elements_contain_the_feature) {
         double TF = ((double) feature_occurrences_in_element) / ((double) num_of_occurrences_of_most_common_feature);
-        double IDF = Math_Calc.Log((((double) num_of_elements) / ((double) num_of_elements_contain_the_feature)), 2);
+        double IDF = MathCalc.Log((((double) num_of_elements) / ((double) num_of_elements_contain_the_feature)), 2);
         return TF * IDF;
     }
 }

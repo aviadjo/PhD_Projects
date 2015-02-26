@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Aviad
  */
-public interface IFeature_Extractor<T> {
+public interface IFeatureExtractor<T> {
 
     /**
      * Return list of features (and occurrences) extracted from the given source

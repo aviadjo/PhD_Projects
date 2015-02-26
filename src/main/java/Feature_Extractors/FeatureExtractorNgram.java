@@ -6,8 +6,8 @@
 package Feature_Extractors;
 
 import Data_Structures.MapDB;
-import Feature_Extraction.Abstract_Feature_Extractor;
-import IO.File_Reader;
+import Feature_Extraction.AFeatureExtractor;
+import IO.FileReader;
 import java.io.File;
 import org.mapdb.HTreeMap;
 
@@ -15,12 +15,12 @@ import org.mapdb.HTreeMap;
  *
  * @author Aviad
  */
-public class FE_ngram<T> extends Abstract_Feature_Extractor<T> {
+public class FeatureExtractorNgram<T> extends AFeatureExtractor<T> {
 
     private final int m_grams; //the gram size to be used
     private final int m_skip; //the skip to be used
 
-    public FE_ngram(int gram_size, int skip) {
+    public FeatureExtractorNgram(int gram_size, int skip) {
         m_grams = gram_size;
         m_skip = skip;
     }
@@ -40,7 +40,7 @@ public class FE_ngram<T> extends Abstract_Feature_Extractor<T> {
         File file = new File(file_path);
 
         if (file.exists()) {
-            String file_string = File_Reader.Read_File_To_String(file_path);
+            String file_string = FileReader.Read_File_To_String(file_path);
             
             String ngram;
             for (int i = 0; i <= file_string.length() - m_grams; i = i + m_skip) {

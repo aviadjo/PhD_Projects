@@ -9,15 +9,15 @@ import Assistants.General;
 import static Assistants.General.Get_String_Number;
 import Console.Console;
 import Data_Structures.MapDB;
-import Dataset_Creation.Dataset_CSV_Builder;
-import Dataset_Creation.Dataset_CSV_Builder.Clasification;
-import Dataset_Creation.Dataset_CSV_Builder.Feature_Representation;
-import Feature_Extraction.Abstract_Feature_Extractor;
-import Feature_Extraction.Collective_Feature_Extractor;
-import Feature_Extractors.FE_ngram;
-import Feature_Selectors.FS_InfoGainRatio;
-import IO.File_Reader;
-import IO.File_Writer;
+import Dataset_Creation.DatasetCSVBuilder;
+import Dataset_Creation.DatasetCSVBuilder.Clasification;
+import Dataset_Creation.DatasetCSVBuilder.Feature_Representation;
+import Feature_Extraction.AFeatureExtractor;
+import Feature_Extraction.FeatureExtractorCombiner;
+import Feature_Extractors.FeatureExtractorNgram;
+import Feature_Selectors.FeatureSelectorInfoGainRatio;
+import IO.FileReader;
+import IO.FileWriter;
 import java.util.ArrayList;
 import javafx.util.Pair;
 import org.mapdb.*;
@@ -35,8 +35,8 @@ public class Tester {
     public static void Test_Ngram() {
         String folder_ClassA = "D:\\Dropbox\\TESTS\\FE_ngram\\DocX_ClassA_10";
         String folder_ClassB = "D:\\Dropbox\\TESTS\\FE_ngram\\DocX_ClassB_10";
-        ArrayList<String> ClassA_elements = File_Reader.Get_Files_Paths_In_Folder(folder_ClassA);
-        ArrayList<String> ClassB_elements = File_Reader.Get_Files_Paths_In_Folder(folder_ClassB);
+        ArrayList<String> ClassA_elements = FileReader.Get_Files_Paths_In_Folder(folder_ClassA);
+        ArrayList<String> ClassB_elements = FileReader.Get_Files_Paths_In_Folder(folder_ClassB);
         //ArrayList<String> list_of_strings_ClassA = new ArrayList<>(Arrays.asList("acbde", "fghij", "klmno"));
         //ArrayList<String> list_of_strings_ClassB = new ArrayList<>(Arrays.asList("pqrst", "uvwxyz"));
         int total_elements_num = ClassA_elements.size() + ClassB_elements.size();
@@ -51,8 +51,8 @@ public class Tester {
         int gram = 3;
         int skip = 1;
         Console.Print_To_Console(String.format("Feature Extraction: ngram (grams=%s skip=%s)", gram, skip), true, false);
-        Abstract_Feature_Extractor<String> ngram_extractor = new FE_ngram<>(gram, skip);
-        Collective_Feature_Extractor<String> CFE = new Collective_Feature_Extractor<>();
+        AFeatureExtractor<String> ngram_extractor = new FeatureExtractorNgram<>(gram, skip);
+        FeatureExtractorCombiner<String> CFE = new FeatureExtractorCombiner<>();
         HTreeMap<String, Integer> ngrams_ClassA = CFE.Extract_Features_DF_From_Elements(ClassA_elements, ngram_extractor);
         Console.Print_To_Console(String.format("ClassA unique features: %s", Get_String_Number(ngrams_ClassA.size())), true, false);
         HTreeMap<String, Integer> ngrams_ClassB = CFE.Extract_Features_DF_From_Elements(ClassB_elements, ngram_extractor);
@@ -62,10 +62,10 @@ public class Tester {
         MapDB.m_db_off_heap_FE.commit();
         
         //FEATURE SELECTION
-        int top_features = 2000;
+        int top_features = 500;
         double top_percent_features = 0.01;
         Console.Print_To_Console(String.format("Selecting features.."), true, false);
-        FS_InfoGainRatio fs_IG = new FS_InfoGainRatio(ClassA_elements.size(), ClassB_elements.size(),false);
+        FeatureSelectorInfoGainRatio fs_IG = new FeatureSelectorInfoGainRatio(ClassA_elements.size(), ClassB_elements.size(),false);
         ArrayList<Pair<String, Integer>> selected_features = fs_IG.Select_Features(ngrams_ClassesAB, top_features, top_percent_features);
         Console.Print_To_Console(String.format("Selected features: %s",selected_features.size()), true, false);
         
@@ -76,7 +76,7 @@ public class Tester {
         Console.Print_To_Console(String.format("Building dataset..."), true, false);
         Console.Print_To_Console(String.format("Feature representation: %s",feature_representation.toString()), true, false);
         //****************
-        Dataset_CSV_Builder<String> dataset_builder = new Dataset_CSV_Builder<>();
+        DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
         String dataset_header = dataset_builder.Get_Dataset_Header_CSV(selected_features, add_preffix_element, add_suffix_classification);
         String dataset_classA = dataset_builder.Build_Database_CSV(ClassA_elements, ngram_extractor, selected_features, total_elements_num, feature_representation, Clasification.Benign, add_preffix_element, add_suffix_classification);
         String dataset_classB = dataset_builder.Build_Database_CSV(ClassB_elements, ngram_extractor, selected_features, total_elements_num, feature_representation, Clasification.Malicious, add_preffix_element, add_suffix_classification);
@@ -84,7 +84,7 @@ public class Tester {
 
         //OUTPUTS
         String dataset_path = String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_files(%s)_gram(%s)_Rep(%s).csv", General.Get_TimeStamp_String(),total_elements_num,gram,feature_representation.toString());
-        File_Writer.Write_To_File(dataset, dataset_path);
+        FileWriter.Write_To_File(dataset, dataset_path);
         Console.Print_To_Console(String.format("Dataset saved to: %s",dataset_path), true, false);
     }
 }

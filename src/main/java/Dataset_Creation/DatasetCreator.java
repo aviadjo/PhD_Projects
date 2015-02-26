@@ -9,6 +9,6 @@ package Dataset_Creation;
  *
  * @author Aviadjo
  */
-public class Dataset_Creator {
+public class DatasetCreator {
     
 }

@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Aviad
  */
-public class File_Reader {
+public class FileReader {
 
     private static final Charset m_encoding = Charset.defaultCharset();
 
@@ -59,7 +59,7 @@ public class File_Reader {
             String file_text = "";
             if (directory_files != null && directory_files.length > 0) {
                 for (File child : directory_files) {
-                    file_text = File_Reader.Read_File_To_String(child.getPath());
+                    file_text = FileReader.Read_File_To_String(child.getPath());
                     if (file_text != "") {
                         list_of_strings.add(file_text);
                     }
