@@ -15,7 +15,7 @@ import org.mapdb.HTreeMap;
  *
  * @author Aviad
  */
-public class FeatureExtractorCombiner<T> {
+public class MasterFeatureExtractor<T> {
 
     /**
      * Return Map<String, Integer> which contain all the feature extracted from
