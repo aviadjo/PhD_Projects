@@ -55,7 +55,7 @@ public class MathCalc {
     private static String GetEntropyValuesCode(ArrayList<Double> values) {
         Double a = values.get(0);
         Double b = values.get(1);
-        return (a >= b) ? a + b + "" : b + a + "";
+        return (a >= b) ? a.toString() + b.toString() + "" : b.toString() + a.toString() + "";
     }
 
     /**
