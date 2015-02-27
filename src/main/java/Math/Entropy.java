@@ -17,7 +17,7 @@ import org.apache.commons.math3.util.FastMath;
  * @author Aviad
  */
 public class Entropy {
-    public static Map<String, Double> m_entropies = new HashMap<>();
+    public static Map<String, Double> m_memoEntropies = new HashMap<>();
 
     /**
      * Calculates the entropy of the given features values
@@ -29,14 +29,14 @@ public class Entropy {
         double entropy = 0.0;
         String values_code = GetEntropyValuesCode(values);
 
-        if (m_entropies.containsKey(values_code)) {
-            entropy = m_entropies.get(values_code);
+        if (m_memoEntropies.containsKey(values_code)) {
+            entropy = m_memoEntropies.get(values_code);
         } else {
             //AreEntropyValuesSumOne(values); //TODO
             for (Double value : values) {
                 entropy -= value * Log(value, 2);
             }
-            m_entropies.put(values_code, entropy);
+            m_memoEntropies.put(values_code, entropy);
         }
         return entropy;
     }

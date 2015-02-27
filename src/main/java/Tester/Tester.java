@@ -94,6 +94,7 @@ public class Tester {
         //FileWriter.Write_To_File(dataset, dataset_path);
         //Console.Print_To_Console(String.format("Dataset saved to: %s",dataset_path), true, false);
         Console.Print_To_Console(String.format("Running time: %s",StopWatch.GetTime()), true, false);
-        Console.Print_To_Console(String.format("Entropy Values: %s",Entropy.m_entropies.size()), true, false);
+        Console.Print_To_Console(String.format("Entropy Values: %s",Entropy.m_memoEntropies.size()), true, false);
+        Console.Print_To_Console(String.format("InfoGain Values: %s",fs_IG.m_memoInfoGain.size()), true, false);
     }
 }

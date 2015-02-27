@@ -26,7 +26,7 @@ import org.mapdb.Serializer;
  */
 public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
 
-    private final Map<String, Double> m_mapInfoGain = new HashMap<>();
+    public final Map<String, Double> m_memoInfoGain = new HashMap<>();
 
     private final int m_Class_A_elements_num;
     private final int m_Class_B_elements_num;
@@ -148,8 +148,8 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
             feature = entry.getKey();
             values_code = GetClassesValuesCode(entry.getValue());
 
-            if (m_mapInfoGain.containsKey(values_code)) {
-                InfoGain = m_mapInfoGain.get(values_code);
+            if (m_memoInfoGain.containsKey(values_code)) {
+                InfoGain = m_memoInfoGain.get(values_code);
             } else {
                 //*************************************************
                 class_A = (int) entry.getValue()[0];
@@ -170,7 +170,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
                 if (m_GainRatio) {
                     InfoGain = (InfoGain / entropy);
                 }
-                m_mapInfoGain.put(values_code, InfoGain);
+                m_memoInfoGain.put(values_code, InfoGain);
             }
             features_InfoGain.put(feature, InfoGain);
         }
