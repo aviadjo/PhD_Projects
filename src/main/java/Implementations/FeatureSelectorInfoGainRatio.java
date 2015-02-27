@@ -7,10 +7,12 @@ package Implementations;
 
 import Data_Structures.MapDB;
 import Feature_Selection.AFeatureSelector;
+import Math.Entropy;
 import Math.MathCalc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javafx.util.Pair;
@@ -22,7 +24,9 @@ import org.mapdb.Serializer;
  *
  * @author Aviadjo
  */
-public class FeatureSelectorInfoGainRatio extends AFeatureSelector {
+public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
+    
+    private final Map<String,Double> m_InfoGain;
 
     private final int m_Class_A_elements_num;
     private final int m_Class_B_elements_num;
@@ -47,7 +51,8 @@ public class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         m_elements_num = m_Class_A_elements_num + m_Class_B_elements_num;
         m_Class_A_elements_percentage = (double) m_Class_A_elements_num / (double) m_elements_num;
         m_Class_B_elements_percentage = (double) m_Class_B_elements_num / (double) m_elements_num;
-        m_Total_entropy = MathCalc.Get_Entropy(new ArrayList<>(Arrays.asList(m_Class_A_elements_percentage, m_Class_B_elements_percentage)));
+        m_Total_entropy = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(m_Class_A_elements_percentage, m_Class_B_elements_percentage)));
+        m_InfoGain = new HashMap<>();
     }
 
     /**
@@ -146,13 +151,13 @@ public class FeatureSelectorInfoGainRatio extends AFeatureSelector {
             class_B = (int) entry.getValue()[1];
             class_A_P = MathCalc.Get_P_with_Laplace_Correction(class_A, class_A + class_B, 2);
             class_B_P = MathCalc.Get_P_with_Laplace_Correction(class_B, class_A + class_B, 2);
-            entropy = MathCalc.Get_Entropy(new ArrayList<>(Arrays.asList(class_A_P, class_B_P)));
+            entropy = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_A_P, class_B_P)));
             //*************************************************
             class_Ax = m_Class_A_elements_num - class_A;
             class_Bx = m_Class_B_elements_num - class_B;
             class_Ax_P = MathCalc.Get_P_with_Laplace_Correction(class_Ax, class_Ax + class_Bx, 2);
             class_Bx_P = MathCalc.Get_P_with_Laplace_Correction(class_Bx, class_Ax + class_Bx, 2);
-            entropyx = MathCalc.Get_Entropy(new ArrayList<>(Arrays.asList(class_Ax_P, class_Bx_P)));
+            entropyx = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_Ax_P, class_Bx_P)));
             //*************************************************
             entropy_after_split = (((((double) class_A) + ((double) class_B)) / ((double) m_elements_num)) * entropy)
                     + (((((double) class_Ax) + ((double) class_Bx)) / ((double) m_elements_num)) * entropyx);

@@ -19,6 +19,7 @@ import Implementations.FeatureExtractorNgram;
 import Implementations.FeatureSelectorInfoGainRatio;
 import IO.FileReader;
 import IO.FileWriter;
+import Math.Entropy;
 import Math.MathCalc;
 import java.util.ArrayList;
 import javafx.util.Pair;
@@ -74,25 +75,25 @@ public class Tester {
         Console.Print_To_Console(String.format("Selected features: %s",selected_features.size()), true, false);
         
         //DATASET CREATION
-        boolean add_preffix_element = false;
-        boolean add_suffix_classification = true;
-        Feature_Representation feature_representation = Feature_Representation.Binary;
-        Console.Print_To_Console(String.format("Building dataset..."), true, false);
-        Console.Print_To_Console(String.format("Feature representation: %s",feature_representation.toString()), true, false);
-        //****************
-        DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
-        String dataset_header = dataset_builder.Get_Dataset_Header_CSV(selected_features, add_preffix_element, add_suffix_classification);
-        String dataset_classA = dataset_builder.Build_Database_CSV(ClassA_elements, ngram_extractor, selected_features, total_elements_num, feature_representation, Clasification.Benign, add_preffix_element, add_suffix_classification);
-        String dataset_classB = dataset_builder.Build_Database_CSV(ClassB_elements, ngram_extractor, selected_features, total_elements_num, feature_representation, Clasification.Malicious, add_preffix_element, add_suffix_classification);
-        String dataset = dataset_header + "\n" + dataset_classB + "\n" + dataset_classA;
+        //boolean add_preffix_element = false;
+        //boolean add_suffix_classification = true;
+        //Feature_Representation feature_representation = Feature_Representation.Binary;
+        //Console.Print_To_Console(String.format("Building dataset..."), true, false);
+        //Console.Print_To_Console(String.format("Feature representation: %s",feature_representation.toString()), true, false);
+        ////****************
+        //DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
+        //String dataset_header = dataset_builder.Get_Dataset_Header_CSV(selected_features, add_preffix_element, add_suffix_classification);
+        //String dataset_classA = dataset_builder.Build_Database_CSV(ClassA_elements, ngram_extractor, selected_features, total_elements_num, feature_representation, Clasification.Benign, add_preffix_element, add_suffix_classification);
+        //String dataset_classB = dataset_builder.Build_Database_CSV(ClassB_elements, ngram_extractor, selected_features, total_elements_num, feature_representation, Clasification.Malicious, add_preffix_element, add_suffix_classification);
+        //String dataset = dataset_header + "\n" + dataset_classB + "\n" + dataset_classA;
         
         StopWatch.Stop();
 
         //OUTPUTS
-        String dataset_path = String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_files(%s)_gram(%s)_Rep(%s).csv", General.Get_TimeStamp_String(),total_elements_num,gram,feature_representation.toString());
-        FileWriter.Write_To_File(dataset, dataset_path);
-        Console.Print_To_Console(String.format("Dataset saved to: %s",dataset_path), true, false);
+        //String dataset_path = String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_files(%s)_gram(%s)_Rep(%s).csv", General.Get_TimeStamp_String(),total_elements_num,gram,feature_representation.toString());
+        //FileWriter.Write_To_File(dataset, dataset_path);
+        //Console.Print_To_Console(String.format("Dataset saved to: %s",dataset_path), true, false);
         Console.Print_To_Console(String.format("Running time: %s",StopWatch.GetTime()), true, false);
-        Console.Print_To_Console(String.format("Entropy Values: %s",MathCalc.m_entropies.size()), true, false);
+        Console.Print_To_Console(String.format("Entropy Values: %s",Entropy.m_entropies.size()), true, false);
     }
 }

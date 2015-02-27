@@ -17,8 +17,6 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class MathCalc {
 
-    public static Map<String, Double> m_entropies = new HashMap<>();
-
     /**
      * Return Logarithm of the given number in the given base
      *
@@ -28,54 +26,6 @@ public class MathCalc {
      */
     public static double Log(double number, double base) {
         return FastMath.log(base, number);
-    }
-
-    /**
-     * Calculates the entropy of the given features values
-     *
-     * @param values values represent the occurrences number of each class
-     * @return the entropy of the given features values
-     */
-    public static double Get_Entropy(ArrayList<Double> values) {
-        AreEntropyValuesSumOne(values);
-        String values_code = GetEntropyValuesCode(values);
-
-        double entropy = 0.0;
-        if (m_entropies.containsKey(values_code)) {
-            entropy = m_entropies.get(values_code);
-        } else {
-            for (Double value : values) {
-                entropy -= value * Log(value, 2);
-            }
-            m_entropies.put(values_code, entropy);
-        }
-        return entropy;
-    }
-
-    private static String GetEntropyValuesCode(ArrayList<Double> values) {
-        Double a = values.get(0);
-        Double b = values.get(1);
-        return (a >= b) ? a.toString() + b.toString() + "" : b.toString() + a.toString() + "";
-    }
-
-    /**
-     * Check if the values for the entropy calculations are summed to 1
-     *
-     * @param values values represent the occurrences number of each class
-     * @return true if the the entropy calculations are summed to 1
-     */
-    private static boolean AreEntropyValuesSumOne(ArrayList<Double> values) {
-        double values_sum = 0;
-        for (Double value : values) {
-            values_sum += value;
-        }
-
-        if (FastMath.round(values_sum) == 1) {
-            return true;
-        } else {
-            Console.Print_To_Console("Error: Get_Entropy() was provided with value that do not sum to 1!", true, false);
-            return false;
-        }
     }
 
     /**
