@@ -25,8 +25,8 @@ import org.mapdb.Serializer;
  * @author Aviadjo
  */
 public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
-    
-    private final Map<String,Double> m_InfoGain;
+
+    private final Map<String, Double> m_mapInfoGain = new HashMap<>();
 
     private final int m_Class_A_elements_num;
     private final int m_Class_B_elements_num;
@@ -52,7 +52,6 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         m_Class_A_elements_percentage = (double) m_Class_A_elements_num / (double) m_elements_num;
         m_Class_B_elements_percentage = (double) m_Class_B_elements_num / (double) m_elements_num;
         m_Total_entropy = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(m_Class_A_elements_percentage, m_Class_B_elements_percentage)));
-        m_InfoGain = new HashMap<>();
     }
 
     /**
@@ -140,38 +139,49 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         double entropyx;
         //************
         double entropy_after_split;
-        double InfoGain;
+        double InfoGain = 0;
 
         String feature;
+        String values_code;
 
         for (Map.Entry<String, int[]> entry : features_DFs.entrySet()) {
             feature = entry.getKey();
-            //*************************************************
-            class_A = (int) entry.getValue()[0];
-            class_B = (int) entry.getValue()[1];
-            class_A_P = MathCalc.Get_P_with_Laplace_Correction(class_A, class_A + class_B, 2);
-            class_B_P = MathCalc.Get_P_with_Laplace_Correction(class_B, class_A + class_B, 2);
-            entropy = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_A_P, class_B_P)));
-            //*************************************************
-            class_Ax = m_Class_A_elements_num - class_A;
-            class_Bx = m_Class_B_elements_num - class_B;
-            class_Ax_P = MathCalc.Get_P_with_Laplace_Correction(class_Ax, class_Ax + class_Bx, 2);
-            class_Bx_P = MathCalc.Get_P_with_Laplace_Correction(class_Bx, class_Ax + class_Bx, 2);
-            entropyx = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_Ax_P, class_Bx_P)));
-            //*************************************************
-            entropy_after_split = (((((double) class_A) + ((double) class_B)) / ((double) m_elements_num)) * entropy)
-                    + (((((double) class_Ax) + ((double) class_Bx)) / ((double) m_elements_num)) * entropyx);
-            InfoGain = m_Total_entropy - entropy_after_split;
-            if (m_GainRatio) {
-                InfoGain = (InfoGain / entropy);
+            values_code = GetClassesValuesCode(entry.getValue());
+
+            if (m_mapInfoGain.containsKey(values_code)) {
+                InfoGain = m_mapInfoGain.get(values_code);
+            } else {
+                //*************************************************
+                class_A = (int) entry.getValue()[0];
+                class_B = (int) entry.getValue()[1];
+                class_A_P = MathCalc.Get_P_with_Laplace_Correction(class_A, class_A + class_B, 2);
+                class_B_P = MathCalc.Get_P_with_Laplace_Correction(class_B, class_A + class_B, 2);
+                entropy = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_A_P, class_B_P)));
+                //*************************************************
+                class_Ax = m_Class_A_elements_num - class_A;
+                class_Bx = m_Class_B_elements_num - class_B;
+                class_Ax_P = MathCalc.Get_P_with_Laplace_Correction(class_Ax, class_Ax + class_Bx, 2);
+                class_Bx_P = MathCalc.Get_P_with_Laplace_Correction(class_Bx, class_Ax + class_Bx, 2);
+                entropyx = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_Ax_P, class_Bx_P)));
+                //*************************************************
+                entropy_after_split = (((((double) class_A) + ((double) class_B)) / ((double) m_elements_num)) * entropy)
+                        + (((((double) class_Ax) + ((double) class_Bx)) / ((double) m_elements_num)) * entropyx);
+                InfoGain = m_Total_entropy - entropy_after_split;
+                if (m_GainRatio) {
+                    InfoGain = (InfoGain / entropy);
+                }
+                m_mapInfoGain.put(values_code, InfoGain);
             }
             features_InfoGain.put(feature, InfoGain);
         }
-
         return features_InfoGain;
     }
 
-    public String Get_Algorithm_Name() {
+    private String GetClassesValuesCode(int[] values) {
+        return values[0] + "," + values[1];
+    }
+
+    public String GetAlgorithmName() {
         if (m_GainRatio) {
             return "Information Gain Ratio";
         } else {

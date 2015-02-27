@@ -29,5 +29,5 @@ public interface IFeatureSelector {
      */
     public ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount, double top_features_percent);
     
-    public String Get_Algorithm_Name();
+    public String GetAlgorithmName();
 }

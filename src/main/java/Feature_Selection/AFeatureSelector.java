@@ -29,5 +29,5 @@ public abstract class AFeatureSelector implements IFeatureSelector {
      */
     public abstract ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount, double top_features_percent);
     
-    public abstract String Get_Algorithm_Name();
+    public abstract String GetAlgorithmName();
 }
