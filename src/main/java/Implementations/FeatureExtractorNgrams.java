@@ -9,18 +9,20 @@ import Data_Structures.MapDB;
 import Feature_Extraction.AFeatureExtractor;
 import IO.FileReader;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import org.mapdb.HTreeMap;
 
 /**
  *
  * @author Aviad
  */
-public class FeatureExtractorNgram<T> extends AFeatureExtractor<T> {
+public class FeatureExtractorNgrams<T> extends AFeatureExtractor<T> {
 
     private final int m_grams; //the gram size to be used
     private final int m_skip; //the skip to be used
 
-    public FeatureExtractorNgram(int gram_size, int skip) {
+    public FeatureExtractorNgrams(int gram_size, int skip) {
         m_grams = gram_size;
         m_skip = skip;
     }
@@ -33,8 +35,8 @@ public class FeatureExtractorNgram<T> extends AFeatureExtractor<T> {
      * @return list of n-grams (and occurrences) extracted from the given source
      */
     @Override
-    public HTreeMap<String, Integer> Extract_Features_TF_From_Single_Element(T element) {
-        HTreeMap<String, Integer> ngrams = MapDB.Get_HTreeMap_String_Integer();
+    public Map<String, Integer> Extract_Features_TF_From_Single_Element(T element) {
+        Map<String, Integer> ngrams = new HashMap<>();
         
         String file_path = (String)element;
         File file = new File(file_path);
@@ -52,7 +54,6 @@ public class FeatureExtractorNgram<T> extends AFeatureExtractor<T> {
                 }
             }
         }
-
         return ngrams;
     }
 
