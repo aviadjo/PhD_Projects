@@ -11,12 +11,19 @@ package Console;
  */
 public class Console {
 
+    /**
+     * Print text to console
+     *
+     * @param text text to print
+     * @param error is error message
+     * @param debug is debug mode
+     */
     public static void Print_To_Console(String text, boolean error, boolean debug) {
         if (debug) {
 
         }
         if (error) {
-            System.err.println(text);   
+            System.err.println(text);
         } else {
             System.out.println(text);
         }

@@ -93,7 +93,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
             if (iterator_sorted.hasNext()) {
                 entry = (HTreeMap.Entry<String, Double>) iterator_sorted.next();
                 feature = entry.getKey();
-                Console.Console.Print_To_Console(String.format("Feature f%s (%s) Information-Gain-Ratio: %s", i + 1, feature,entry.getValue()), true, false);
+                Console.Console.Print_To_Console(String.format("Feature f%s (%s) Information-Gain-Ratio: %s", i + 1, feature, entry.getValue()), true, false);
                 feature_DF_of_Classes = features_DFs.get(feature);
                 feature_DF_total = feature_DF_of_Classes[0] + feature_DF_of_Classes[1]; //To be used for TFIDF calculation.
                 features_Top.add(new Pair(feature, feature_DF_total));
@@ -102,6 +102,13 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         return features_Top;
     }
 
+    /**
+     * Returns string contain list of the given features and their occurrences in malicious and benign files
+     *
+     * @param features_DFs list of features and Document Frequency for each
+     * class, A and B
+     * @return string which contains for every feature it's occurrences in malicious and benign files
+     */
     public String Get_Features_Occurrence_In_Malicious_Benign(HTreeMap<String, int[]> features_DFs) {
         StringBuilder results = new StringBuilder();
         int[] value;
@@ -166,7 +173,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
                 entropyx = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_Ax_P, class_Bx_P)));
                 //*************************************************
                 entropy_after_split = (((((double) class_A) + ((double) class_B)) / ((double) m_elements_num)) * entropy)
-                                     +(((((double) class_Ax) + ((double) class_Bx)) / ((double) m_elements_num)) * entropyx);
+                        + (((((double) class_Ax) + ((double) class_Bx)) / ((double) m_elements_num)) * entropyx);
                 InfoGain = m_Total_entropy - entropy_after_split;
                 if (m_GainRatio) {
                     InfoGain = (InfoGain / entropy);

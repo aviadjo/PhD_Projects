@@ -15,15 +15,28 @@ import Dataset_Creation.DatasetCSVBuilder.Clasification;
 import Dataset_Creation.DatasetCSVBuilder.Feature_Representation;
 import Feature_Extraction.AFeatureExtractor;
 import Feature_Extraction.MasterFeatureExtractor;
+import IO.Directories;
 import Implementations.FeatureExtractorNgrams;
 import Implementations.FeatureSelectorInfoGainRatio;
 import IO.FileReader;
 import IO.FileWriter;
 import Math.Entropy;
-import Math.MathCalc;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javafx.util.Pair;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.mapdb.*;
 
 /**
@@ -33,16 +46,17 @@ import org.mapdb.*;
 public class Tester {
 
     public static void main(String[] args) {
-        Test_Ngram();
+        //TestNgram();
+        TestUNZIP();
     }
 
-    public static void Test_Ngram() {
+    public static void TestNgram() {
         StopWatch.Start();
 
-        String folder_ClassA = "D:\\Dropbox\\TESTS\\FE_ngram\\DocX_ClassA_10";
-        String folder_ClassB = "D:\\Dropbox\\TESTS\\FE_ngram\\DocX_ClassB_10";
-        //String folder_ClassA = "D:\\Dropbox\\TESTS\\FE_ngram\\PDF_ClassA";
-        //String folder_ClassB = "D:\\Dropbox\\TESTS\\FE_ngram\\PDF_ClassB";
+        //String folder_ClassA = "D:\\Dropbox\\TESTS\\FE_ngram\\DocX_ClassA_20";
+        //String folder_ClassB = "D:\\Dropbox\\TESTS\\FE_ngram\\DocX_ClassB_20";
+        String folder_ClassA = "D:\\Dropbox\\TESTS\\FE_ngram\\PDF_ClassA";
+        String folder_ClassB = "D:\\Dropbox\\TESTS\\FE_ngram\\PDF_ClassB";
         //String folder_ClassA = "D:\\Dropbox\\TESTS\\FE_ngram\\TXT_ClassA";
         //String folder_ClassB = "D:\\Dropbox\\TESTS\\FE_ngram\\TXT_ClassB";
         ArrayList<String> ClassA_elements = FileReader.Get_Files_Paths_In_Folder(folder_ClassA);
@@ -74,7 +88,7 @@ public class Tester {
         MapDB.m_db_off_heap_FE.commit();
 
         //FEATURE SELECTION
-        int top_features = 500;
+        int top_features = 2000;
         double top_percent_features = 0.01;
         Console.Print_To_Console(String.format("Selecting features.."), true, false);
         FeatureSelectorInfoGainRatio fs_IG = new FeatureSelectorInfoGainRatio(ClassA_elements.size(), ClassB_elements.size(), false);
@@ -86,7 +100,7 @@ public class Tester {
         boolean add_suffix_classification = true;
         Feature_Representation feature_representation = Feature_Representation.Binary;
         Console.Print_To_Console(String.format("Building dataset..."), true, false);
-        Console.Print_To_Console(String.format("Feature representation: %s",feature_representation.toString()), true, false);
+        Console.Print_To_Console(String.format("Feature representation: %s", feature_representation.toString()), true, false);
         //****************
         DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
         String dataset_header = dataset_builder.Get_Dataset_Header_CSV(selected_features, add_preffix_element, add_suffix_classification);
@@ -96,11 +110,106 @@ public class Tester {
         StopWatch.Stop();
 
         //OUTPUTS
-        String dataset_path = String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_files(%s)_gram(%s)_Rep(%s).csv", General.Get_TimeStamp_String(),total_elements_num,gram,feature_representation.toString());
+        String dataset_path = String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_files(%s)_gram(%s)_Rep(%s).csv", General.Get_TimeStamp_String(), total_elements_num, gram, feature_representation.toString());
         FileWriter.Write_To_File(dataset, dataset_path);
-        Console.Print_To_Console(String.format("Dataset saved to: %s",dataset_path), true, false);
+        Console.Print_To_Console(String.format("Dataset saved to: %s", dataset_path), true, false);
         Console.Print_To_Console(String.format("Running time: %s", StopWatch.GetTime()), true, false);
         Console.Print_To_Console(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
         Console.Print_To_Console(String.format("InfoGain Values: %s", fs_IG.m_memoInfoGain.size()), true, false);
+    }
+
+    private static void TestUNZIP() {
+        Map<String, Integer> structuralPaths = null;
+        String file = "D:\\1.docx";
+        String destinationFolder = FileUtils.getTempDirectoryPath() + "\\" + FilenameUtils.getName(file);
+        if (UnzipFileToFolder(file, destinationFolder)) {
+            Map<String, Integer> a = GetFolderStructuralPaths(destinationFolder);
+            Console.Print_To_Console("OK!!!", true, false);
+        }
+        Directories.DeleteDirectory(destinationFolder);
+    }
+
+    public static Map<String, Integer> GetFolderStructuralPaths(String folderPath) {
+        Map<String, Integer> structuralPaths = new HashMap<>();
+        
+        try {
+            Files.walk(Paths.get(folderPath)).forEach(filePath -> {
+                if (!filePath.toString().equals(Paths.get(folderPath).toString())) {
+                    AddKeyToMap(structuralPaths, filePath.toString().substring(folderPath.length(), filePath.toString().length()));
+                    if (Files.isRegularFile(filePath)) {
+                        
+                    }
+                }
+            });
+        } catch (IOException ex) {
+            Console.Print_To_Console(String.format("Error retrieveing the internal subfolders and files of: '%s'", folderPath), true, false);
+        }
+        return structuralPaths;
+    }
+
+    public static Map<String, Integer> GetXMLStructuralPaths(String xmlFilePath) {
+        Map<String, Integer> structuralPaths = new HashMap<>();
+
+        return structuralPaths;
+    }
+
+    public static Stream<Path> GetFolderPaths2(String folderPath) {
+        Stream<Path> files = null;
+        try {
+            files = Files.walk(Paths.get(folderPath));
+        } catch (IOException ex) {
+            Console.Print_To_Console(String.format("Error retrieveing the internal subfolders and files of: '%s'", folderPath), true, false);
+        }
+        return files;
+    }
+
+    //public static void GetFolderPaths2(String folderPath) {
+        /*Files.walk(Paths.get(folderPath)).forEach(filePath -> {
+     if (Files.isRegularFile(filePath)) {
+     System.out.println(filePath);
+     }
+     });*/
+
+    /*File[] folderFiles = new File(folderPath).listFiles();
+     // get all the files from a directory
+     for (File file : folderFiles) {
+            
+     if (file.isFile()) {
+     files.add(file);
+     } else if (file.isDirectory()) {
+     listf(file.getAbsolutePath(), files);
+     }
+     }*/
+    //}
+    public static void AddKeyToMap(Map<String, Integer> map, String key) {
+        if (!map.containsKey(key)) {
+            map.put(key, 1);
+        } else {
+            map.put(key, map.get(key) + 1);
+        }
+    }
+
+    /**
+     * Unzip the given file to the given folder
+     *
+     * @param filePath the full path of the file to unzip
+     * @param destinationFolder the folder to unzip the file to
+     * @return true if the unzipping process done successfully
+     */
+    public static boolean UnzipFileToFolder(String filePath, String destinationFolder) {
+        boolean success = false;
+        ZipFile zipFile;
+        try {
+            zipFile = new ZipFile(filePath);
+            if (!zipFile.isEncrypted()) {
+                zipFile.extractAll(destinationFolder);
+                success = true;
+            } else {
+                Console.Print_To_Console(String.format("file '%s' is password protected!", filePath), true, false);
+            }
+        } catch (ZipException ex) {
+            Console.Print_To_Console(String.format("Error unzipping file '%s': %s", filePath, ex.getMessage()), true, false);
+        }
+        return success;
     }
 }
