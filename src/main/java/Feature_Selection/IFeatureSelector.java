@@ -27,7 +27,7 @@ public interface IFeatureSelector {
      * @return ArrayList of features selected from the given features list using
      * some Feature Selection method and their DF
      */
-    public ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount, double top_features_percent);
+    public ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount, double top_features_percent, boolean printScores);
     
-    public String GetAlgorithmName();
+    public String GetName();
 }

@@ -105,7 +105,7 @@ public class DatasetCSVBuilder<T> {
             } else if (representation == Feature_Representation.TFIDF) {
                 num_of_elements_contain_the_feature = selected_feature_pair.getValue();
                 feature_occurrences_in_element = (element_features_TF.containsKey(selected_feature)) ? element_features_TF.get(selected_feature) : 0;
-                TFIDF = MathCalc.Get_TFIDF(feature_occurrences_in_element, num_of_occurrences_of_most_common_feature, total_elements_num, num_of_elements_contain_the_feature);
+                TFIDF = MathCalc.GetTFIDF(feature_occurrences_in_element, num_of_occurrences_of_most_common_feature, total_elements_num, num_of_elements_contain_the_feature);
                 cell_value = TFIDF + ",";
             }
             features_vector_CSV.append(cell_value);

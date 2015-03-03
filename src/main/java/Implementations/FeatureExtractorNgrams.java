@@ -19,7 +19,7 @@ import org.mapdb.HTreeMap;
  */
 public class FeatureExtractorNgrams<T> extends AFeatureExtractor<T> {
 
-    private final int m_grams; //the gram size to be used
+    private final int m_grams; //the gram size to be used    
     private final int m_skip; //the skip to be used
 
     public FeatureExtractorNgrams(int gram_size, int skip) {
@@ -37,13 +37,13 @@ public class FeatureExtractorNgrams<T> extends AFeatureExtractor<T> {
     @Override
     public Map<String, Integer> Extract_Features_TF_From_Single_Element(T element) {
         Map<String, Integer> ngrams = new HashMap<>();
-        
-        String file_path = (String)element;
+
+        String file_path = (String) element;
         File file = new File(file_path);
 
         if (file.exists()) {
-            String file_string = FileReader.Read_File_To_String(file_path);
-            
+            String file_string = FileReader.ReadFile(file_path);
+
             String ngram;
             for (int i = 0; i <= file_string.length() - m_grams; i = i + m_skip) {
                 ngram = file_string.substring(i, i + m_grams);
@@ -55,6 +55,11 @@ public class FeatureExtractorNgrams<T> extends AFeatureExtractor<T> {
             }
         }
         return ngrams;
+    }
+
+    @Override
+    public String GetName() {
+        return String.format("n-gram (grams=%s skip=%s)", m_grams, m_skip);
     }
 
 }

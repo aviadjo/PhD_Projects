@@ -21,7 +21,7 @@ public class FileWriter {
      * @param text some text
      * @param destination_file_path the path of the destination file
      */
-    public static void Write_To_File(String text, String destination_file_path) {
+    public static void WriteFile(String text, String destination_file_path) {
         try {
             FileUtils.writeStringToFile(new File(destination_file_path), text);
         } catch (IOException e) {

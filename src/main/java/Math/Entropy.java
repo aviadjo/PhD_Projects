@@ -25,7 +25,7 @@ public class Entropy {
      * @param values values represent the occurrences number of each class
      * @return the entropy of the given features values
      */
-    public static double Get_Entropy(ArrayList<Double> values) {
+    public static double GetEntropy(ArrayList<Double> values) {
         double entropy = 0.0;
         String values_code = GetEntropyValuesCode(values);
 

@@ -22,5 +22,7 @@ public interface IFeatureExtractor<T> {
      * source
      */
     public Map<String, Integer> Extract_Features_TF_From_Single_Element(T element);
+    
+    public String GetName();
 
 }

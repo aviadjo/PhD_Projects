@@ -36,7 +36,7 @@ public class MathCalc {
      * @param parts_num number of parts
      * @return Probability P with Laplace Correction
      */
-    public static double Get_P_with_Laplace_Correction(int part, int total, int parts_num) {
+    public static double GetPwithLaplaceCorrection(int part, int total, int parts_num) {
         return ((double) part + (double) 1.0) / ((double) total + (double) parts_num);
     }
 
@@ -53,7 +53,7 @@ public class MathCalc {
      * the class of the record
      * @return TD*IDF calculation
      */
-    public static double Get_TFIDF(int feature_occurrences_in_element, int num_of_occurrences_of_most_common_feature, int num_of_elements, int num_of_elements_contain_the_feature) {
+    public static double GetTFIDF(int feature_occurrences_in_element, int num_of_occurrences_of_most_common_feature, int num_of_elements, int num_of_elements_contain_the_feature) {
         double TF = ((double) feature_occurrences_in_element) / ((double) num_of_occurrences_of_most_common_feature);
         double IDF = MathCalc.Log((((double) num_of_elements) / ((double) num_of_elements_contain_the_feature)), 2);
         return TF * IDF;

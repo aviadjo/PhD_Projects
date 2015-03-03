@@ -24,4 +24,5 @@ public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T> {
     @Override
     public abstract Map<String, Integer> Extract_Features_TF_From_Single_Element(T element);
 
+    public abstract String GetName();
 }

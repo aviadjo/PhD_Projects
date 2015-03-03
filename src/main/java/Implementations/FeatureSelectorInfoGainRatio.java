@@ -51,7 +51,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         m_elements_num = m_Class_A_elements_num + m_Class_B_elements_num;
         m_Class_A_elements_percentage = (double) m_Class_A_elements_num / (double) m_elements_num;
         m_Class_B_elements_percentage = (double) m_Class_B_elements_num / (double) m_elements_num;
-        m_Total_entropy = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(m_Class_A_elements_percentage, m_Class_B_elements_percentage)));
+        m_Total_entropy = Entropy.GetEntropy(new ArrayList<>(Arrays.asList(m_Class_A_elements_percentage, m_Class_B_elements_percentage)));
     }
 
     /**
@@ -67,7 +67,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * Selection algorithm and their DF
      */
     @Override
-    public ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount_to_select, double top_features_percent_to_select) {
+    public ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount_to_select, double top_features_percent_to_select, boolean printScores) {
         //File_Writer.Write_To_File(Get_Features_Occurrence_In_Malicious_Benign(features_DFs), String.format("D:\\features_occurences_%s.csv", Get_TimeStamp_String()));
         HTreeMap<String, Double> features_InfoGain = Get_Features_InfoGain(features_DFs);
 
@@ -93,7 +93,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
             if (iterator_sorted.hasNext()) {
                 entry = (HTreeMap.Entry<String, Double>) iterator_sorted.next();
                 feature = entry.getKey();
-                Console.Console.Print_To_Console(String.format("Feature f%s (%s) Information-Gain-Ratio: %s", i + 1, feature, entry.getValue()), true, false);
+                if (printScores) {Console.Console.Print_To_Console(String.format("Feature f%s (%s) Information-Gain-Ratio: %s", i + 1, feature, entry.getValue()), true, false);}
                 feature_DF_of_Classes = features_DFs.get(feature);
                 feature_DF_total = feature_DF_of_Classes[0] + feature_DF_of_Classes[1]; //To be used for TFIDF calculation.
                 features_Top.add(new Pair(feature, feature_DF_total));
@@ -162,15 +162,15 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
                 //*************************************************
                 class_A = (int) entry.getValue()[0];
                 class_B = (int) entry.getValue()[1];
-                class_A_P = MathCalc.Get_P_with_Laplace_Correction(class_A, class_A + class_B, 2);
-                class_B_P = MathCalc.Get_P_with_Laplace_Correction(class_B, class_A + class_B, 2);
-                entropy = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_A_P, class_B_P)));
+                class_A_P = MathCalc.GetPwithLaplaceCorrection(class_A, class_A + class_B, 2);
+                class_B_P = MathCalc.GetPwithLaplaceCorrection(class_B, class_A + class_B, 2);
+                entropy = Entropy.GetEntropy(new ArrayList<>(Arrays.asList(class_A_P, class_B_P)));
                 //*************************************************
                 class_Ax = m_Class_A_elements_num - class_A;
                 class_Bx = m_Class_B_elements_num - class_B;
-                class_Ax_P = MathCalc.Get_P_with_Laplace_Correction(class_Ax, class_Ax + class_Bx, 2);
-                class_Bx_P = MathCalc.Get_P_with_Laplace_Correction(class_Bx, class_Ax + class_Bx, 2);
-                entropyx = Entropy.Get_Entropy(new ArrayList<>(Arrays.asList(class_Ax_P, class_Bx_P)));
+                class_Ax_P = MathCalc.GetPwithLaplaceCorrection(class_Ax, class_Ax + class_Bx, 2);
+                class_Bx_P = MathCalc.GetPwithLaplaceCorrection(class_Bx, class_Ax + class_Bx, 2);
+                entropyx = Entropy.GetEntropy(new ArrayList<>(Arrays.asList(class_Ax_P, class_Bx_P)));
                 //*************************************************
                 entropy_after_split = (((((double) class_A) + ((double) class_B)) / ((double) m_elements_num)) * entropy)
                         + (((((double) class_Ax) + ((double) class_Bx)) / ((double) m_elements_num)) * entropyx);
@@ -189,7 +189,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         return values[0] + "," + values[1];
     }
 
-    public String GetAlgorithmName() {
+    public String GetName() {
         if (m_GainRatio) {
             return "Information Gain Ratio";
         } else {
