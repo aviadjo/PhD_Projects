@@ -21,6 +21,7 @@ import Implementations.FeatureSelectorInfoGainRatio;
 import IO.FileReader;
 import IO.FileWriter;
 import Math.Entropy;
+import com.sleepycat.collections.MapEntryParameter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,11 +34,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javafx.util.Pair;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.mapdb.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -45,6 +52,8 @@ import org.mapdb.*;
  */
 public class Tester {
 
+    public static String m_PathOfficeFileTempFolder = "";
+    
     public static void main(String[] args) {
         //TestNgram();
         TestUNZIP();
@@ -121,7 +130,8 @@ public class Tester {
     private static void TestUNZIP() {
         Map<String, Integer> structuralPaths = null;
         String file = "D:\\1.docx";
-        String destinationFolder = FileUtils.getTempDirectoryPath() + "\\" + FilenameUtils.getName(file);
+        String destinationFolder = Paths.get(FileUtils.getTempDirectoryPath()).toString() + "\\" + FilenameUtils.getName(file);
+        m_PathOfficeFileTempFolder = destinationFolder + "\\";
         if (UnzipFileToFolder(file, destinationFolder)) {
             Map<String, Integer> a = GetFolderStructuralPaths(destinationFolder);
             Console.Print_To_Console("OK!!!", true, false);
@@ -131,35 +141,50 @@ public class Tester {
 
     public static Map<String, Integer> GetFolderStructuralPaths(String folderPath) {
         Map<String, Integer> structuralPaths = new HashMap<>();
-        Map<String, Integer> xmlStructuralPaths = new HashMap<>();
-        
-        ArrayList<Path> directoryPaths = Directories.GetAllDirectoryPaths(folderPath);
+        ArrayList<String> directoryPaths = Directories.GetAllDirectoryPaths(folderPath);
 
-        for (Path path : directoryPaths) {
-            if (!path.toString().equals(Paths.get(folderPath).toString())) {
-                AddKeyToMap(structuralPaths, path.toString().substring(folderPath.length(), path.toString().length()));
-                if (Files.isRegularFile(path)) {
-                    xmlStructuralPaths = GetXMLStructuralPaths(path.toString());
-                    structuralPaths.putAll(structuralPaths);
-                }
+        for (String path : directoryPaths) {
+            if (!path.equals(folderPath)) {
+                AddKeyToMap(structuralPaths, path);
+                /*if (Files.isRegularFile(Paths.get(path))) {
+                    structuralPaths.putAll(GetXMLStructuralPaths(path));
+                }*/
             }
         }
 
-        Console.Print_To_Console(String.format("Error retrieveing the internal subfolders and files of: '%s'", folderPath), true, false);
         return structuralPaths;
     }
 
     public static Map<String, Integer> GetXMLStructuralPaths(String xmlFilePath) {
         Map<String, Integer> structuralPaths = new HashMap<>();
 
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document xml = db.parse(xmlFilePath);
+            Node xmlRootNode = xml.getFirstChild();
+            GetXMLStructuralPathsRecursively(xmlRootNode,xmlFilePath,structuralPaths);
+        } catch (Exception ex) {
+            Console.Print_To_Console(String.format("Error traversing XML file: '%s'", xmlFilePath), true, false);
+        }
+
         return structuralPaths;
     }
-
-    public static void XMLNodeTraversalRecursively(Map<String, Integer> structuralPaths) {
-
+    
+    public static void GetXMLStructuralPathsRecursively(Node xmlNode, String parentNodePath, Map<String, Integer> structuralPaths){
+        String currentNodePath = String.format("%s\\%s", parentNodePath, xmlNode.getNodeName());
+        AddKeyToMap(structuralPaths,currentNodePath);
+        
+        NodeList childNodes = xmlNode.getChildNodes();
+        Node childNode;
+        for (int i = 0 ; i < childNodes.getLength() ; i++){
+            childNode = childNodes.item(i);
+            GetXMLStructuralPathsRecursively(childNode,currentNodePath,structuralPaths);
+        }
     }
 
     public static void AddKeyToMap(Map<String, Integer> map, String key) {
+        key = key.replace(m_PathOfficeFileTempFolder, "");
         if (!map.containsKey(key)) {
             map.put(key, 1);
         } else {

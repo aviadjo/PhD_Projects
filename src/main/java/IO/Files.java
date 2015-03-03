@@ -22,9 +22,9 @@ public class Files {
      * @param file_path file's path
      * @return true if the given file path exists
      */
-    public static boolean IsFileExists(String file_path) {
+    public static boolean IsFile(String file_path) {
         File f = new File(file_path);
-        return (f.exists() && !f.isDirectory());
+        return (f.exists() && f.isFile() && !f.isDirectory());
     }
 
     /**

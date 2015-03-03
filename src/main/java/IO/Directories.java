@@ -22,6 +22,17 @@ import org.apache.commons.io.FileUtils;
 public class Directories {
 
     /**
+     * Returns true if the given directory path exists
+     *
+     * @param directoryPath directories path
+     * @return true if the given directory path exists
+     */
+    public static boolean IsDirectory(String directoryPath) {
+        File f = new File(directoryPath);
+        return (f.exists() && f.isDirectory());
+    }
+
+    /**
      * Create directory for the given directory path
      *
      * @param directoryPath path of the destination directory to create
@@ -56,11 +67,11 @@ public class Directories {
         }
     }
 
-    public static ArrayList<Path> GetAllDirectoryPaths(String directoryPath) {
-        ArrayList<Path> directoryPaths = new ArrayList<>();
+    public static ArrayList<String> GetAllDirectoryPaths(String directoryPath) {
+        ArrayList<String> directoryPaths = new ArrayList<>();
         try {
             java.nio.file.Files.walk(Paths.get(directoryPath)).forEach(filePath -> {
-                directoryPaths.add(filePath);
+                directoryPaths.add(filePath.toString());
             });
         } catch (IOException e) {
             Console.Print_To_Console(String.format("Error getting directory paths: %s", directoryPath), true, false);
