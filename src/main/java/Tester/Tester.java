@@ -131,19 +131,21 @@ public class Tester {
 
     public static Map<String, Integer> GetFolderStructuralPaths(String folderPath) {
         Map<String, Integer> structuralPaths = new HashMap<>();
+        Map<String, Integer> xmlStructuralPaths = new HashMap<>();
         
-        try {
-            Files.walk(Paths.get(folderPath)).forEach(filePath -> {
-                if (!filePath.toString().equals(Paths.get(folderPath).toString())) {
-                    AddKeyToMap(structuralPaths, filePath.toString().substring(folderPath.length(), filePath.toString().length()));
-                    if (Files.isRegularFile(filePath)) {
-                        
-                    }
+        ArrayList<Path> directoryPaths = Directories.GetAllDirectoryPaths(folderPath);
+
+        for (Path path : directoryPaths) {
+            if (!path.toString().equals(Paths.get(folderPath).toString())) {
+                AddKeyToMap(structuralPaths, path.toString().substring(folderPath.length(), path.toString().length()));
+                if (Files.isRegularFile(path)) {
+                    xmlStructuralPaths = GetXMLStructuralPaths(path.toString());
+                    structuralPaths.putAll(structuralPaths);
                 }
-            });
-        } catch (IOException ex) {
-            Console.Print_To_Console(String.format("Error retrieveing the internal subfolders and files of: '%s'", folderPath), true, false);
+            }
         }
+
+        Console.Print_To_Console(String.format("Error retrieveing the internal subfolders and files of: '%s'", folderPath), true, false);
         return structuralPaths;
     }
 
@@ -153,34 +155,10 @@ public class Tester {
         return structuralPaths;
     }
 
-    public static Stream<Path> GetFolderPaths2(String folderPath) {
-        Stream<Path> files = null;
-        try {
-            files = Files.walk(Paths.get(folderPath));
-        } catch (IOException ex) {
-            Console.Print_To_Console(String.format("Error retrieveing the internal subfolders and files of: '%s'", folderPath), true, false);
-        }
-        return files;
+    public static void XMLNodeTraversalRecursively(Map<String, Integer> structuralPaths) {
+
     }
 
-    //public static void GetFolderPaths2(String folderPath) {
-        /*Files.walk(Paths.get(folderPath)).forEach(filePath -> {
-     if (Files.isRegularFile(filePath)) {
-     System.out.println(filePath);
-     }
-     });*/
-
-    /*File[] folderFiles = new File(folderPath).listFiles();
-     // get all the files from a directory
-     for (File file : folderFiles) {
-            
-     if (file.isFile()) {
-     files.add(file);
-     } else if (file.isDirectory()) {
-     listf(file.getAbsolutePath(), files);
-     }
-     }*/
-    //}
     public static void AddKeyToMap(Map<String, Integer> map, String key) {
         if (!map.containsKey(key)) {
             map.put(key, 1);

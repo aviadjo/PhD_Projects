@@ -5,8 +5,14 @@
  */
 package IO;
 
+import Console.Console;
+import static Tester.Tester.AddKeyToMap;
+import static Tester.Tester.GetXMLStructuralPaths;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -28,7 +34,7 @@ public class Directories {
         if (!destinationDirectory.exists()) {
             directoryCreated = destinationDirectory.mkdir();
             if (!directoryCreated) {
-                Console.Console.Print_To_Console(String.format("Error creating directory: %s",directoryPath), true, false);
+                Console.Print_To_Console(String.format("Error creating directory: %s", directoryPath), true, false);
             }
         }
         return destinationDirectory;
@@ -45,8 +51,21 @@ public class Directories {
             FileUtils.deleteDirectory(new File(directoryPath));
             return true;
         } catch (IOException e) {
-            Console.Console.Print_To_Console(String.format("Error deleting directory: %s",directoryPath), true, false);
+            Console.Print_To_Console(String.format("Error deleting directory: %s", directoryPath), true, false);
             return false;
         }
+    }
+
+    public static ArrayList<Path> GetAllDirectoryPaths(String directoryPath) {
+        ArrayList<Path> directoryPaths = new ArrayList<>();
+        try {
+            java.nio.file.Files.walk(Paths.get(directoryPath)).forEach(filePath -> {
+                directoryPaths.add(filePath);
+            });
+        } catch (IOException e) {
+            Console.Print_To_Console(String.format("Error getting directory paths: %s", directoryPath), true, false);
+        }
+
+        return directoryPaths;
     }
 }

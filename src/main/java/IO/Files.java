@@ -6,6 +6,7 @@
 package IO;
 
 import java.io.File;
+import java.nio.file.Path;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -34,6 +35,10 @@ public class Files {
      */
     public static String GetFileExtansion(String filename) {
         return FilenameUtils.getExtension(filename);
+    }
+
+    static Object walk(Path get) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
