@@ -18,7 +18,7 @@ public class Console {
      * @param error is error message
      * @param debug is debug mode
      */
-    public static void Print_To_Console(String text, boolean error, boolean debug) {
+    public static void Print(String text, boolean error, boolean debug) {
         if (debug) {
 
         }
@@ -29,7 +29,7 @@ public class Console {
         }
     }
 
-    public static void Print_To_Debugger_Console(String text) {
+    public static void PrintDebug(String text) {
         System.err.println(text);
     }
 }

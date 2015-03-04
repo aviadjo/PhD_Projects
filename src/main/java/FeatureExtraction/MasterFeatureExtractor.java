@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Feature_Extraction;
+package FeatureExtraction;
 
-import Data_Structures.MapDB;
+import DataStructures.MapDB;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +28,12 @@ public class MasterFeatureExtractor<T> {
      * all given elements (using the given Feature Extractor) and their Document
      * Frequency (DF)
      */
-    public HTreeMap<String, Integer> Extract_Features_DF_From_Elements(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor) {
+    public HTreeMap<String, Integer> ExtractFeaturesDocumentFrequencyFromElements(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor) {
         Map<String, Integer> element_features_TF = new HashMap<>();
-        HTreeMap<String, Integer> elements_features_DF = MapDB.Get_HTreeMap_String_Integer();
+        HTreeMap<String, Integer> elements_features_DF = MapDB.GetHTreeMapStringInteger();
 
         for (T element : elements) {
-            element_features_TF = Feature_Extractor.Extract_Features_TF_From_Single_Element(element);
+            element_features_TF = Feature_Extractor.ExtractFeaturesFrequencyFromSingleElement(element);
 
             for (String feature : element_features_TF.keySet()) {
                 if (!elements_features_DF.containsKey(feature)) {
@@ -59,8 +59,8 @@ public class MasterFeatureExtractor<T> {
      * extracted from all given elements (Class A and Class B) and their
      * Document Frequency (DF) in Class A and Class B
      */
-    public HTreeMap<String, int[]> Gather_ClassA_ClassB_DF(HTreeMap<String, Integer> DF_ClassA, HTreeMap<String, Integer> DF_ClassB) {
-        HTreeMap<String, int[]> DF_classA_classB = MapDB.Get_HTreeMap_String_Array_int();
+    public HTreeMap<String, int[]> GatherClassAClassBFeatureFrequency(HTreeMap<String, Integer> DF_ClassA, HTreeMap<String, Integer> DF_ClassB) {
+        HTreeMap<String, int[]> DF_classA_classB = MapDB.GetHTreeMapStringArrayInt();
 
         String feature = "";
         Integer DF = 0;

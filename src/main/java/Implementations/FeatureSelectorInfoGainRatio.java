@@ -5,8 +5,8 @@
  */
 package Implementations;
 
-import Data_Structures.MapDB;
-import Feature_Selection.AFeatureSelector;
+import DataStructures.MapDB;
+import FeatureSelection.AFeatureSelector;
 import Math.Entropy;
 import Math.MathCalc;
 import java.util.ArrayList;
@@ -67,9 +67,9 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * Selection algorithm and their DF
      */
     @Override
-    public ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount_to_select, double top_features_percent_to_select, boolean printScores) {
+    public ArrayList<Pair<String, Integer>> SelectTopFeatures(HTreeMap<String, int[]> features_DFs, int top_features_amount_to_select, double top_features_percent_to_select, boolean printScores) {
         //File_Writer.Write_To_File(Get_Features_Occurrence_In_Malicious_Benign(features_DFs), String.format("D:\\features_occurences_%s.csv", Get_TimeStamp_String()));
-        HTreeMap<String, Double> features_InfoGain = Get_Features_InfoGain(features_DFs);
+        HTreeMap<String, Double> features_InfoGain = GetFeaturesInfoGain(features_DFs);
 
         //Comparator used for iterator
         Comparator features_comperator = new Comparator() {
@@ -93,7 +93,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
             if (iterator_sorted.hasNext()) {
                 entry = (HTreeMap.Entry<String, Double>) iterator_sorted.next();
                 feature = entry.getKey();
-                if (printScores) {Console.Console.Print_To_Console(String.format("Feature f%s (%s) Information-Gain-Ratio: %s", i + 1, feature, entry.getValue()), true, false);}
+                if (printScores) {Console.Console.Print(String.format("Feature f%s (%s) Information-Gain-Ratio: %s", i + 1, feature, entry.getValue()), true, false);}
                 feature_DF_of_Classes = features_DFs.get(feature);
                 feature_DF_total = feature_DF_of_Classes[0] + feature_DF_of_Classes[1]; //To be used for TFIDF calculation.
                 features_Top.add(new Pair(feature, feature_DF_total));
@@ -109,7 +109,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * class, A and B
      * @return string which contains for every feature it's occurrences in malicious and benign files
      */
-    public String Get_Features_Occurrence_In_Malicious_Benign(HTreeMap<String, int[]> features_DFs) {
+    public String GetFeaturesFrequenciesInClassAClassB(HTreeMap<String, int[]> features_DFs) {
         StringBuilder results = new StringBuilder();
         int[] value;
         String seperator = "|";
@@ -129,8 +129,8 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * @return HTreeMap which contains for every feature it's corresponding
      * Information Gain (IG) or Information Gain Ratio(IGR) score
      */
-    public HTreeMap<String, Double> Get_Features_InfoGain(HTreeMap<String, int[]> features_DFs) {
-        HTreeMap<String, Double> features_InfoGain = MapDB.Get_HTreeMap_String_Double();
+    public HTreeMap<String, Double> GetFeaturesInfoGain(HTreeMap<String, int[]> features_DFs) {
+        HTreeMap<String, Double> features_InfoGain = MapDB.GetHTreeMapStringDouble();
 
         //TODO - convert all the variables to double
         int class_A;

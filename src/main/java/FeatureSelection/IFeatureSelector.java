@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Feature_Selection;
+package FeatureSelection;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -14,7 +14,7 @@ import org.mapdb.HTreeMap;
  *
  * @author Aviad
  */
-public abstract class AFeatureSelector implements IFeatureSelector {
+public interface IFeatureSelector {
 
     /**
      * Return ArrayList of features selected from the given features list using
@@ -27,7 +27,7 @@ public abstract class AFeatureSelector implements IFeatureSelector {
      * @return ArrayList of features selected from the given features list using
      * some Feature Selection method and their DF
      */
-    public abstract ArrayList<Pair<String, Integer>> Select_Features(HTreeMap<String, int[]> features_DFs, int top_features_amount, double top_features_percent, boolean printScores);
+    public ArrayList<Pair<String, Integer>> SelectTopFeatures(HTreeMap<String, int[]> features_DFs, int top_features_amount, double top_features_percent, boolean printScores);
     
-    public abstract String GetName();
+    public String GetName();
 }

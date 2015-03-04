@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Dataset_Creation;
+package DatasetCreation;
 
-import Feature_Extraction.AFeatureExtractor;
+import FeatureExtraction.AFeatureExtractor;
 import Math.MathCalc;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,12 +43,12 @@ public class DatasetCSVBuilder<T> {
      * @param suffix_class add suffix column identifying the class of the record
      * @return CSV string which represent the dataset
      */
-    public String Build_Database_CSV(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
+    public String BuildDatabaseCSV(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
         StringBuilder dataset_CSV = new StringBuilder();
         String element_features_vector_CSV;
 
         for (T element : elements) {
-            element_features_vector_CSV = Get_Features_Vector_CSV(element, Feature_Extractor, selected_features, total_elements_num, representation, classification, prefix_element, suffix_class);
+            element_features_vector_CSV = GetFeaturesVectorCSV(element, Feature_Extractor, selected_features, total_elements_num, representation, classification, prefix_element, suffix_class);
             dataset_CSV.append(element_features_vector_CSV);
             dataset_CSV.append("\n");
         }
@@ -67,8 +67,8 @@ public class DatasetCSVBuilder<T> {
      * @param suffix_class add suffix column identifying the class of the record
      * @return CSV string which represent the element features vector
      */
-    public String Get_Features_Vector_CSV(T element, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
-        Map<String, Integer> element_features_TF = Feature_Extractor.Extract_Features_TF_From_Single_Element(element);
+    public String GetFeaturesVectorCSV(T element, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
+        Map<String, Integer> element_features_TF = Feature_Extractor.ExtractFeaturesFrequencyFromSingleElement(element);
         StringBuilder features_vector_CSV = new StringBuilder();
 
         if (prefix_element) {
@@ -84,7 +84,7 @@ public class DatasetCSVBuilder<T> {
             selected_feature = selected_feature_pair.getKey();
             if (element_features_TF.containsKey(selected_feature)) {
                 selected_feature_value = element_features_TF.get(selected_feature);
-                if (selected_feature_value > num_of_occurrences_of_most_common_feature){
+                if (selected_feature_value > num_of_occurrences_of_most_common_feature) {
                     num_of_occurrences_of_most_common_feature = selected_feature_value;
                 }
             }
@@ -128,7 +128,7 @@ public class DatasetCSVBuilder<T> {
      * @param suffix_class add suffix column identifying the class of the record
      * @return CSV string which represent the header row of the dataset
      */
-    public String Get_Dataset_Header_CSV(ArrayList<Pair<String, Integer>> selected_features, boolean prefix_element, boolean suffix_class) {
+    public String GetDatasetHeaderCSV(ArrayList<Pair<String, Integer>> selected_features, boolean prefix_element, boolean suffix_class) {
         StringBuilder dataset_header_CSV = new StringBuilder();
         if (prefix_element) {
             dataset_header_CSV.append("Element,");

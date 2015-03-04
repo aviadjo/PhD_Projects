@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Feature_Extraction;
+package FeatureExtraction;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public interface IFeatureExtractor<T> {
      * @return list of features (and occurrences) extracted from the given
      * source
      */
-    public Map<String, Integer> Extract_Features_TF_From_Single_Element(T element);
+    public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element);
     
     public String GetName();
 

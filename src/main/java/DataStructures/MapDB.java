@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Data_Structures;
+package DataStructures;
 
-import static Assistants.General.Get_TimeStamp_String;
+import static Assistants.General.GetTimeStamp;
 import java.io.File;
 import org.mapdb.*;
 
@@ -20,7 +20,7 @@ public class MapDB {
     public static DB m_db_off_heap_FS = DBMaker.newMemoryDirectDB().transactionDisable().asyncWriteEnable().closeOnJvmShutdown().deleteFilesAfterClose().make();
     public static int m_db_counter = 0;
 
-    public static HTreeMap<String, Integer> Get_HTreeMap_String_Integer() {
+    public static HTreeMap<String, Integer> GetHTreeMapStringInteger() {
         return m_db_off_heap_FE.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.INTEGER)
@@ -29,7 +29,7 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(3);*/
     }
 
-    public static HTreeMap<String, int[]> Get_HTreeMap_String_Array_int() {
+    public static HTreeMap<String, int[]> GetHTreeMapStringArrayInt() {
         return m_db_off_heap_CFE.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.INT_ARRAY)
@@ -38,7 +38,7 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(8);*/
     }
 
-    public static HTreeMap<String, Double> Get_HTreeMap_String_Double() {
+    public static HTreeMap<String, Double> GetHTreeMapStringDouble() {
         return m_db_off_heap_FS.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .counterEnable()
@@ -46,16 +46,16 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(3);*/
     }
 
-    public static HTreeMap<String, Integer> Get_Temp_HTreeMap_String_Integer() {
+    public static HTreeMap<String, Integer> GetTempHTreeMapStringInteger() {
         return DBMaker.newTempHashMap();
     }
 
-    public static HTreeMap<String, int[]> Get_Temp_HTreeMap_String_Array_int() {
+    public static HTreeMap<String, int[]> GetTempHTreeMapStringArrayInt() {
         return DBMaker.newTempHashMap();
     }
 
-    public static void Get_DB() {
-        String db_file_path = String.format("DatasetBuilderMapDB_%s", Get_TimeStamp_String());
+    public static void GetDB() {
+        String db_file_path = String.format("DatasetBuilderMapDB_%s", GetTimeStamp());
         File db_file = new File(db_file_path);
         DBMaker.newFileDB(db_file);
     }

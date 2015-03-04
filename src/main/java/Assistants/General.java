@@ -21,7 +21,7 @@ public class General {
      * Throws UnsupportedOperationException
      *
      */
-    public static void Not_Implemented_Exception() {
+    public static void NotImplementedException() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -30,7 +30,7 @@ public class General {
      *
      * @return Current TimeStamp string
      */
-    public static String Get_TimeStamp_String() {
+    public static String GetTimeStamp() {
         return new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss").format(new Date());
     }
 
@@ -40,7 +40,7 @@ public class General {
      * @return string which represent the given integer number with ','
      * seperation on thousands
      */
-    public static String Get_String_Number(int number) {
+    public static String GetStringNumber(int number) {
         return NumberFormat.getIntegerInstance(/*Locale.US*/).format(number);
     }
 
@@ -51,7 +51,7 @@ public class General {
      * @param array an array
      * @return ArrayList of elements generated from the given Array
      */
-    public static <T> ArrayList Get_ArrayList(T[] array) {
+    public static <T> ArrayList GetArrayList(T[] array) {
         ArrayList<T> arraylist = new ArrayList<>();
         arraylist.addAll(Arrays.asList(array));
         return arraylist;

@@ -5,8 +5,8 @@
  */
 package Implementations;
 
-import Data_Structures.MapDB;
-import Feature_Extraction.AFeatureExtractor;
+import DataStructures.MapDB;
+import FeatureExtraction.AFeatureExtractor;
 import IO.FileReader;
 import java.io.File;
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class FeatureExtractorNgrams<T> extends AFeatureExtractor<T> {
      * @return list of n-grams (and occurrences) extracted from the given source
      */
     @Override
-    public Map<String, Integer> Extract_Features_TF_From_Single_Element(T element) {
+    public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> ngrams = new HashMap<>();
 
         String file_path = (String) element;

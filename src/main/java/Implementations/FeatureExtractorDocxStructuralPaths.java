@@ -6,7 +6,7 @@
 package Implementations;
 
 import Console.Console;
-import Feature_Extraction.AFeatureExtractor;
+import FeatureExtraction.AFeatureExtractor;
 import IO.Directories;
 import static Tester.Tester.m_ArrayList;
 import java.nio.file.Files;
@@ -34,7 +34,7 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
     private static String m_OfficeFileTempFolderPath = "";
 
     @Override
-    public Map<String, Integer> Extract_Features_TF_From_Single_Element(Object element) {
+    public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(Object element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
         String filePath = (String) element;
         String destinationFolder = FileUtils.getTempDirectoryPath() + FilenameUtils.getName(filePath);
@@ -138,10 +138,10 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
                 zipFile.extractAll(destinationFolder);
                 success = true;
             } else {
-                Console.Print_To_Console(String.format("file '%s' is password protected!", filePath), true, false);
+                Console.Print(String.format("file '%s' is password protected!", filePath), true, false);
             }
         } catch (ZipException ex) {
-            Console.Print_To_Console(String.format("Error unzipping file '%s': %s", filePath, ex.getMessage()), true, false);
+            Console.Print(String.format("Error unzipping file '%s': %s", filePath, ex.getMessage()), true, false);
         }
         return success;
     }

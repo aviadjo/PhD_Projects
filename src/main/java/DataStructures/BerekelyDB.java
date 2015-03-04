@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Data_Structures;
+package DataStructures;
 
 //import com.sleepycat.collections.StoredMap;
 //import com.sleepycat.je.Database;
