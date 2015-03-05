@@ -25,12 +25,28 @@ public class StopWatch {
         m_end_time = Instant.now();
     }
 
-    public static String GetTime() {
+    public static String GetTimeSecondsString() {
         String durationString = "";
         if (m_start_time != null && m_end_time != null) {
             return Duration.between(m_start_time, m_end_time).toString();
         } else {
             return "Error";
+        }
+    }
+
+    public long GetTimeMilisecondsSeconds() {
+        if (m_start_time != null && m_end_time != null) {
+            return (Duration.between(m_start_time, m_end_time).toMillis() / 1000);
+        } else {
+            return -1;
+        }
+    }
+
+    public long GetTimeSeconds() {
+        if (m_start_time != null && m_end_time != null) {
+            return GetTimeMilisecondsSeconds()/1000;
+        } else {
+            return -1;
         }
     }
 

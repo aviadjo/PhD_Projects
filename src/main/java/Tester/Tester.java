@@ -18,7 +18,6 @@ import FeatureExtraction.MasterFeatureExtractor;
 import IO.Directories;
 import Implementations.FeatureExtractorNgrams;
 import Implementations.FeatureSelectorInfoGainRatio;
-import IO.FileReader;
 import IO.FileWriter;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Math.Entropy;
@@ -106,7 +105,7 @@ public class Tester {
         String dataset_path = String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_files(%s)_gram(%s)_Rep(%s).csv", General.GetTimeStamp(), total_elements_num, gram, feature_representation.toString());
         FileWriter.WriteFile(dataset, dataset_path);
         Console.Print(String.format("Dataset saved to: %s", dataset_path), true, false);
-        Console.Print(String.format("Running time: %s", StopWatch.GetTime()), true, false);
+        Console.Print(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);
         Console.Print(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
         Console.Print(String.format("InfoGain Values: %s", fs_IG.m_memoInfoGain.size()), true, false);
     }
@@ -141,7 +140,10 @@ public class Tester {
         //ClassA.clear();
         //ClassB.clear();
         MapDB.m_db_off_heap_FE.commit();
-
+        
+        //Write
+        FileWriter.WriteFile(General.GetFeaturesFrequenciesInClassAClassB(ClassesAB), String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_DOCX_DF.csv", General.GetTimeStamp()));
+        
         //FEATURE SELECTION
         int top_features = 500;
         double top_percent_features = 0.01;
@@ -168,7 +170,7 @@ public class Tester {
         String dataset_path = String.format("D:\\Dropbox\\DATASETS\\DATASET_%s_DOCX_files(%s)_Rep(%s).csv", General.GetTimeStamp(), total_elements_num, feature_representation.toString());
         FileWriter.WriteFile(dataset, dataset_path);
         Console.Print(String.format("Dataset saved to: %s", dataset_path), true, false);
-        Console.Print(String.format("Running time: %s", StopWatch.GetTime()), true, false);
+        Console.Print(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);
         Console.Print(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
         Console.Print(String.format("InfoGain Values: %s", fs_IG.m_memoInfoGain.size()), true, false);
     }

@@ -103,24 +103,6 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
     }
 
     /**
-     * Returns string contain list of the given features and their occurrences in malicious and benign files
-     *
-     * @param features_DFs list of features and Document Frequency for each
-     * class, A and B
-     * @return string which contains for every feature it's occurrences in malicious and benign files
-     */
-    public String GetFeaturesFrequenciesInClassAClassB(HTreeMap<String, int[]> features_DFs) {
-        StringBuilder results = new StringBuilder();
-        int[] value;
-        String seperator = "|";
-        for (Map.Entry<String, int[]> entry : features_DFs.entrySet()) {
-            value = entry.getValue();
-            results.append(entry.getKey()).append(seperator).append(value[0]).append(seperator).append(value[1]).append("\n");
-        }
-        return results.toString();
-    }
-
-    /**
      * Calculates Information Gain (IG) or Information Gain Ratio(IGR) score for
      * the given feature list
      *
