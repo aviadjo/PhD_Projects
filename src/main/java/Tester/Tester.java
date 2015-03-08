@@ -52,7 +52,7 @@ public class Tester {
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         boolean preffixElement = false;
         boolean suffixClassification = true;
-        String destinationFolderPath = "D:\\Dropbox\\Dataset";
+        String destinationFolderPath = "D:\\Dropbox\\DATASETS";
 
         BuildDataset(folder_Benign,
                 folder_Malicious,
@@ -113,7 +113,7 @@ public class Tester {
         StopWatch.Stop();
 
         //OUTPUTS
-        String dataset_path = String.format(destinationFolderPath + "\\DATASET_%s_files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s).csv", General.GetTimeStamp(), ClassA_elements.size(), ClassB_elements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
+        String dataset_path = String.format(destinationFolderPath + "\\DATASET_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s).csv", General.GetTimeStamp(), ClassA_elements.size(), ClassB_elements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
         FileWriter.WriteFile(dataset, dataset_path);
         Console.Print(String.format("Dataset saved to: %s", dataset_path), true, false);
         Console.Print(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);

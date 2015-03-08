@@ -91,7 +91,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
             if (iterator_sorted.hasNext()) {
                 entry = (HTreeMap.Entry<String, Double>) iterator_sorted.next();
                 feature = entry.getKey();
-                if (printScores) {Console.Console.Print(String.format("Feature f%s (%s) Information-Gain-Ratio: %s", i + 1, feature, entry.getValue()), true, false);}
+                if (printScores) {Console.Console.Print(String.format("Feature f%s: Information-Gain-Ratio: %s -> %s", i + 1, entry.getValue(), feature), true, false);}
                 feature_DF_of_Classes = features_DFs.get(feature);
                 feature_DF_total = feature_DF_of_Classes[0] + feature_DF_of_Classes[1]; //To be used for TFIDF calculation.
                 features_Top.add(new Pair(feature, feature_DF_total));
