@@ -62,19 +62,16 @@ public class MasterFeatureExtractor<T> {
     public HTreeMap<String, int[]> GatherClassAClassBFeatureFrequency(HTreeMap<String, Integer> DF_ClassA, HTreeMap<String, Integer> DF_ClassB) {
         HTreeMap<String, int[]> DF_classA_classB = MapDB.GetHTreeMapStringArrayInt();
 
-        String feature = "";
-        Integer DF = 0;
+        String feature;
+        Integer DF;
 
         //Loop through Class A Features
         for (Map.Entry<String, Integer> entry : DF_ClassA.entrySet()) {
             feature = entry.getKey();
             DF = entry.getValue();
-
-            DF_classA_classB.put(feature, new int[2]); //Add the feature to the total list.
-            DF_classA_classB.get(feature)[0] = DF; //Add the first value to the feature
-            DF_classA_classB.get(feature)[1] = 0;
+            DF_classA_classB.put(feature, new int[]{DF /*classA*/, 0/*classB*/}); //Add the feature to the total list.
         }
-        DF_ClassA.clear(); //TEST
+        //DF_ClassA.clear(); //TEST
         //Loop through Class B Features
         for (Map.Entry<String, Integer> entry : DF_ClassB.entrySet()) {
             feature = entry.getKey();
@@ -83,12 +80,10 @@ public class MasterFeatureExtractor<T> {
             if (DF_classA_classB.containsKey(feature)) {
                 DF_classA_classB.get(feature)[1] = DF; //Set the second value to the feature in index 1 (For class B)
             } else {
-                DF_classA_classB.put(feature, new int[2]); //Add the feature to the total list.
-                DF_classA_classB.get(feature)[0] = 0; //Add the first value (For class A) to the feature
-                DF_classA_classB.get(feature)[1] = DF; //Add the second value (For class B) to the feature
+                DF_classA_classB.put(feature, new int[]{0 /*classA*/, DF /*classB*/}); //Add the feature to the total list.
             }
         }
-        DF_ClassB.clear(); //TEST
+        //DF_ClassB.clear(); //TEST
         return DF_classA_classB;
     }
 }

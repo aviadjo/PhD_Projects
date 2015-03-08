@@ -39,8 +39,8 @@ public class Tester {
     
 
     public static void main(String[] args) {
-        //BuildDatasetConfiguration();
-        TestGenerateTops();
+        BuildDatasetConfiguration();
+        //TestGenerateTops();
     }
 
     public static void BuildDatasetConfiguration() {
@@ -75,6 +75,6 @@ public class Tester {
         String csv = FileReader.ReadFile("D:\\Dropbox\\DATASETS\\DATASET_2015.03.08_11.39.32_DOCX_files(B20_M20)_Rep(Binary).csv");
 
         DatasetCSVBuilder DCB = new DatasetCSVBuilder();
-        String newCSV = DCB.GetTopXDataset(csv, 600);
+        String newCSV = DCB.GetTopXDataset(csv, 20);
     }
 }
