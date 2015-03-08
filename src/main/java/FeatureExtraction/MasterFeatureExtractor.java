@@ -80,12 +80,12 @@ public class MasterFeatureExtractor<T> {
             feature = entry.getKey();
             DF = entry.getValue();
 
-            if (!DF_classA_classB.containsKey(feature)) {
+            if (DF_classA_classB.containsKey(feature)) {
+                DF_classA_classB.get(feature)[1] = DF; //Set the second value to the feature in index 1 (For class B)
+            } else {
                 DF_classA_classB.put(feature, new int[2]); //Add the feature to the total list.
                 DF_classA_classB.get(feature)[0] = 0; //Add the first value (For class A) to the feature
                 DF_classA_classB.get(feature)[1] = DF; //Add the second value (For class B) to the feature
-            } else {
-                DF_classA_classB.get(feature)[1] = DF; //Set the second value to the feature in index 1 (For class B)
             }
         }
         DF_ClassB.clear(); //TEST

@@ -24,7 +24,7 @@ public class DatasetCSVBuilder<T> {
         Malicious
     }
 
-    public enum Feature_Representation {
+    public enum FeatureRepresentation {
 
         Binary,
         TFIDF
@@ -43,7 +43,7 @@ public class DatasetCSVBuilder<T> {
      * @param suffix_class add suffix column identifying the class of the record
      * @return CSV string which represent the dataset
      */
-    public String BuildDatabaseCSV(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
+    public String BuildDatabaseCSV(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, FeatureRepresentation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
         StringBuilder dataset_CSV = new StringBuilder();
         String element_features_vector_CSV;
 
@@ -67,7 +67,7 @@ public class DatasetCSVBuilder<T> {
      * @param suffix_class add suffix column identifying the class of the record
      * @return CSV string which represent the element features vector
      */
-    public String GetFeaturesVectorCSV(T element, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, Feature_Representation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
+    public String GetFeaturesVectorCSV(T element, AFeatureExtractor<T> Feature_Extractor, ArrayList<Pair<String, Integer>> selected_features, int total_elements_num, FeatureRepresentation representation, Clasification classification, boolean prefix_element, boolean suffix_class) {
         Map<String, Integer> element_features_TF = Feature_Extractor.ExtractFeaturesFrequencyFromSingleElement(element);
         StringBuilder features_vector_CSV = new StringBuilder();
 
@@ -96,13 +96,13 @@ public class DatasetCSVBuilder<T> {
         String cell_value = "";
         for (Pair<String, Integer> selected_feature_pair : selected_features) {
             selected_feature = selected_feature_pair.getKey();
-            if (representation == Feature_Representation.Binary) {
+            if (representation == FeatureRepresentation.Binary) {
                 if (element_features_TF.containsKey(selected_feature)) {
                     cell_value = 1 + ",";
                 } else {
                     cell_value = 0 + ",";
                 }
-            } else if (representation == Feature_Representation.TFIDF) {
+            } else if (representation == FeatureRepresentation.TFIDF) {
                 num_of_elements_contain_the_feature = selected_feature_pair.getValue();
                 feature_occurrences_in_element = (element_features_TF.containsKey(selected_feature)) ? element_features_TF.get(selected_feature) : 0;
                 TFIDF = MathCalc.GetTFIDF(feature_occurrences_in_element, num_of_occurrences_of_most_common_feature, total_elements_num, num_of_elements_contain_the_feature);
