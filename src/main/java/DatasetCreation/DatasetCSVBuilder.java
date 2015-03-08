@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import javafx.util.Pair;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -143,5 +144,34 @@ public class DatasetCSVBuilder<T> {
             dataset_header_CSV = new StringBuilder(dataset_header_CSV.substring(0, dataset_header_CSV.length() - 1));
         }
         return dataset_header_CSV.toString();
+    }
+
+    public String GetTopXDataset(String originalCSVDataset, int topX) {
+        StringBuilder newCSVDatabase = new StringBuilder();
+
+        String[] lines = originalCSVDataset.split("\n");
+        int originalFeaturesCount = lines[0].split(",").length - 1;
+
+        if (originalFeaturesCount >= topX) {
+            String newLine = "";
+            for (String line : lines) {
+                if (!line.equals("")) {
+                    newLine = GetTopXCSVLine(line, topX);
+                    newCSVDatabase.append(newLine).append("\n");
+                }
+            }
+        } else {
+            Console.Console.Print(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount), true, false);
+        }
+
+        return newCSVDatabase.toString();
+    }
+
+    private String GetTopXCSVLine(String csvLine, int topX) {
+        int indexOfLastTopComma = StringUtils.ordinalIndexOf(csvLine, ",", topX);
+        int indexOdfirstClassColumn = csvLine.lastIndexOf(",") + 1;
+        String topFeatures = csvLine.substring(0, indexOfLastTopComma + 1);
+        String classColumn = csvLine.substring(indexOdfirstClassColumn, csvLine.length());
+        return topFeatures + classColumn;
     }
 }

@@ -8,7 +8,6 @@ package Implementations;
 import Console.Console;
 import FeatureExtraction.AFeatureExtractor;
 import IO.Directories;
-import static Tester.Tester.m_ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -116,7 +115,6 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
         key = key.replace(m_OfficeFileTempFolderPath, "");
         if (!m_structuralPaths.containsKey(key)) {
             m_structuralPaths.put(key, 1);
-            m_ArrayList.add(key);
         } else {
             m_structuralPaths.put(key, m_structuralPaths.get(key) + 1);
         }
