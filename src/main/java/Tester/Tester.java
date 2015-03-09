@@ -22,8 +22,8 @@ import Implementations.FeatureExtractorDocxStructuralPaths;
 public class Tester {
 
     public static void main(String[] args) {
-        BuildDatasetConfiguration();
-        //TestGenerateTops();
+        //BuildDatasetConfiguration();
+        TestGenerateTops();
     }
 
     public static void BuildDatasetConfiguration() {
@@ -36,7 +36,7 @@ public class Tester {
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;
         boolean printDocumentFrequencies = true;
-        boolean createDatabaseCSV = false;
+        boolean createDatabaseCSV = true;
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         String destinationFolderPath = "D:\\Dropbox\\DATASETS";
 
@@ -53,14 +53,15 @@ public class Tester {
                 createDatabaseCSV
         );
 
-        String datasetTop500 = DatasetCSVBuilder.GetTopXDataset(datasetCSV, 40);
-        FileWriter.WriteFile(datasetTop500, "D:\\Dropbox\\DATASETS\\top_40.csv");
+        if (datasetCSV != "") {
+            String datasetTop500 = DatasetCSVBuilder.GetTopXDataset(datasetCSV, 40,addElementIDColumn,addClassificationColumn);
+            FileWriter.WriteFile(datasetTop500, "D:\\Dropbox\\DATASETS\\top_40.csv");
+        }
     }
 
     private static void TestGenerateTops() {
-        String csv = FileReader.ReadFile("D:\\Dropbox\\DATASETS\\DATASET_2015.03.08_11.39.32_DOCX_files(B20_M20)_Rep(Binary).csv");
-
-        DatasetCSVBuilder DCB = new DatasetCSVBuilder();
-        String newCSV = DCB.GetTopXDataset(csv, 20);
+        String csv = FileReader.ReadFile("D:\\Dropbox\\DATASETS\\DATASET_TEST_EID_DATA_CLASS.csv");
+        String newCSV = DatasetCSVBuilder.GetTopXDataset(csv, 30,true,true);
+        FileWriter.WriteFile(newCSV, "D:\\Dropbox\\DATASETS\\_DATASET_TEST_RESULT.csv");
     }
 }

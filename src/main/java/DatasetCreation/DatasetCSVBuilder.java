@@ -124,8 +124,8 @@ public class DatasetCSVBuilder<T> {
     /**
      * Return CSV string which represent the header row of the dataset
      *
-     * @param selectedFeaturesNum the top selected features number to build the dataset
-     * with
+     * @param selectedFeaturesNum the top selected features number to build the
+     * dataset with
      * @param addElementIDColumn add prefix column identifying the record
      * @param addClassificationColumn add suffix column identifying the class of
      * the record
@@ -156,17 +156,17 @@ public class DatasetCSVBuilder<T> {
      * @param topX top X features to extract
      * @return CSV string of the top X features from the given dataset
      */
-    public static String GetTopXDataset(String originalCSVDataset, int topX) {
+    public static String GetTopXDataset(String originalCSVDataset, int topX, boolean elementIDColumnExist, boolean classificationColumnExist) {
         StringBuilder newCSVDatabase = new StringBuilder();
 
         String[] lines = originalCSVDataset.split("\n");
-        int originalFeaturesCount = lines[0].split(",").length - 1;
+        int originalFeaturesCount = lines[0].split(",").length + ((elementIDColumnExist) ? -1 : 0) + ((classificationColumnExist) ? -1 : 0);
 
         if (originalFeaturesCount >= topX) {
             String newLine = "";
             for (String line : lines) {
                 if (!line.equals("")) {
-                    newLine = GetTopXCSVLine(line, topX);
+                    newLine = GetTopXCSVLine(line, topX,elementIDColumnExist,classificationColumnExist);
                     newCSVDatabase.append(newLine).append("\n");
                 }
             }
@@ -185,11 +185,15 @@ public class DatasetCSVBuilder<T> {
      * @param topX top X features to extract
      * @return CSV line of the top X features from the given dataset line
      */
-    private static String GetTopXCSVLine(String csvLine, int topX) {
-        int indexOfLastTopComma = StringUtils.ordinalIndexOf(csvLine, ",", topX);
-        int indexOdfirstClassColumn = csvLine.lastIndexOf(",") + 1;
-        String topFeatures = csvLine.substring(0, indexOfLastTopComma + 1);
-        String classColumn = csvLine.substring(indexOdfirstClassColumn, csvLine.length());
+    private static String GetTopXCSVLine(String csvLine, int topX, boolean elementIDColumnExist, boolean classificationColumnExist) {
+        int indexOfLastTop =  StringUtils.ordinalIndexOf(csvLine, ",", topX + ((elementIDColumnExist) ? 1 : 0));
+        String topFeatures = csvLine.substring(0, indexOfLastTop + 1);
+        
+        String classColumn = "";
+        if (classificationColumnExist){
+            int indexOdfirstClassColumn = csvLine.lastIndexOf(",") + 1;
+            classColumn = csvLine.substring(indexOdfirstClassColumn, csvLine.length());
+        }
         return topFeatures + classColumn;
     }
 }
