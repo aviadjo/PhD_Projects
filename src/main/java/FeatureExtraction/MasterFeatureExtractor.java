@@ -29,7 +29,7 @@ public class MasterFeatureExtractor<T> {
      */
     public Map<String, Integer> ExtractFeaturesDocumentFrequencyFromElements(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor) {
         Map<String, Integer> element_features_TF = new HashMap<>();
-        Map<String, Integer> elements_features_DF = DataStructures.GetHTreeMapStringInteger();
+        Map<String, Integer> elements_features_DF = DataStructures.GetMapStringInteger();
 
         for (T element : elements) {
             element_features_TF = Feature_Extractor.ExtractFeaturesFrequencyFromSingleElement(element);
@@ -59,7 +59,7 @@ public class MasterFeatureExtractor<T> {
      * Document Frequency (DF) in Class A and Class B
      */
     public Map<String, int[]> GatherClassAClassBFeatureFrequency(Map<String, Integer> DF_ClassA, Map<String, Integer> DF_ClassB) {
-        Map<String, int[]> DF_classA_classB = DataStructures.GetHTreeMapStringArrayInt();
+        Map<String, int[]> DF_classA_classB = DataStructures.GetMapStringIntArray();
 
         String feature;
         Integer DF;

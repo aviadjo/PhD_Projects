@@ -21,7 +21,7 @@ public class MapDB {
     public static DB m_db_off_heap_FS = DBMaker.newMemoryDirectDB().transactionDisable().asyncWriteEnable().closeOnJvmShutdown().deleteFilesAfterClose().make();
     public static int m_db_counter = 0;
 
-    public static Map<String, Integer> GetHTreeMapStringInteger() {
+    public static Map<String, Integer> GetMapStringInteger() {
         return m_db_off_heap_FE.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.INTEGER)
@@ -30,7 +30,7 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(3);*/
     }
 
-    public static Map<String, int[]> GetHTreeMapStringArrayInt() {
+    public static Map<String, int[]> GetMapStringIntArray() {
         return m_db_off_heap_CFE.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.INT_ARRAY)
@@ -39,7 +39,7 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(8);*/
     }
 
-    public static Map<String, Double> GetHTreeMapStringDouble() {
+    public static Map<String, Double> GetMapStringDouble() {
         return m_db_off_heap_FS.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .counterEnable()

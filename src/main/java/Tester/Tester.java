@@ -20,8 +20,6 @@ import Implementations.FeatureExtractorDocxStructuralPaths;
  */
 public class Tester {
 
-    
-
     public static void main(String[] args) {
         BuildDatasetConfiguration();
         //TestGenerateTops();
@@ -32,7 +30,7 @@ public class Tester {
         String folder_Malicious = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_100";
         //AFeatureExtractor<String> featureExtractorNgram = new FeatureExtractorNgrams<>(3, 1);
         AFeatureExtractor<String> featureExtractorDocxStructuralPaths = new FeatureExtractorDocxStructuralPaths();
-        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(1000, 100, false);
+        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(false);
         int topFeatures = 500;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;

@@ -25,13 +25,17 @@ import org.mapdb.Serializer;
  */
 public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
 
-    private final int m_Class_A_elements_num;
-    private final int m_Class_B_elements_num;
-    private final boolean m_GainRatio;
-    private final int m_elements_num;
-    private final double m_Class_A_elements_percentage;
-    private final double m_Class_B_elements_percentage;
-    private final double m_Total_entropy;
+    private int m_Class_A_elements_num;
+    private int m_Class_B_elements_num;
+    private boolean m_GainRatio;
+    private int m_elements_num;
+    private double m_Class_A_elements_percentage;
+    private double m_Class_B_elements_percentage;
+    private double m_Total_entropy;
+
+    public FeatureSelectorInfoGainRatio(boolean GainRatio) {
+        m_GainRatio = GainRatio;
+    }
 
     /**
      * Initialize Feature Selection - Information Gain
@@ -41,10 +45,10 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * @param Class_B_elements_num the amount of elements (files, etc..) from
      * Class B
      */
-    public FeatureSelectorInfoGainRatio(int Class_A_elements_num, int Class_B_elements_num, boolean GainRatio) {
+    public void SetTotalInfo(int Class_A_elements_num, int Class_B_elements_num) {
         m_Class_A_elements_num = Class_A_elements_num;
         m_Class_B_elements_num = Class_B_elements_num;
-        m_GainRatio = GainRatio;
+
         m_elements_num = m_Class_A_elements_num + m_Class_B_elements_num;
         m_Class_A_elements_percentage = (double) m_Class_A_elements_num / (double) m_elements_num;
         m_Class_B_elements_percentage = (double) m_Class_B_elements_num / (double) m_elements_num;
@@ -55,18 +59,18 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * Select X (or X precent) top features from the given features list
      * according to Information Gain scoring
      *
-     * @param features_DFs list of features and Document Frequency for each
+     * @param featuresDFs list of features and Document Frequency for each
      * class, A and B
-     * @param top_features_amount_to_select the amount of top features to select
+     * @param topFeaturesToSelect the amount of top features to select
      * @param top_features_percent_to_select the percent of top features to
      * select
      * @return ArrayList of features selected by Information Gain Feature
      * Selection algorithm and their DF
      */
     @Override
-    public ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> features_DFs, int top_features_amount_to_select, double top_features_percent_to_select, boolean printScores) {
-        //File_Writer.Write_To_File(Get_Features_Occurrence_In_Malicious_Benign(features_DFs), String.format("D:\\features_occurences_%s.csv", Get_TimeStamp_String()));
-        Map<String, Double> features_InfoGain = GetFeaturesInfoGain(features_DFs);
+    public ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> featuresDFs, int classAelementsNum, int classBelementsNum, int topFeaturesToSelect, boolean printScores) {
+        SetTotalInfo(classAelementsNum, classBelementsNum);
+        Map<String, Double> features_InfoGain = GetFeaturesInfoGain(featuresDFs);
 
         //Comparator used for iterator
         Comparator features_comperator = new Comparator() {
@@ -80,7 +84,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         //Initialize an Iterator over the sorted map
         Iterator iterator_sorted = Pump.sort(features_InfoGain.entrySet().iterator(), false, 1000000000, features_comperator, Serializer.BASIC);
 
-        int amount_to_select = ((top_features_amount_to_select < features_InfoGain.size()) ? top_features_amount_to_select : features_InfoGain.size());
+        int amount_to_select = ((topFeaturesToSelect < features_InfoGain.size()) ? topFeaturesToSelect : features_InfoGain.size());
         ArrayList<Pair<String, Integer>> features_Top = new ArrayList<>();
         String feature;
         int feature_DF_total;
@@ -90,8 +94,10 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
             if (iterator_sorted.hasNext()) {
                 entry = (Map.Entry<String, Double>) iterator_sorted.next();
                 feature = entry.getKey();
-                if (printScores) {Console.Console.Print(String.format("Feature f%s: Information-Gain-Ratio: %s -> %s", i + 1, entry.getValue(), feature), true, false);}
-                feature_DF_of_Classes = features_DFs.get(feature);
+                if (printScores) {
+                    Console.Console.Print(String.format("Feature f%s: Information-Gain-Ratio: %s -> %s", i + 1, entry.getValue(), feature), true, false);
+                }
+                feature_DF_of_Classes = featuresDFs.get(feature);
                 feature_DF_total = feature_DF_of_Classes[0] + feature_DF_of_Classes[1]; //To be used for TFIDF calculation.
                 features_Top.add(new Pair(feature, feature_DF_total));
             }
@@ -109,7 +115,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * Information Gain (IG) or Information Gain Ratio(IGR) score
      */
     public Map<String, Double> GetFeaturesInfoGain(Map<String, int[]> features_DFs) {
-        Map<String, Double> features_InfoGain = DataStructures.GetHTreeMapStringDouble();
+        Map<String, Double> features_InfoGain = DataStructures.GetMapStringDouble();
 
         //TODO - convert all the variables to double
         int class_A;

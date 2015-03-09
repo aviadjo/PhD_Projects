@@ -14,18 +14,18 @@ import java.util.Map;
  */
 public class DataStructures {
 
-    public static Map<String, Integer> GetHTreeMapStringInteger() {
-        //return MapDB.GetHTreeMapStringInteger();
-        return new HashMap<String,Integer>();
+    public static Map<String, Integer> GetMapStringInteger() {
+        //return MapDB.GetMapStringInteger();
+        return new HashMap<>();
     }
 
-    public static Map<String, int[]> GetHTreeMapStringArrayInt() {
-        //return MapDB.GetHTreeMapStringArrayInt();
-        return new HashMap<String,int[]>();
+    public static Map<String, int[]> GetMapStringIntArray() {
+        //return MapDB.GetMapStringIntArray();
+        return new HashMap<>();
     }
 
-    public static Map<String, Double> GetHTreeMapStringDouble() {
-        //return MapDB.GetHTreeMapStringDouble();
-        return new HashMap<String,Double>();
+    public static Map<String, Double> GetMapStringDouble() {
+        //return MapDB.GetMapStringDouble();
+        return new HashMap<>();
     }
 }
