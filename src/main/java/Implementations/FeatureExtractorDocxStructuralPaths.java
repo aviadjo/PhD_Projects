@@ -29,8 +29,8 @@ import org.w3c.dom.NodeList;
  */
 public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
 
-    private static Map<String, Integer> m_structuralPaths = new HashMap<>();
-    private static String m_OfficeFileTempFolderPath = "";
+    private Map<String, Integer> m_structuralPaths = new HashMap<>();
+    private String m_OfficeFileTempFolderPath = "";
 
     @Override
     public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(Object element) {

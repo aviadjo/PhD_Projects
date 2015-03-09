@@ -5,10 +5,38 @@
  */
 package Implementations;
 
+import FeatureExtraction.AFeatureExtractor;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.cos.COSObject;
+import org.apache.pdfbox.pdmodel.*;
+
 /**
  *
  * @author Aviad
  */
-public class FeatureExtractorPDFStructuralPaths {
+public class FeatureExtractorPDFStructuralPaths extends AFeatureExtractor {
+
+    private Map<String, Integer> m_structuralPaths = new HashMap<>();
+
+    @Override
+    public Map ExtractFeaturesFrequencyFromSingleElement(Object element) {
+        Map<String, Integer> structuralPaths = new HashMap<>();
+        
+        return structuralPaths;
+    }
     
+    public void AddObjectStructuralPath(String parentObjectPath){
+        
+    }
+
+    @Override
+    public String GetName() {
+        return "PDF Structural Paths";
+    }
+
 }

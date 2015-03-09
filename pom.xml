@@ -43,5 +43,10 @@
             <artifactId>je</artifactId>
             <version>3.2.76</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>1.8.8</version>
+        </dependency>
     </dependencies>
 </project>

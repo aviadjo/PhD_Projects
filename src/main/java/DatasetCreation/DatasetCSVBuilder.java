@@ -74,8 +74,7 @@ public class DatasetCSVBuilder<T> {
         StringBuilder featuresVectorCSV = new StringBuilder();
 
         if (addElementIDColumn) {
-            String element_string = element.toString();
-            featuresVectorCSV.append(element_string + ",");
+            featuresVectorCSV.append(element.toString()).append(",");
         }
 
         //To find the value of the most common feature from the selected features
