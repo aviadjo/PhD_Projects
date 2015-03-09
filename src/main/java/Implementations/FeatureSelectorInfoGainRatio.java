@@ -65,16 +65,16 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * Selection algorithm and their DF
      */
     @Override
-    public ArrayList<Pair<String, Integer>> SelectTopFeatures(HTreeMap<String, int[]> features_DFs, int top_features_amount_to_select, double top_features_percent_to_select, boolean printScores) {
+    public ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> features_DFs, int top_features_amount_to_select, double top_features_percent_to_select, boolean printScores) {
         //File_Writer.Write_To_File(Get_Features_Occurrence_In_Malicious_Benign(features_DFs), String.format("D:\\features_occurences_%s.csv", Get_TimeStamp_String()));
-        HTreeMap<String, Double> features_InfoGain = GetFeaturesInfoGain(features_DFs);
+        Map<String, Double> features_InfoGain = GetFeaturesInfoGain(features_DFs);
 
         //Comparator used for iterator
         Comparator features_comperator = new Comparator() {
             @Override
             public int compare(Object o1, Object o2) {
-                return ((HTreeMap.Entry<String, Double>) o2).getValue().compareTo(
-                        ((HTreeMap.Entry<String, Double>) o1).getValue());
+                return ((Map.Entry<String, Double>) o2).getValue().compareTo(
+                        ((Map.Entry<String, Double>) o1).getValue());
             }
         };
 
@@ -109,8 +109,8 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * @return HTreeMap which contains for every feature it's corresponding
      * Information Gain (IG) or Information Gain Ratio(IGR) score
      */
-    public HTreeMap<String, Double> GetFeaturesInfoGain(HTreeMap<String, int[]> features_DFs) {
-        HTreeMap<String, Double> features_InfoGain = MapDB.GetHTreeMapStringDouble();
+    public Map<String, Double> GetFeaturesInfoGain(Map<String, int[]> features_DFs) {
+        Map<String, Double> features_InfoGain = MapDB.GetHTreeMapStringDouble();
 
         //TODO - convert all the variables to double
         int class_A;

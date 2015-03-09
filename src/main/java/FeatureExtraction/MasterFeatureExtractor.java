@@ -9,7 +9,6 @@ import DataStructures.MapDB;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.mapdb.HTreeMap;
 
 /**
  *
@@ -28,9 +27,9 @@ public class MasterFeatureExtractor<T> {
      * all given elements (using the given Feature Extractor) and their Document
      * Frequency (DF)
      */
-    public HTreeMap<String, Integer> ExtractFeaturesDocumentFrequencyFromElements(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor) {
+    public Map<String, Integer> ExtractFeaturesDocumentFrequencyFromElements(ArrayList<T> elements, AFeatureExtractor<T> Feature_Extractor) {
         Map<String, Integer> element_features_TF = new HashMap<>();
-        HTreeMap<String, Integer> elements_features_DF = MapDB.GetHTreeMapStringInteger();
+        Map<String, Integer> elements_features_DF = MapDB.GetHTreeMapStringInteger();
 
         for (T element : elements) {
             element_features_TF = Feature_Extractor.ExtractFeaturesFrequencyFromSingleElement(element);
@@ -59,8 +58,8 @@ public class MasterFeatureExtractor<T> {
      * extracted from all given elements (Class A and Class B) and their
      * Document Frequency (DF) in Class A and Class B
      */
-    public HTreeMap<String, int[]> GatherClassAClassBFeatureFrequency(HTreeMap<String, Integer> DF_ClassA, HTreeMap<String, Integer> DF_ClassB) {
-        HTreeMap<String, int[]> DF_classA_classB = MapDB.GetHTreeMapStringArrayInt();
+    public Map<String, int[]> GatherClassAClassBFeatureFrequency(Map<String, Integer> DF_ClassA, Map<String, Integer> DF_ClassB) {
+        Map<String, int[]> DF_classA_classB = MapDB.GetHTreeMapStringArrayInt();
 
         String feature;
         Integer DF;

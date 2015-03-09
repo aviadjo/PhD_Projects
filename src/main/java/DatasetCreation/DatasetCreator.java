@@ -18,6 +18,7 @@ import IO.Directories;
 import IO.FileWriter;
 import Math.Entropy;
 import java.util.ArrayList;
+import java.util.Map;
 import javafx.util.Pair;
 import org.mapdb.HTreeMap;
 
@@ -70,11 +71,11 @@ public class DatasetCreator {
         //FEATURE EXTRACTION
         MasterFeatureExtractor<String> CFE = new MasterFeatureExtractor<>();
         Console.Print(String.format("Feature Extraction: %s", featureExtractor.GetName()), true, false);
-        HTreeMap<String, Integer> classAFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassA_elements, featureExtractor);
+        Map<String, Integer> classAFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassA_elements, featureExtractor);
         Console.Print(String.format("ClassA unique features: %s", GetStringNumber(classAFeatures.size())), true, false);
-        HTreeMap<String, Integer> classBFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassB_elements, featureExtractor);
+        Map<String, Integer> classBFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassB_elements, featureExtractor);
         Console.Print(String.format("ClassB unique features: %s", GetStringNumber(classBFeatures.size())), true, false);
-        HTreeMap<String, int[]> classesABFeatures = CFE.GatherClassAClassBFeatureFrequency(classAFeatures, classBFeatures);
+        Map<String, int[]> classesABFeatures = CFE.GatherClassAClassBFeatureFrequency(classAFeatures, classBFeatures);
         Console.Print(String.format("Total unique features: %s", GetStringNumber(classesABFeatures.size())), true, false);
         //classA_features.clear();
         //classB_features.clear();

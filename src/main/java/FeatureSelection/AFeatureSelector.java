@@ -30,7 +30,7 @@ public abstract class AFeatureSelector implements IFeatureSelector {
      * @return ArrayList of features selected from the given features list using
      * some Feature Selection method and their DF
      */
-    public abstract ArrayList<Pair<String, Integer>> SelectTopFeatures(HTreeMap<String, int[]> features_DFs, int top_features_amount, double top_features_percent, boolean printScores);
+    public abstract ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> features_DFs, int top_features_amount, double top_features_percent, boolean printScores);
 
     public abstract String GetName();
 }

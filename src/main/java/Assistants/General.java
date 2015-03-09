@@ -68,7 +68,7 @@ public class General {
      * @return string which contains for every feature it's Frequencies in
      * classA and classB
      */
-    public static String GetFeaturesFrequenciesInClassAClassB(HTreeMap<String, int[]> features_DFs) {
+    public static String GetFeaturesFrequenciesInClassAClassB(Map<String, int[]> features_DFs) {
         StringBuilder results = new StringBuilder();
         int[] value;
         String seperator = "|";
