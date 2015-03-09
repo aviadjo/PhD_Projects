@@ -18,13 +18,13 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class DatasetCSVBuilder<T> {
 
-    public enum Clasification {
+    public static enum Clasification {
 
         Benign,
         Malicious
     }
 
-    public enum FeatureRepresentation {
+    public static enum FeatureRepresentation {
 
         Binary,
         TFIDF
@@ -131,7 +131,7 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the header row of the dataset
      */
-    public String GetDatasetHeaderCSV(int selectedFeaturesNum, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public static String GetDatasetHeaderCSV(int selectedFeaturesNum, boolean addElementIDColumn, boolean addClassificationColumn) {
         StringBuilder datasetHeaderCSV = new StringBuilder();
         if (addElementIDColumn) {
             datasetHeaderCSV.append("Element,");
