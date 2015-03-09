@@ -7,6 +7,7 @@ package DataStructures;
 
 import static Assistants.General.GetTimeStamp;
 import java.io.File;
+import java.util.Map;
 import org.mapdb.*;
 
 /**
@@ -20,7 +21,7 @@ public class MapDB {
     public static DB m_db_off_heap_FS = DBMaker.newMemoryDirectDB().transactionDisable().asyncWriteEnable().closeOnJvmShutdown().deleteFilesAfterClose().make();
     public static int m_db_counter = 0;
 
-    public static HTreeMap<String, Integer> GetHTreeMapStringInteger() {
+    public static Map<String, Integer> GetHTreeMapStringInteger() {
         return m_db_off_heap_FE.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.INTEGER)
@@ -29,7 +30,7 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(3);*/
     }
 
-    public static HTreeMap<String, int[]> GetHTreeMapStringArrayInt() {
+    public static Map<String, int[]> GetHTreeMapStringArrayInt() {
         return m_db_off_heap_CFE.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.INT_ARRAY)
@@ -38,7 +39,7 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(8);*/
     }
 
-    public static HTreeMap<String, Double> GetHTreeMapStringDouble() {
+    public static Map<String, Double> GetHTreeMapStringDouble() {
         return m_db_off_heap_FS.createHashMap(++m_db_counter + "")
                 .keySerializer(Serializer.STRING)
                 .counterEnable()
@@ -46,11 +47,11 @@ public class MapDB {
         /*return DBMaker.newCacheDirect(3);*/
     }
 
-    public static HTreeMap<String, Integer> GetTempHTreeMapStringInteger() {
+    public static Map<String, Integer> GetTempHTreeMapStringInteger() {
         return DBMaker.newTempHashMap();
     }
 
-    public static HTreeMap<String, int[]> GetTempHTreeMapStringArrayInt() {
+    public static Map<String, int[]> GetTempHTreeMapStringArrayInt() {
         return DBMaker.newTempHashMap();
     }
 

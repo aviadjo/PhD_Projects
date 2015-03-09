@@ -5,6 +5,7 @@
  */
 package Implementations;
 
+import DataStructures.DataStructures;
 import DataStructures.MapDB;
 import FeatureSelection.AFeatureSelector;
 import Math.Entropy;
@@ -12,11 +13,9 @@ import Math.MathCalc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javafx.util.Pair;
-import org.mapdb.HTreeMap;
 import org.mapdb.Pump;
 import org.mapdb.Serializer;
 
@@ -86,10 +85,10 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         String feature;
         int feature_DF_total;
         int[] feature_DF_of_Classes;
-        HTreeMap.Entry<String, Double> entry;
+        Map.Entry<String, Double> entry;
         for (int i = 0; i < amount_to_select; i++) {
             if (iterator_sorted.hasNext()) {
-                entry = (HTreeMap.Entry<String, Double>) iterator_sorted.next();
+                entry = (Map.Entry<String, Double>) iterator_sorted.next();
                 feature = entry.getKey();
                 if (printScores) {Console.Console.Print(String.format("Feature f%s: Information-Gain-Ratio: %s -> %s", i + 1, entry.getValue(), feature), true, false);}
                 feature_DF_of_Classes = features_DFs.get(feature);
@@ -106,11 +105,11 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      *
      * @param features_DFs list of features and Document Frequency for each
      * class, A and B
-     * @return HTreeMap which contains for every feature it's corresponding
+     * @return Map which contains for every feature it's corresponding
      * Information Gain (IG) or Information Gain Ratio(IGR) score
      */
     public Map<String, Double> GetFeaturesInfoGain(Map<String, int[]> features_DFs) {
-        Map<String, Double> features_InfoGain = MapDB.GetHTreeMapStringDouble();
+        Map<String, Double> features_InfoGain = DataStructures.GetHTreeMapStringDouble();
 
         //TODO - convert all the variables to double
         int class_A;

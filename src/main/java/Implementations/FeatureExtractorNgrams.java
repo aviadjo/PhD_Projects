@@ -5,13 +5,11 @@
  */
 package Implementations;
 
-import DataStructures.MapDB;
 import FeatureExtraction.AFeatureExtractor;
 import IO.FileReader;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import org.mapdb.HTreeMap;
 
 /**
  *
