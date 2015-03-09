@@ -11,6 +11,7 @@ import static DatasetCreation.DatasetCreator.BuildDataset;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import IO.FileReader;
+import IO.FileWriter;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 
@@ -39,7 +40,7 @@ public class Tester {
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         String destinationFolderPath = "D:\\Dropbox\\DATASETS";
 
-        BuildDataset(folder_Benign,
+        String datasetCSV = BuildDataset(folder_Benign,
                 folder_Malicious,
                 featureExtractorDocxStructuralPaths,
                 featureSelector,
@@ -51,6 +52,9 @@ public class Tester {
                 printDocumentFrequencies,
                 createDatabaseCSV
         );
+
+        String datasetTop500 = DatasetCSVBuilder.GetTopXDataset(datasetCSV, 40);
+        FileWriter.WriteFile(datasetTop500, "D:\\Dropbox\\DATASETS\\top_40.csv");
     }
 
     private static void TestGenerateTops() {

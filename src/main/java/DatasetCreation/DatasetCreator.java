@@ -45,7 +45,7 @@ public class DatasetCreator {
      * @param createDatabaseCSV whether to create the dataset
      * record
      */
-    public static void BuildDataset(String folder_ClassA,
+    public static String BuildDataset(String folder_ClassA,
             String folder_ClassB,
             AFeatureExtractor<String> featureExtractor,
             AFeatureSelector featureSelector,
@@ -60,13 +60,13 @@ public class DatasetCreator {
 
         ArrayList<String> ClassAelements = Directories.GetDirectoryFilesPaths(folder_ClassA);
         ArrayList<String> ClassBelements = Directories.GetDirectoryFilesPaths(folder_ClassB);
-        int total_elements_num = ClassAelements.size() + ClassBelements.size();
+        int totalElementsNum = ClassAelements.size() + ClassBelements.size();
 
         Console.Print(String.format("ClassA folder: %s", folder_ClassA), true, false);
         Console.Print(String.format("ClassB folder: %s", folder_ClassB), true, false);
         Console.Print(String.format("ClassA elements: %s", GetStringNumber(ClassAelements.size())), true, false);
         Console.Print(String.format("ClassB elements: %s", GetStringNumber(ClassBelements.size())), true, false);
-        Console.Print(String.format("Total elements: %s", GetStringNumber(total_elements_num)), true, false);
+        Console.Print(String.format("Total elements: %s", GetStringNumber(totalElementsNum)), true, false);
 
         //FEATURE EXTRACTION
         MasterFeatureExtractor<String> CFE = new MasterFeatureExtractor<>();
@@ -90,27 +90,29 @@ public class DatasetCreator {
 
         //FEATURE SELECTION
         Console.Print(String.format("Selecting top %s features..", topFeatures), true, false);
-        ArrayList<Pair<String, Integer>> selected_features = featureSelector.SelectTopFeatures(classesABFeatures, ClassAelements.size(),ClassBelements.size(),topFeatures, true);
+        ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABFeatures, ClassAelements.size(),ClassBelements.size(),topFeatures, true);
 
         //DATASET CREATION
+        String datasetCSV = "";
         if (createDatabaseCSV) {
             Console.Print(String.format("Building dataset..."), true, false);
             Console.Print(String.format("Feature representation: %s", featureRepresentation.toString()), true, false);
             //****************
             DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
-            String dataset_header = dataset_builder.GetDatasetHeaderCSV(selected_features, addElementIDColumn, addClassificationColumn);
-            String dataset_classA = dataset_builder.BuildDatabaseCSV(ClassAelements, featureExtractor, selected_features, total_elements_num, featureRepresentation, DatasetCSVBuilder.Clasification.Benign, addElementIDColumn, addClassificationColumn);
-            String dataset_classB = dataset_builder.BuildDatabaseCSV(ClassBelements, featureExtractor, selected_features, total_elements_num, featureRepresentation, DatasetCSVBuilder.Clasification.Malicious, addElementIDColumn, addClassificationColumn);
-            String dataset = dataset_header + "\n" + dataset_classB + "\n" + dataset_classA;
+            String datasetHeaderCSV = dataset_builder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
+            String datasetClassACSV = dataset_builder.BuildDatabaseCSV(ClassAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, DatasetCSVBuilder.Clasification.Benign, addElementIDColumn, addClassificationColumn);
+            String datasetClassBCSV = dataset_builder.BuildDatabaseCSV(ClassBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, DatasetCSVBuilder.Clasification.Malicious, addElementIDColumn, addClassificationColumn);
+            datasetCSV = datasetHeaderCSV + "\n" + datasetClassBCSV + "\n" + datasetClassACSV;
             StopWatch.Stop();
 
             //OUTPUTS
             String dataset_path = String.format(destinationFolderPath + "\\DATASET_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s).csv", General.GetTimeStamp(), ClassAelements.size(), ClassBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
-            FileWriter.WriteFile(dataset, dataset_path);
+            FileWriter.WriteFile(datasetCSV, dataset_path);
             Console.Print(String.format("Dataset saved to: %s", dataset_path), true, false);
             Console.Print(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);
             Console.Print(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
             Console.Print(String.format("InfoGain Values: %s", featureSelector.m_memo.size()), true, false);
         }
+        return datasetCSV;
     }
 }
