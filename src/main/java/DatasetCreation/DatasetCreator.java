@@ -38,12 +38,14 @@ public class DatasetCreator {
      * @param topFeatures top features to select
      * @param featureRepresentation feature representation method (for example:
      * Boolea, TFIDF)
-     * @param addElementIDColumn whether to add element ID column to the dataset CSV
-     * @param addClassificationColumn whether to add classification column to the dataset CSV
+     * @param addElementIDColumn whether to add element ID column to the dataset
+     * CSV
+     * @param addClassificationColumn whether to add classification column to
+     * the dataset CSV
      * @param destinationFolderPath destination folder path
-     * @param printFeaturesDocumentFrequencies whether to print the features' document frequencies
-     * @param createDatabaseCSV whether to create the dataset
-     * record
+     * @param printFeaturesDocumentFrequencies whether to print the features'
+     * document frequencies
+     * @param createDatabaseCSV whether to create the dataset record
      */
     public static String BuildDataset(String folder_ClassA,
             String folder_ClassB,
@@ -51,11 +53,13 @@ public class DatasetCreator {
             AFeatureSelector featureSelector,
             int topFeatures,
             FeatureRepresentation featureRepresentation,
+            boolean createDatabaseCSV,
             boolean addElementIDColumn,
             boolean addClassificationColumn,
             String destinationFolderPath,
             boolean printFeaturesDocumentFrequencies,
-            boolean createDatabaseCSV) {
+            boolean printSelectedFeaturesScore
+    ) {
         StopWatch.Start();
 
         ArrayList<String> ClassAelements = Directories.GetDirectoryFilesPaths(folder_ClassA);
@@ -90,7 +94,7 @@ public class DatasetCreator {
 
         //FEATURE SELECTION
         Console.Print(String.format("Selecting top %s features..", topFeatures), true, false);
-        ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABFeatures, ClassAelements.size(),ClassBelements.size(),topFeatures, true);
+        ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABFeatures, ClassAelements.size(), ClassBelements.size(), topFeatures, printSelectedFeaturesScore);
 
         //DATASET CREATION
         String datasetCSV = "";

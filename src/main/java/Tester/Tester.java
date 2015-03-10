@@ -19,10 +19,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.cos.COSObject;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
 
 /**
  *
@@ -31,8 +34,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 public class Tester {
 
     public static void main(String[] args) {
-        BuildDatasetConfiguration();
+        //BuildDatasetConfiguration();
         //TestGenerateTops();
+
+        ExtractFeaturesFrequencyFromSingleElement("D:\\2.pdf");
     }
 
     public static void BuildDatasetConfiguration() {
@@ -42,11 +47,13 @@ public class Tester {
         AFeatureExtractor<String> featureExtractorDocxStructuralPaths = new FeatureExtractorDocxStructuralPaths();
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(false);
         int topFeatures = 500;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
+        boolean createDatabaseCSV = true;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;
-        boolean printDocumentFrequencies = false;
-        boolean createDatabaseCSV = true;
-        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
+        boolean printFeaturesDocumentFrequencies = false;
+        boolean printSelectedFeaturesScore = false;
+
         String destinationFolderPath = "D:\\Dropbox\\DATASETS";
 
         String datasetCSV = BuildDataset(folder_Benign,
@@ -55,11 +62,12 @@ public class Tester {
                 featureSelector,
                 topFeatures,
                 featureRepresentation,
+                createDatabaseCSV,
                 addElementIDColumn,
                 addClassificationColumn,
                 destinationFolderPath,
-                printDocumentFrequencies,
-                createDatabaseCSV
+                printFeaturesDocumentFrequencies,
+                printSelectedFeaturesScore
         );
 
         if (datasetCSV != "") {
@@ -88,6 +96,16 @@ public class Tester {
             //PDDocumentCatalog pdc = pdf.getDocumentCatalog();
             //COSObject catalog = cd.getCatalog();
             List<COSObject> objects = pdfDocument.getObjects();
+
+            PDDocumentCatalog pdc = pdf.getDocumentCatalog();
+
+            COSBase cb = pdc.getCOSObject();
+
+            PDStructureTreeRoot pstr = pdc.getStructureTreeRoot();
+            if (pstr != null) {
+                List<Object> kids = pstr.getKids();
+            }
+            String a = "";
 
         } catch (IOException ex) {
             Console.Console.Print(String.format("Error parsing PDF file: %s", filePath), true, false);

@@ -70,10 +70,10 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
     @Override
     public ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> featuresDFs, int classAelementsNum, int classBelementsNum, int topFeaturesToSelect, boolean printScores) {
         SetTotalInfo(classAelementsNum, classBelementsNum);
-        Map<String, Double> features_InfoGain = GetFeaturesInfoGain(featuresDFs);
+        Map<String, Double> featuresInfoGain = GetFeaturesInfoGain(featuresDFs);
 
         //Comparator used for iterator
-        Comparator features_comperator = new Comparator() {
+        Comparator featuresComperator = new Comparator() {
             @Override
             public int compare(Object o1, Object o2) {
                 return ((Map.Entry<String, Double>) o2).getValue().compareTo(
@@ -82,27 +82,27 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         };
 
         //Initialize an Iterator over the sorted map
-        Iterator iterator_sorted = Pump.sort(features_InfoGain.entrySet().iterator(), false, 1000000000, features_comperator, Serializer.BASIC);
+        Iterator iteratorSorted = Pump.sort(featuresInfoGain.entrySet().iterator(), false, 1000000000, featuresComperator, Serializer.BASIC);
 
-        int amount_to_select = ((topFeaturesToSelect < features_InfoGain.size()) ? topFeaturesToSelect : features_InfoGain.size());
-        ArrayList<Pair<String, Integer>> features_Top = new ArrayList<>();
+        int amount_to_select = ((topFeaturesToSelect < featuresInfoGain.size()) ? topFeaturesToSelect : featuresInfoGain.size());
+        ArrayList<Pair<String, Integer>> topFeatures = new ArrayList<>();
         String feature;
-        int feature_DF_total;
-        int[] feature_DF_of_Classes;
+        int featureDFtotal;
+        int[] featureDFofClasses;
         Map.Entry<String, Double> entry;
         for (int i = 0; i < amount_to_select; i++) {
-            if (iterator_sorted.hasNext()) {
-                entry = (Map.Entry<String, Double>) iterator_sorted.next();
+            if (iteratorSorted.hasNext()) {
+                entry = (Map.Entry<String, Double>) iteratorSorted.next();
                 feature = entry.getKey();
                 if (printScores) {
-                    Console.Console.Print(String.format("Feature f%s: Information-Gain-Ratio: %s -> %s", i + 1, entry.getValue(), feature), true, false);
+                    Console.Console.Print(String.format("Feature f%s: %s: %s -> %s", i + 1, GetName(), entry.getValue(), feature), true, false);
                 }
-                feature_DF_of_Classes = featuresDFs.get(feature);
-                feature_DF_total = feature_DF_of_Classes[0] + feature_DF_of_Classes[1]; //To be used for TFIDF calculation.
-                features_Top.add(new Pair(feature, feature_DF_total));
+                featureDFofClasses = featuresDFs.get(feature);
+                featureDFtotal = featureDFofClasses[0] + featureDFofClasses[1]; //To be used for TFIDF calculation.
+                topFeatures.add(new Pair(feature, featureDFtotal));
             }
         }
-        return features_Top;
+        return topFeatures;
     }
 
     /**
