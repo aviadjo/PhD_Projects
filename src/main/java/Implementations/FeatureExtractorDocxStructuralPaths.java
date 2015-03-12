@@ -80,8 +80,10 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document xml = db.parse(xmlFilePath);
-            Node xmlRootNode = xml.getFirstChild();
-            AddXMLStructuralPathsRecursively(xmlRootNode, xmlFilePath);
+            NodeList nodeList = xml.getChildNodes();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                AddXMLStructuralPathsRecursively(nodeList.item(i), xmlFilePath);
+            }
         } catch (Exception ex) {
             //Console.Print_To_Console(String.format("Error traversing XML file: '%s'", xmlFilePath), true, false);
         }
