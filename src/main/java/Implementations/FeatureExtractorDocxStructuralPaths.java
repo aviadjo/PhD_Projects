@@ -29,7 +29,7 @@ import org.w3c.dom.NodeList;
  */
 public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
 
-    private Map<String, Integer> m_structuralPaths = new HashMap<>();
+    //private Map<String, Integer> m_structuralPaths = new HashMap<>();
     private String m_OfficeFileTempFolderPath = "";
 
     @Override
@@ -39,9 +39,9 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
         String destinationFolder = FileUtils.getTempDirectoryPath() + FilenameUtils.getName(filePath);
         m_OfficeFileTempFolderPath = destinationFolder + "\\";
         if (UnzipFileToFolder(filePath, destinationFolder)) {
-            ExtractFolderStructuralPaths(destinationFolder);
-            structuralPaths.putAll(m_structuralPaths);
-            m_structuralPaths.clear();
+            ExtractFolderStructuralPaths(destinationFolder, structuralPaths);
+            //structuralPaths.putAll(m_structuralPaths);
+            //m_structuralPaths.clear();
         }
         //Directories.DeleteDirectory(destinationFolder); //TODO
 
@@ -53,17 +53,17 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
      *
      * @param folderPath path of a folder
      */
-    private void ExtractFolderStructuralPaths(String folderPath) {
+    private void ExtractFolderStructuralPaths(String folderPath, Map<String, Integer> structuralPaths) {
         ArrayList<String> directoryPaths = Directories.GetDirectoryFilesPaths(folderPath);
 
         String fileExtension;
         for (String path : directoryPaths) {
             if (!path.equals(folderPath)) {
-                AddStructuralPath(path);
+                AddStructuralPath(path, structuralPaths);
                 if (Files.isRegularFile(Paths.get(path))) {
                     fileExtension = FilenameUtils.getExtension(path);
                     if (fileExtension.equals("rels") || fileExtension.equals("xml")) {
-                        AddXMLStructuralPaths(path);
+                        AddXMLStructuralPaths(path, structuralPaths);
                     }
                 }
             }
@@ -75,14 +75,14 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
      *
      * @param xmlFilePath the path of a xml file
      */
-    private void AddXMLStructuralPaths(String xmlFilePath) {
+    private void AddXMLStructuralPaths(String xmlFilePath, Map<String, Integer> structuralPaths) {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document xml = db.parse(xmlFilePath);
             NodeList nodeList = xml.getChildNodes();
             for (int i = 0; i < nodeList.getLength(); i++) {
-                AddXMLStructuralPathsRecursively(nodeList.item(i), xmlFilePath);
+                AddXMLStructuralPathsRecursively(nodeList.item(i), xmlFilePath, structuralPaths);
             }
         } catch (Exception ex) {
             //Console.Print_To_Console(String.format("Error traversing XML file: '%s'", xmlFilePath), true, false);
@@ -96,15 +96,15 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
      * @param xmlNode xmlNode to look for its childs
      * @param parentNodePath the path of the parent node
      */
-    private void AddXMLStructuralPathsRecursively(Node xmlNode, String parentNodePath) {
+    private void AddXMLStructuralPathsRecursively(Node xmlNode, String parentNodePath, Map<String, Integer> structuralPaths) {
         String currentNodePath = String.format("%s\\%s", parentNodePath, xmlNode.getNodeName());
-        AddStructuralPath(currentNodePath);
+        AddStructuralPath(currentNodePath, structuralPaths);
 
         NodeList childNodes = xmlNode.getChildNodes();
         Node childNode;
         for (int i = 0; i < childNodes.getLength(); i++) {
             childNode = childNodes.item(i);
-            AddXMLStructuralPathsRecursively(childNode, currentNodePath);
+            AddXMLStructuralPathsRecursively(childNode, currentNodePath, structuralPaths);
         }
     }
 
@@ -113,12 +113,12 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
      *
      * @param key the key to add to the map
      */
-    private void AddStructuralPath(String key) {
+    private void AddStructuralPath(String key, Map<String, Integer> structuralPaths) {
         key = key.replace(m_OfficeFileTempFolderPath, "");
-        if (!m_structuralPaths.containsKey(key)) {
-            m_structuralPaths.put(key, 1);
+        if (!structuralPaths.containsKey(key)) {
+            structuralPaths.put(key, 1);
         } else {
-            m_structuralPaths.put(key, m_structuralPaths.get(key) + 1);
+            structuralPaths.put(key, structuralPaths.get(key) + 1);
         }
     }
 
