@@ -43,7 +43,7 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
             //structuralPaths.putAll(m_structuralPaths);
             //m_structuralPaths.clear();
         }
-        //Directories.DeleteDirectory(destinationFolder); //TODO
+        //Directories.DeleteDirectory(destinationFolder); //TEST
 
         return structuralPaths;
     }

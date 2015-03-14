@@ -41,6 +41,7 @@ public class MasterFeatureExtractor<T> {
                     elements_features_DF.put(feature, elements_features_DF.get(feature) + 1);
                 }
             }
+            element_features_TF.clear(); //TEST
         }
         return elements_features_DF;
     }
@@ -50,39 +51,39 @@ public class MasterFeatureExtractor<T> {
      * extracted from all given elements (Class A and Class B) and their
      * Document Frequency (DF) in Class A and Class B
      *
-     * @param DF_ClassA Map<String, Integer> which contain the features and
+     * @param ClassADF Map<String, Integer> which contain the features and
      * their Document Frequency extracted from elements from ClassA
-     * @param DF_ClassB Map<String, Integer> which contain the features and
+     * @param ClassBDF Map<String, Integer> which contain the features and
      * their Document Frequency extracted from elements from ClassB
      * @return Map<String, ArrayList<Integer>> which contain all the feature
      * extracted from all given elements (Class A and Class B) and their
      * Document Frequency (DF) in Class A and Class B
      */
-    public Map<String, int[]> GatherClassAClassBFeatureFrequency(Map<String, Integer> DF_ClassA, Map<String, Integer> DF_ClassB) {
-        Map<String, int[]> DF_classA_classB = DataStructures.GetMapStringIntArray();
+    public Map<String, int[]> GatherClassAClassBFeatureFrequency(Map<String, Integer> ClassADF, Map<String, Integer> ClassBDF) {
+        Map<String, int[]> ClassesABDF = DataStructures.GetMapStringIntArray();
 
         String feature;
         Integer DF;
 
         //Loop through Class A Features
-        for (Map.Entry<String, Integer> entry : DF_ClassA.entrySet()) {
+        for (Map.Entry<String, Integer> entry : ClassADF.entrySet()) {
             feature = entry.getKey();
             DF = entry.getValue();
-            DF_classA_classB.put(feature, new int[]{DF /*classA*/, 0/*classB*/}); //Add the feature to the total list.
+            ClassesABDF.put(feature, new int[]{DF /*classA*/, 0/*classB*/}); //Add the feature to the total list.
         }
-        //DF_ClassA.clear(); //TEST
+        ClassADF.clear(); //TEST
         //Loop through Class B Features
-        for (Map.Entry<String, Integer> entry : DF_ClassB.entrySet()) {
+        for (Map.Entry<String, Integer> entry : ClassBDF.entrySet()) {
             feature = entry.getKey();
             DF = entry.getValue();
 
-            if (DF_classA_classB.containsKey(feature)) {
-                DF_classA_classB.get(feature)[1] = DF; //Set the second value to the feature in index 1 (For class B)
+            if (ClassesABDF.containsKey(feature)) {
+                ClassesABDF.get(feature)[1] = DF; //Set the second value to the feature in index 1 (For class B)
             } else {
-                DF_classA_classB.put(feature, new int[]{0 /*classA*/, DF /*classB*/}); //Add the feature to the total list.
+                ClassesABDF.put(feature, new int[]{0 /*classA*/, DF /*classB*/}); //Add the feature to the total list.
             }
         }
-        //DF_ClassB.clear(); //TEST
-        return DF_classA_classB;
+        ClassBDF.clear(); //TEST
+        return ClassesABDF;
     }
 }

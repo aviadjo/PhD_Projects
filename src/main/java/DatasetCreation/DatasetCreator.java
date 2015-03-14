@@ -81,8 +81,6 @@ public class DatasetCreator {
         Console.Print(String.format("ClassB unique features: %s", GetStringNumber(classBFeatures.size())), true, false);
         Map<String, int[]> classesABFeatures = CFE.GatherClassAClassBFeatureFrequency(classAFeatures, classBFeatures);
         Console.Print(String.format("Total unique features: %s", GetStringNumber(classesABFeatures.size())), true, false);
-        //classA_features.clear();
-        //classB_features.clear();
         MapDB.m_db_off_heap_FE.commit();
 
         //PRINT DOCUMENT FREQUENCY

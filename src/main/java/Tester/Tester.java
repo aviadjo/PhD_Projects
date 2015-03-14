@@ -17,26 +17,17 @@ import Implementations.FeatureExtractorDocxStructuralPaths;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.swing.tree.TreeNode;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.cos.COSObject;
-import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdfviewer.PDFTreeModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
-import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
 import org.fit.pdfdom.PDFDomTree;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -112,6 +103,7 @@ public class Tester {
             
             PDFTreeModel ptm = new PDFTreeModel(pdf);
             AddPDFStructuralPathsRecursively(ptm.getRoot(),"\\");
+            
             //pdf.getDocument().getCatalog().getCOSObject()
             
             /*PDDocumentCatalog pdc = pdf.getDocumentCatalog();
@@ -136,14 +128,18 @@ public class Tester {
      * @param parentNodePath the path of the parent node
      */
     private static void AddPDFStructuralPathsRecursively(Object pdfNode, String parentNodePath) {
-        COSDictionary pdfNodeDict = (COSDictionary) pdfNode;
+        //String currentNodePath = String.format("%s\\%s", parentNodePath, pdfNode.toString());
         
         COSName key;
         COSBase value;
+        TreeNode a = ((TreeNode)pdfNode);
+        
         for (Map.Entry<COSName, COSBase> mapEntry : ((COSDictionary) pdfNode).entrySet())
         {
             key = mapEntry.getKey();
             value = mapEntry.getValue();
+            
+            AddPDFStructuralPathsRecursively(value.getCOSObject(),/*currentNodePath*/"");
         }
         /*pdfNode
         String currentNodePath = String.format("%s\\%s", parentNodePath, pdfNode.getNodeName());
