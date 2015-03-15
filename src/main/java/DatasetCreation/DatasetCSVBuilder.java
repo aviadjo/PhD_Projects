@@ -6,6 +6,9 @@
 package DatasetCreation;
 
 import FeatureExtraction.AFeatureExtractor;
+import Framework.Framework.Clasification;
+import Framework.Framework.FeatureRepresentation;
+import IO.FileWriter;
 import Math.MathCalc;
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,18 +20,6 @@ import org.apache.commons.lang3.StringUtils;
  * @author Aviad
  */
 public class DatasetCSVBuilder<T> {
-
-    public static enum Clasification {
-
-        Benign,
-        Malicious
-    }
-
-    public static enum FeatureRepresentation {
-
-        Binary,
-        TFIDF
-    }
 
     /**
      * Return CSV string which represent the dataset
@@ -148,6 +139,28 @@ public class DatasetCSVBuilder<T> {
     }
 
     /**
+     * Generate Top datasets from the given original CSV dataset
+     *
+     * @param originalCSVDataset the original dataset to extract top X features
+     * from
+     * @param destinationFolder the destination folder to write the datasets
+     * @param addElementIDColumn add prefix column identifying the record
+     * @param addClassificationColumn add suffix column identifying the class of
+     * @param tops top X datasets to build
+     */
+    public static void GenerateTopDatasets(String originalCSVDataset, ArrayList<Integer> tops, String destinationFolder, boolean elementIDColumnExist, boolean classificationColumnExist) {
+        String topDataset;
+        String destinationFile;
+        char letter = 'a';
+        for (Integer top : tops) {
+            destinationFile = String.format("%s_Dataset_Top_%s.csv", letter, top);
+            topDataset = GetTopXDataset(originalCSVDataset, top, elementIDColumnExist, classificationColumnExist);
+            FileWriter.WriteFile(topDataset, destinationFolder + "\\" + destinationFile);
+            letter = (char)(((int)letter) + 1);
+        }
+    }
+
+    /**
      * Return CSV string of the top X features from the given dataset
      *
      * @param originalCSVDataset the original dataset to extract top X features
@@ -165,7 +178,7 @@ public class DatasetCSVBuilder<T> {
             String newLine = "";
             for (String line : lines) {
                 if (!line.equals("")) {
-                    newLine = GetTopXCSVLine(line, topX,elementIDColumnExist,classificationColumnExist);
+                    newLine = GetTopXCSVLine(line, topX, elementIDColumnExist, classificationColumnExist);
                     newCSVDatabase.append(newLine).append("\n");
                 }
             }
@@ -185,11 +198,11 @@ public class DatasetCSVBuilder<T> {
      * @return CSV line of the top X features from the given dataset line
      */
     private static String GetTopXCSVLine(String csvLine, int topX, boolean elementIDColumnExist, boolean classificationColumnExist) {
-        int indexOfLastTop =  StringUtils.ordinalIndexOf(csvLine, ",", topX + ((elementIDColumnExist) ? 1 : 0));
+        int indexOfLastTop = StringUtils.ordinalIndexOf(csvLine, ",", topX + ((elementIDColumnExist) ? 1 : 0));
         String topFeatures = csvLine.substring(0, indexOfLastTop + 1);
-        
+
         String classColumn = "";
-        if (classificationColumnExist){
+        if (classificationColumnExist) {
             int indexOdfirstClassColumn = csvLine.lastIndexOf(",") + 1;
             classColumn = csvLine.substring(indexOdfirstClassColumn, csvLine.length());
         }

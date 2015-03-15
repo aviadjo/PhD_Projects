@@ -10,10 +10,11 @@ import static Assistants.General.GetStringNumber;
 import Assistants.StopWatch;
 import Console.Console;
 import DataStructures.MapDB;
-import DatasetCreation.DatasetCSVBuilder.FeatureRepresentation;
+import Framework.Framework.FeatureRepresentation;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.MasterFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
+import Framework.Framework.Clasification;
 import IO.Directories;
 import IO.FileWriter;
 import Math.Entropy;
@@ -46,6 +47,8 @@ public class DatasetCreator {
      * @param printFeaturesDocumentFrequencies whether to print the features'
      * document frequencies
      * @param createDatabaseCSV whether to create the dataset record
+     * @param printSelectedFeaturesScore whether to print the score of the
+     * selected features
      */
     public static String BuildDataset(String folder_ClassA,
             String folder_ClassB,
@@ -102,8 +105,8 @@ public class DatasetCreator {
             //****************
             DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
             String datasetHeaderCSV = dataset_builder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
-            String datasetClassACSV = dataset_builder.BuildDatabaseCSV(ClassAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, DatasetCSVBuilder.Clasification.Benign, addElementIDColumn, addClassificationColumn);
-            String datasetClassBCSV = dataset_builder.BuildDatabaseCSV(ClassBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, DatasetCSVBuilder.Clasification.Malicious, addElementIDColumn, addClassificationColumn);
+            String datasetClassACSV = dataset_builder.BuildDatabaseCSV(ClassAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Benign, addElementIDColumn, addClassificationColumn);
+            String datasetClassBCSV = dataset_builder.BuildDatabaseCSV(ClassBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Malicious, addElementIDColumn, addClassificationColumn);
             datasetCSV = datasetHeaderCSV + "\n" + datasetClassBCSV + "\n" + datasetClassACSV;
             StopWatch.Stop();
 

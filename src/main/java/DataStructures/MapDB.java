@@ -16,9 +16,10 @@ import org.mapdb.*;
  */
 public class MapDB {
 
-    public static DB m_db_off_heap_FE = DBMaker.newMemoryDirectDB().transactionDisable().asyncWriteEnable().closeOnJvmShutdown().deleteFilesAfterClose().make();
-    public static DB m_db_off_heap_CFE = DBMaker.newMemoryDirectDB().transactionDisable().asyncWriteEnable().closeOnJvmShutdown().deleteFilesAfterClose().make();
-    public static DB m_db_off_heap_FS = DBMaker.newMemoryDirectDB().transactionDisable().asyncWriteEnable().closeOnJvmShutdown().deleteFilesAfterClose().make();
+    //TEST - mmapFileEnableIfSupported()
+    public static DB m_db_off_heap_FE = DBMaker.newMemoryDirectDB().transactionDisable().closeOnJvmShutdown().asyncWriteEnable().deleteFilesAfterClose().make();
+    public static DB m_db_off_heap_CFE = DBMaker.newMemoryDirectDB().transactionDisable().closeOnJvmShutdown().asyncWriteEnable().deleteFilesAfterClose().make();
+    public static DB m_db_off_heap_FS = DBMaker.newMemoryDirectDB().transactionDisable().closeOnJvmShutdown().asyncWriteEnable().deleteFilesAfterClose().make();
     public static int m_db_counter = 0;
 
     public static Map<String, Integer> GetMapStringInteger() {

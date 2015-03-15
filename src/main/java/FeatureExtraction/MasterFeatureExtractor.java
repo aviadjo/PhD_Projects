@@ -64,6 +64,7 @@ public class MasterFeatureExtractor<T> {
 
         String feature;
         Integer DF;
+        int[] DFsTest;
 
         //Loop through Class A Features
         for (Map.Entry<String, Integer> entry : ClassADF.entrySet()) {
@@ -73,12 +74,18 @@ public class MasterFeatureExtractor<T> {
         }
         ClassADF.clear(); //TEST
         //Loop through Class B Features
+        
         for (Map.Entry<String, Integer> entry : ClassBDF.entrySet()) {
             feature = entry.getKey();
             DF = entry.getValue();
 
             if (ClassesABDF.containsKey(feature)) {
                 ClassesABDF.get(feature)[1] = DF; //Set the second value to the feature in index 1 (For class B)
+                
+                //DFsTest = ClassesABDF.get(feature);
+                //ClassesABDF.remove(feature);
+                //ClassesABDF.put(feature, new int[]{DFsTest[0] /*classA*/, DF /*classB*/});
+                
             } else {
                 ClassesABDF.put(feature, new int[]{0 /*classA*/, DF /*classB*/}); //Add the feature to the total list.
             }
