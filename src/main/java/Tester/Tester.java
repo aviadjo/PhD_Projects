@@ -36,14 +36,11 @@ import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 public class Tester {
 
     public static void main(String[] args) {
-        CreateDataset();
-        //TestGenerateTops();
+        //CreateDataset();
 
         //ExtractFeaturesFrequencyFromSingleElement("D:\\2.pdf");
         //SetConfigurationFile();
     }
-
-
 
     private static Map<String, Integer> m_structuralPaths = new HashMap<>();
 
@@ -59,7 +56,6 @@ public class Tester {
 
             //pdfDocument.
             PDDocumentCatalog pdc = pdf.getDocumentCatalog();
-            //pdc.getActions().
 
             //List<COSObject> objects = pdfDocument.getObjects();
             PDFTreeModel ptm = new PDFTreeModel(pdf);
