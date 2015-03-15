@@ -15,9 +15,13 @@ import IO.FileWriter;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import javax.swing.tree.TreeNode;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.pdfbox.cos.COSBase;
@@ -37,10 +41,12 @@ import org.w3c.dom.NodeList;
 public class Tester {
 
     public static void main(String[] args) {
-        //BuildDatasetConfiguration();
+        BuildDatasetConfiguration();
         //TestGenerateTops();
 
-        ExtractFeaturesFrequencyFromSingleElement("D:\\2.pdf");
+        //ExtractFeaturesFrequencyFromSingleElement("D:\\2.pdf");
+
+        //SetConfigurationFile();
     }
 
     public static void BuildDatasetConfiguration() {
@@ -100,26 +106,24 @@ public class Tester {
             //PDDocumentCatalog pdc = pdf.getDocumentCatalog();
             //COSObject catalog = cd.getCatalog();
             //List<COSObject> objects = pdfDocument.getObjects();
-            
-            PDFTreeModel ptm = new PDFTreeModel(pdf);
-            AddPDFStructuralPathsRecursively(ptm.getRoot(),"\\");
-            
-            //pdf.getDocument().getCatalog().getCOSObject()
-            
-            /*PDDocumentCatalog pdc = pdf.getDocumentCatalog();
-            COSBase cb = pdc.getCOSObject();
-            PDStructureTreeRoot pstr = pdc.getStructureTreeRoot();
-            if (pstr != null) {
-                List<Object> kids = pstr.getKids();
-            }
-            String a = "";*/
 
+            PDFTreeModel ptm = new PDFTreeModel(pdf);
+            AddPDFStructuralPathsRecursively(ptm.getRoot(), "\\");
+
+            //pdf.getDocument().getCatalog().getCOSObject()
+            /*PDDocumentCatalog pdc = pdf.getDocumentCatalog();
+             COSBase cb = pdc.getCOSObject();
+             PDStructureTreeRoot pstr = pdc.getStructureTreeRoot();
+             if (pstr != null) {
+             List<Object> kids = pstr.getKids();
+             }
+             String a = "";*/
         } catch (IOException ex) {
             Console.Console.Print(String.format("Error parsing PDF file: %s", filePath), true, false);
         }
         return structuralPaths;
     }
-    
+
     /**
      * Add structural paths from the given pdfNode into the local map
      * recursively
@@ -129,28 +133,27 @@ public class Tester {
      */
     private static void AddPDFStructuralPathsRecursively(Object pdfNode, String parentNodePath) {
         //String currentNodePath = String.format("%s\\%s", parentNodePath, pdfNode.toString());
-        
+
         COSName key;
         COSBase value;
-        TreeNode a = ((TreeNode)pdfNode);
-        
-        for (Map.Entry<COSName, COSBase> mapEntry : ((COSDictionary) pdfNode).entrySet())
-        {
+        TreeNode a = ((TreeNode) pdfNode);
+
+        for (Map.Entry<COSName, COSBase> mapEntry : ((COSDictionary) pdfNode).entrySet()) {
             key = mapEntry.getKey();
             value = mapEntry.getValue();
-            
-            AddPDFStructuralPathsRecursively(value.getCOSObject(),/*currentNodePath*/"");
+
+            AddPDFStructuralPathsRecursively(value.getCOSObject(),/*currentNodePath*/ "");
         }
         /*pdfNode
-        String currentNodePath = String.format("%s\\%s", parentNodePath, pdfNode.getNodeName());
-        AddPDFStructuralPath(currentNodePath);
+         String currentNodePath = String.format("%s\\%s", parentNodePath, pdfNode.getNodeName());
+         AddPDFStructuralPath(currentNodePath);
 
-        NodeList childNodes = pdfNode.getChildNodes();
-        Node childNode;
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            childNode = childNodes.item(i);
-            AddPDFStructuralPathsRecursively(childNode, currentNodePath);
-        }*/
+         NodeList childNodes = pdfNode.getChildNodes();
+         Node childNode;
+         for (int i = 0; i < childNodes.getLength(); i++) {
+         childNode = childNodes.item(i);
+         AddPDFStructuralPathsRecursively(childNode, currentNodePath);
+         }*/
     }
 
     /**
@@ -219,5 +222,56 @@ public class Tester {
     //        m_structuralPaths.put(key, m_structuralPaths.get(key) + 1);
     //    }
     //}
+    private static void SetConfigurationFile() {
+        Properties prop = new Properties();
+
+        OutputStream output;
+        try {
+            output = new FileOutputStream("config.properties");
+
+            // set the properties value
+            prop.setProperty("BENIGN_FOLDER", "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_20");
+            prop.setProperty("MALICIOUS_FOLDER", ":\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_100");
+            prop.setProperty("SELECT_TOP_FEATURES", "500");
+
+            // save properties to project root folder
+            prop.store(output,null);
+        } catch (FileNotFoundException ex) {
+
+        } catch (IOException ex) {
+            
+        }
+        
+        String folder_Benign = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_20";
+        String folder_Malicious = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_100";
+
+        //AFeatureExtractor<String> featureExtractorNgram = new FeatureExtractorNgrams<>(3, 1);
+        AFeatureExtractor<String> featureExtractorDocxStructuralPaths = new FeatureExtractorDocxStructuralPaths();
+        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(false);
+        int topFeatures = 500;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
+        boolean createDatabaseCSV = true;
+        boolean addElementIDColumn = false;
+        boolean addClassificationColumn = true;
+        boolean printFeaturesDocumentFrequencies = false;
+        boolean printSelectedFeaturesScore = false;
+
+        String destinationFolderPath = "D:\\Dropbox\\DATASETS";
+
+        String datasetCSV = BuildDataset(folder_Benign,
+                folder_Malicious,
+                featureExtractorDocxStructuralPaths,
+                featureSelector,
+                topFeatures,
+                featureRepresentation,
+                createDatabaseCSV,
+                addElementIDColumn,
+                addClassificationColumn,
+                destinationFolderPath,
+                printFeaturesDocumentFrequencies,
+                printSelectedFeaturesScore
+        );
+
+    }
 
 }

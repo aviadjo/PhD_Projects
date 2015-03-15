@@ -5,6 +5,10 @@
  */
 package Console;
 
+import Tester.Tester;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Aviad
@@ -24,6 +28,7 @@ public class Console {
         }
         if (error) {
             System.err.println(text);
+            //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         } else {
             System.out.println(text);
         }

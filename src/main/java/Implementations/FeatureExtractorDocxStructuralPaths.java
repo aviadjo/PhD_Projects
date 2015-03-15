@@ -29,7 +29,6 @@ import org.w3c.dom.NodeList;
  */
 public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
 
-    //private Map<String, Integer> m_structuralPaths = new HashMap<>();
     private String m_OfficeFileTempFolderPath = "";
 
     @Override
@@ -40,11 +39,8 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
         m_OfficeFileTempFolderPath = destinationFolder + "\\";
         if (UnzipFileToFolder(filePath, destinationFolder)) {
             ExtractFolderStructuralPaths(destinationFolder, structuralPaths);
-            //structuralPaths.putAll(m_structuralPaths);
-            //m_structuralPaths.clear();
         }
         //Directories.DeleteDirectory(destinationFolder); //TEST
-
         return structuralPaths;
     }
 

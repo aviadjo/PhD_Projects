@@ -41,7 +41,7 @@ public class MasterFeatureExtractor<T> {
                     elements_features_DF.put(feature, elements_features_DF.get(feature) + 1);
                 }
             }
-            element_features_TF.clear(); //TEST
+            //element_features_TF.clear(); //TEST
         }
         return elements_features_DF;
     }
