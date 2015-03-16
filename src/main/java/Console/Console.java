@@ -22,7 +22,7 @@ public class Console {
      * @param error is error message
      * @param debug is debug mode
      */
-    public static void Print(String text, boolean error, boolean debug) {
+    public static void PrintLine(String text, boolean error, boolean debug) {
         if (debug) {
 
         }

@@ -29,6 +29,8 @@ import org.mapdb.HTreeMap;
  */
 public class DatasetCreator {
 
+    public static String m_datasetFilename = "";
+    
     /**
      * Return CSV string which represent the dataset
      *
@@ -52,6 +54,8 @@ public class DatasetCreator {
      */
     public static String BuildDataset(String folder_ClassA,
             String folder_ClassB,
+            String destinationFolderPath,
+            String datasetFilenameFormat,
             AFeatureExtractor<String> featureExtractor,
             AFeatureSelector featureSelector,
             int topFeatures,
@@ -59,7 +63,6 @@ public class DatasetCreator {
             boolean createDatabaseCSV,
             boolean addElementIDColumn,
             boolean addClassificationColumn,
-            String destinationFolderPath,
             boolean printFeaturesDocumentFrequencies,
             boolean printSelectedFeaturesScore
     ) {
@@ -69,39 +72,39 @@ public class DatasetCreator {
         ArrayList<String> ClassBelements = Directories.GetDirectoryFilesPaths(folder_ClassB);
         int totalElementsNum = ClassAelements.size() + ClassBelements.size();
 
-        Console.Print(String.format("ClassA folder: %s", folder_ClassA), true, false);
-        Console.Print(String.format("ClassB folder: %s", folder_ClassB), true, false);
-        Console.Print(String.format("ClassA elements: %s", GetStringNumber(ClassAelements.size())), true, false);
-        Console.Print(String.format("ClassB elements: %s", GetStringNumber(ClassBelements.size())), true, false);
-        Console.Print(String.format("Total elements: %s", GetStringNumber(totalElementsNum)), true, false);
+        Console.PrintLine(String.format("ClassA folder: %s", folder_ClassA), true, false);
+        Console.PrintLine(String.format("ClassB folder: %s", folder_ClassB), true, false);
+        Console.PrintLine(String.format("ClassA elements: %s", GetStringNumber(ClassAelements.size())), true, false);
+        Console.PrintLine(String.format("ClassB elements: %s", GetStringNumber(ClassBelements.size())), true, false);
+        Console.PrintLine(String.format("Total elements: %s", GetStringNumber(totalElementsNum)), true, false);
 
         //FEATURE EXTRACTION
         MasterFeatureExtractor<String> CFE = new MasterFeatureExtractor<>();
-        Console.Print(String.format("Feature Extraction: %s", featureExtractor.GetName()), true, false);
+        Console.PrintLine(String.format("Feature Extraction: %s", featureExtractor.GetName()), true, false);
         Map<String, Integer> classAFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassAelements, featureExtractor);
-        Console.Print(String.format("ClassA unique features: %s", GetStringNumber(classAFeatures.size())), true, false);
+        Console.PrintLine(String.format("ClassA unique features: %s", GetStringNumber(classAFeatures.size())), true, false);
         Map<String, Integer> classBFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassBelements, featureExtractor);
-        Console.Print(String.format("ClassB unique features: %s", GetStringNumber(classBFeatures.size())), true, false);
+        Console.PrintLine(String.format("ClassB unique features: %s", GetStringNumber(classBFeatures.size())), true, false);
         Map<String, int[]> classesABFeatures = CFE.GatherClassAClassBFeatureFrequency(classAFeatures, classBFeatures);
-        Console.Print(String.format("Total unique features: %s", GetStringNumber(classesABFeatures.size())), true, false);
+        Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABFeatures.size())), true, false);
         MapDB.m_db_off_heap_FE.commit();
 
         //PRINT DOCUMENT FREQUENCY
         if (printFeaturesDocumentFrequencies) {
             String filename = String.format(destinationFolderPath + "\\DATASET_%s_DOCX_DF.csv", General.GetTimeStamp());
-            Console.Print(String.format("Document frequencies written to: %s", filename), true, false);
+            Console.PrintLine(String.format("Document frequencies written to: %s", filename), true, false);
             FileWriter.WriteFile(General.GetFeaturesFrequenciesInClassAClassB(classesABFeatures), filename);
         }
 
         //FEATURE SELECTION
-        Console.Print(String.format("Selecting top %s features..", topFeatures), true, false);
+        Console.PrintLine(String.format("Selecting top %s features..", topFeatures), true, false);
         ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABFeatures, ClassAelements.size(), ClassBelements.size(), topFeatures, printSelectedFeaturesScore);
 
         //DATASET CREATION
         String datasetCSV = "";
         if (createDatabaseCSV) {
-            Console.Print(String.format("Building dataset..."), true, false);
-            Console.Print(String.format("Feature representation: %s", featureRepresentation.toString()), true, false);
+            Console.PrintLine(String.format("Building dataset..."), true, false);
+            Console.PrintLine(String.format("Feature representation: %s", featureRepresentation.toString()), true, false);
             //****************
             DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
             String datasetHeaderCSV = dataset_builder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
@@ -111,12 +114,13 @@ public class DatasetCreator {
             StopWatch.Stop();
 
             //OUTPUTS
-            String dataset_path = String.format(destinationFolderPath + "\\DATASET_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s).csv", General.GetTimeStamp(), ClassAelements.size(), ClassBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
-            FileWriter.WriteFile(datasetCSV, dataset_path);
-            Console.Print(String.format("Dataset saved to: %s", dataset_path), true, false);
-            Console.Print(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);
-            Console.Print(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
-            Console.Print(String.format("InfoGain Values: %s", featureSelector.m_memo.size()), true, false);
+            m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), ClassAelements.size(), ClassBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
+            String datasetPath = destinationFolderPath + "\\" + m_datasetFilename + ".csv";
+            FileWriter.WriteFile(datasetCSV, datasetPath);
+            Console.PrintLine(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);
+            Console.PrintLine(String.format("Dataset saved to: %s", datasetPath), true, false);
+            //Console.PrintLine(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
+            //Console.PrintLine(String.format("InfoGain Values: %s", featureSelector.m_memo.size()), true, false);
         }
         return datasetCSV;
     }

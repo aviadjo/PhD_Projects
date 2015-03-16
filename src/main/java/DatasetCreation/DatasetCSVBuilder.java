@@ -144,16 +144,19 @@ public class DatasetCSVBuilder<T> {
      * @param originalCSVDataset the original dataset to extract top X features
      * from
      * @param destinationFolder the destination folder to write the datasets
-     * @param addElementIDColumn add prefix column identifying the record
-     * @param addClassificationColumn add suffix column identifying the class of
      * @param tops top X datasets to build
+     * @param datasetFilename the dataset filename
+     * @param elementIDColumnExist is column identifying the record exists
+     * @param classificationColumnExist is column identifying the class of
+     * the record exists
      */
-    public static void GenerateTopDatasets(String originalCSVDataset, ArrayList<Integer> tops, String destinationFolder, boolean elementIDColumnExist, boolean classificationColumnExist) {
+    public static void GenerateTopDatasets(String originalCSVDataset, ArrayList<Integer> tops, String destinationFolder, String datasetFilename,boolean elementIDColumnExist, boolean classificationColumnExist) {
         String topDataset;
         String destinationFile;
         char letter = 'a';
         for (Integer top : tops) {
-            destinationFile = String.format("%s_Dataset_Top_%s.csv", letter, top);
+            Console.Console.PrintLine(top + "", true, false);
+            destinationFile = String.format("%s_%s_Top(%s).csv", datasetFilename,letter, top);
             topDataset = GetTopXDataset(originalCSVDataset, top, elementIDColumnExist, classificationColumnExist);
             FileWriter.WriteFile(topDataset, destinationFolder + "\\" + destinationFile);
             letter = (char)(((int)letter) + 1);
@@ -183,7 +186,7 @@ public class DatasetCSVBuilder<T> {
                 }
             }
         } else {
-            Console.Console.Print(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount), true, false);
+            Console.Console.PrintLine(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount), true, false);
         }
 
         return newCSVDatabase.toString();

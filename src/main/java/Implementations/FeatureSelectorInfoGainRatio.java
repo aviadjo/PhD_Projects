@@ -95,7 +95,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
                 entry = (Map.Entry<String, Double>) iteratorSorted.next();
                 feature = entry.getKey();
                 if (printScores) {
-                    Console.Console.Print(String.format("Feature f%s: %s: %s -> %s", i + 1, GetName(), entry.getValue(), feature), true, false);
+                    Console.Console.PrintLine(String.format("Feature f%s: %s: %s -> %s", i + 1, GetName(), entry.getValue(), feature), true, false);
                 }
                 featureDFofClasses = featuresDFs.get(feature);
                 featureDFtotal = featureDFofClasses[0] + featureDFofClasses[1]; //To be used for TFIDF calculation.

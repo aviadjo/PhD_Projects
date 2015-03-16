@@ -36,7 +36,7 @@ import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 public class Tester {
 
     public static void main(String[] args) {
-        //CreateDataset();
+        CreateDataset();
 
         //ExtractFeaturesFrequencyFromSingleElement("D:\\2.pdf");
         //SetConfigurationFile();
@@ -70,7 +70,7 @@ public class Tester {
              }
              String a = "";*/
         } catch (IOException ex) {
-            Console.Console.Print(String.format("Error parsing PDF file: %s", filePath), true, false);
+            Console.Console.PrintLine(String.format("Error parsing PDF file: %s", filePath), true, false);
         }
         return structuralPaths;
     }
@@ -194,34 +194,6 @@ public class Tester {
 
         String folder_Benign = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_20";
         String folder_Malicious = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_100";
-
-        //AFeatureExtractor<String> featureExtractorNgram = new FeatureExtractorNgrams<>(3, 1);
-        AFeatureExtractor<String> featureExtractorDocxStructuralPaths = new FeatureExtractorDocxStructuralPaths();
-        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(false);
-        int topFeatures = 500;
-        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
-        boolean createDatabaseCSV = true;
-        boolean addElementIDColumn = false;
-        boolean addClassificationColumn = true;
-        boolean printFeaturesDocumentFrequencies = false;
-        boolean printSelectedFeaturesScore = false;
-
-        String destinationFolderPath = "D:\\Dropbox\\DATASETS";
-
-        String datasetCSV = BuildDataset(folder_Benign,
-                folder_Malicious,
-                featureExtractorDocxStructuralPaths,
-                featureSelector,
-                topFeatures,
-                featureRepresentation,
-                createDatabaseCSV,
-                addElementIDColumn,
-                addClassificationColumn,
-                destinationFolderPath,
-                printFeaturesDocumentFrequencies,
-                printSelectedFeaturesScore
-        );
-
     }
 
 }

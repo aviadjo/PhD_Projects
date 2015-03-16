@@ -48,5 +48,17 @@
             <artifactId>pdfbox</artifactId>
             <version>1.8.8</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.11</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>3.11</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

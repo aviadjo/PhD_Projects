@@ -134,10 +134,10 @@ public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
                 zipFile.extractAll(destinationFolder);
                 success = true;
             } else {
-                Console.Print(String.format("file '%s' is password protected!", filePath), true, false);
+                Console.PrintLine(String.format("file '%s' is password protected!", filePath), true, false);
             }
         } catch (ZipException ex) {
-            Console.Print(String.format("Error unzipping file '%s': %s", filePath, ex.getMessage()), true, false);
+            Console.PrintLine(String.format("Error unzipping file '%s': %s", filePath, ex.getMessage()), true, false);
         }
         return success;
     }

@@ -43,7 +43,7 @@ public class Directories {
         if (!destinationDirectory.exists()) {
             directoryCreated = destinationDirectory.mkdir();
             if (!directoryCreated) {
-                Console.Print(String.format("Error creating directory: %s", directoryPath), true, false);
+                Console.PrintLine(String.format("Error creating directory: %s", directoryPath), true, false);
             }
         }
         return destinationDirectory;
@@ -60,7 +60,7 @@ public class Directories {
             FileUtils.deleteDirectory(new File(directoryPath));
             return true;
         } catch (IOException e) {
-            Console.Print(String.format("Error deleting directory: %s", directoryPath), true, false);
+            Console.PrintLine(String.format("Error deleting directory: %s", directoryPath), true, false);
             return false;
         }
     }
@@ -78,7 +78,7 @@ public class Directories {
                 directoryPaths.add(filePath.toString());
             });
         } catch (IOException e) {
-            Console.Print(String.format("Error getting directory paths: %s", directoryPath), true, false);
+            Console.PrintLine(String.format("Error getting directory paths: %s", directoryPath), true, false);
         }
         
         directoryPaths.remove(directoryPath);

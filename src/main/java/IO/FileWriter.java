@@ -25,7 +25,7 @@ public class FileWriter {
         try {
             FileUtils.writeStringToFile(new File(destination_file_path), text);
         } catch (IOException e) {
-            Console.Console.Print("Error writing strubg to file: " + e.getMessage(), true, false);
+            Console.Console.PrintLine("Error writing strubg to file: " + e.getMessage(), true, false);
         }
     }
 }
