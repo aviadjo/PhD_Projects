@@ -10,18 +10,16 @@ import static Assistants.General.GetStringNumber;
 import Assistants.StopWatch;
 import Console.Console;
 import DataStructures.MapDB;
-import Framework.Framework.FeatureRepresentation;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.MasterFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework.Clasification;
+import Framework.Framework.FeatureRepresentation;
 import IO.Directories;
 import IO.FileWriter;
-import Math.Entropy;
 import java.util.ArrayList;
 import java.util.Map;
 import javafx.util.Pair;
-import org.mapdb.HTreeMap;
 
 /**
  *
@@ -30,13 +28,14 @@ import org.mapdb.HTreeMap;
 public class DatasetCreator {
 
     public static String m_datasetFilename = "";
-    
+
     /**
      * Return CSV string which represent the dataset
      *
      * @param folder_ClassA folder of elements from class A
      * @param folder_ClassB folder of elements from class B
      * @param featureExtractor The feature extractor to use
+     * @param datasetFilenameFormat the format of the destination file
      * @param featureSelector The feature selector to use
      * @param topFeatures top features to select
      * @param featureRepresentation feature representation method (for example:
@@ -51,6 +50,7 @@ public class DatasetCreator {
      * @param createDatabaseCSV whether to create the dataset record
      * @param printSelectedFeaturesScore whether to print the score of the
      * selected features
+     * @return dataset CSV
      */
     public static String BuildDataset(String folder_ClassA,
             String folder_ClassB,

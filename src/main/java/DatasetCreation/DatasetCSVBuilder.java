@@ -147,19 +147,19 @@ public class DatasetCSVBuilder<T> {
      * @param tops top X datasets to build
      * @param datasetFilename the dataset filename
      * @param elementIDColumnExist is column identifying the record exists
-     * @param classificationColumnExist is column identifying the class of
-     * the record exists
+     * @param classificationColumnExist is column identifying the class of the
+     * record exists
      */
-    public static void GenerateTopDatasets(String originalCSVDataset, ArrayList<Integer> tops, String destinationFolder, String datasetFilename,boolean elementIDColumnExist, boolean classificationColumnExist) {
+    public static void GenerateTopDatasets(String originalCSVDataset, ArrayList<Integer> tops, String destinationFolder, String datasetFilename, boolean elementIDColumnExist, boolean classificationColumnExist) {
         String topDataset;
         String destinationFile;
         char letter = 'a';
         for (Integer top : tops) {
             Console.Console.PrintLine(top + "", true, false);
-            destinationFile = String.format("%s_%s_Top(%s).csv", datasetFilename,letter, top);
+            destinationFile = String.format("%s_%s_Top(%s).csv", datasetFilename, letter, top);
             topDataset = GetTopXDataset(originalCSVDataset, top, elementIDColumnExist, classificationColumnExist);
             FileWriter.WriteFile(topDataset, destinationFolder + "\\" + destinationFile);
-            letter = (char)(((int)letter) + 1);
+            letter = (char) (((int) letter) + 1);
         }
     }
 

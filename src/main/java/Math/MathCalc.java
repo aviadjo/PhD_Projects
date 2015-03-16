@@ -5,10 +5,6 @@
  */
 package Math;
 
-import Console.Console;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.math3.util.FastMath;
 
 /**
