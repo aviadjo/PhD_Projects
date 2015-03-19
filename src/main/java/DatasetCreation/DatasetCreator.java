@@ -45,14 +45,16 @@ public class DatasetCreator {
      * @param addClassificationColumn whether to add classification column to
      * the dataset CSV
      * @param destinationFolderPath destination folder path
-     * @param printFeaturesDocumentFrequencies whether to print the features'
-     * document frequencies
+     * @param printFileFeaturesDocumentFrequencies whether to print the
+     * features' document frequencies
      * @param createDatabaseCSV whether to create the dataset record
      * @param printSelectedFeaturesScore whether to print the score of the
      * selected features
+     * @param printFileSelectedFeatures whether to print file with the selected
+     * features
      * @return dataset CSV
      */
-    public static String BuildDataset(String folder_ClassA,
+    public static StringBuilder BuildDataset(String folder_ClassA,
             String folder_ClassB,
             String destinationFolderPath,
             String datasetFilenameFormat,
@@ -63,8 +65,9 @@ public class DatasetCreator {
             boolean createDatabaseCSV,
             boolean addElementIDColumn,
             boolean addClassificationColumn,
-            boolean printFeaturesDocumentFrequencies,
-            boolean printSelectedFeaturesScore
+            boolean printFileFeaturesDocumentFrequencies,
+            boolean printSelectedFeaturesScore,
+            boolean printFileSelectedFeatures
     ) {
         StopWatch.Start();
 
@@ -89,19 +92,24 @@ public class DatasetCreator {
         Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABFeatures.size())), true, false);
         MapDB.m_db_off_heap_FE.commit();
 
-        //PRINT DOCUMENT FREQUENCY
-        if (printFeaturesDocumentFrequencies) {
-            String filename = String.format(destinationFolderPath + "\\DATASET_%s_DOCX_DF.csv", General.GetTimeStamp());
-            Console.PrintLine(String.format("Document frequencies written to: %s", filename), true, false);
-            FileWriter.WriteFile(General.GetFeaturesFrequenciesInClassAClassB(classesABFeatures), filename);
+        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), ClassAelements.size(), ClassBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
+
+        //PRINT FILE - DOCUMENT FREQUENCY
+        if (printFileFeaturesDocumentFrequencies) {
+            PrintCSVFileFeaturesDocumentFrequencies(classesABFeatures, destinationFolderPath);
         }
 
         //FEATURE SELECTION
         Console.PrintLine(String.format("Selecting top %s features..", topFeatures), true, false);
         ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABFeatures, ClassAelements.size(), ClassBelements.size(), topFeatures, printSelectedFeaturesScore);
 
+        //PRINT FILE - SELECTED FEATURES
+        if (printFileSelectedFeatures) {
+            PrintCSVFileSelectedFeatures(selectedFeatures, destinationFolderPath);
+        }
+
         //DATASET CREATION
-        String datasetCSV = "";
+        StringBuilder datasetCSV = new StringBuilder();
         if (createDatabaseCSV) {
             Console.PrintLine(String.format("Building dataset..."), true, false);
             Console.PrintLine(String.format("Feature representation: %s", featureRepresentation.toString()), true, false);
@@ -110,18 +118,45 @@ public class DatasetCreator {
             String datasetHeaderCSV = dataset_builder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
             String datasetClassACSV = dataset_builder.BuildDatabaseCSV(ClassAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Benign, addElementIDColumn, addClassificationColumn);
             String datasetClassBCSV = dataset_builder.BuildDatabaseCSV(ClassBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Malicious, addElementIDColumn, addClassificationColumn);
-            datasetCSV = datasetHeaderCSV + "\n" + datasetClassBCSV + "\n" + datasetClassACSV;
+            datasetCSV.append(datasetHeaderCSV).append("\n").append(datasetClassBCSV).append("\n").append(datasetClassACSV);
             StopWatch.Stop();
 
             //OUTPUTS
-            m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), ClassAelements.size(), ClassBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
             String datasetPath = destinationFolderPath + "\\" + m_datasetFilename + ".csv";
-            FileWriter.WriteFile(datasetCSV, datasetPath);
+            FileWriter.WriteFile(datasetCSV.toString(), datasetPath);
             Console.PrintLine(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);
             Console.PrintLine(String.format("Dataset saved to: %s", datasetPath), true, false);
             //Console.PrintLine(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
             //Console.PrintLine(String.format("InfoGain Values: %s", featureSelector.m_memo.size()), true, false);
         }
         return datasetCSV;
+    }
+
+    /**
+     * Print CSV file contain list of features and their document frequencies
+     *
+     * @param featuresDocumentFrequencies features document frequencies
+     * @param destinationFolderPath path of the destination folder to print the
+     * selected features file to
+     */
+    private static void PrintCSVFileFeaturesDocumentFrequencies(Map<String, int[]> GetFeaturesDocumentFrequenciesCSV, String destinationFolderPath) {
+        String featuresDocumentFrequenciesFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_FeaturesDF" + ".csv";
+        StringBuilder sb = DatasetCSVBuilder.GetFeaturesDocumentFrequenciesCSV(GetFeaturesDocumentFrequenciesCSV);
+        FileWriter.WriteFile(sb.toString(), featuresDocumentFrequenciesFilePath);
+        Console.PrintLine(String.format("Features Document Frequencies saved to: %s", featuresDocumentFrequenciesFilePath), true, false);
+    }
+
+    /**
+     * Print CSV file contain list of selected features
+     *
+     * @param selectedFeatures ArrayList of selected features selected features
+     * @param destinationFolderPath path of the destination folder to print the
+     * selected features file to
+     */
+    private static void PrintCSVFileSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, String destinationFolderPath) {
+        StringBuilder sb = DatasetCSVBuilder.GetSelectedFeaturesCSV(selectedFeatures);
+        String featuresFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_FeaturesList" + ".csv";
+        FileWriter.WriteFile(sb.toString(), featuresFilePath);
+        Console.PrintLine(String.format("Selected Features saved to: %s", featuresFilePath), true, false);
     }
 }

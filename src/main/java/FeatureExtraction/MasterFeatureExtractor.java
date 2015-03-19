@@ -51,10 +51,10 @@ public class MasterFeatureExtractor<T> {
      * extracted from all given elements (Class A and Class B) and their
      * Document Frequency (DF) in Class A and Class B
      *
-     * @param ClassADF Map<String, Integer> which contain the features and
-     * their Document Frequency extracted from elements from ClassA
-     * @param ClassBDF Map<String, Integer> which contain the features and
-     * their Document Frequency extracted from elements from ClassB
+     * @param ClassADF Map<String, Integer> which contain the features and their
+     * Document Frequency extracted from elements from ClassA
+     * @param ClassBDF Map<String, Integer> which contain the features and their
+     * Document Frequency extracted from elements from ClassB
      * @return Map<String, ArrayList<Integer>> which contain all the feature
      * extracted from all given elements (Class A and Class B) and their
      * Document Frequency (DF) in Class A and Class B
@@ -64,7 +64,7 @@ public class MasterFeatureExtractor<T> {
 
         String feature;
         Integer DF;
-        int[] DFsTest;
+        int[] DFsTemp;
 
         //Loop through Class A Features
         for (Map.Entry<String, Integer> entry : ClassADF.entrySet()) {
@@ -74,19 +74,16 @@ public class MasterFeatureExtractor<T> {
         }
         ClassADF.clear(); //TEST
         //Loop through Class B Features
-        
+
         for (Map.Entry<String, Integer> entry : ClassBDF.entrySet()) {
             feature = entry.getKey();
             DF = entry.getValue();
 
-            if (ClassesABDF.containsKey(feature)) {
-                //ClassesABDF.get(feature)[1] = DF; //Set the second value to the feature in index 1 (For class B)
-                DFsTest = ClassesABDF.get(feature);
-                ClassesABDF.remove(feature);
-                ClassesABDF.put(feature, new int[]{DFsTest[0] /*classA*/, DF /*classB*/});
-                
-            } else {
+            if (!ClassesABDF.containsKey(feature)) {
                 ClassesABDF.put(feature, new int[]{0 /*classA*/, DF /*classB*/}); //Add the feature to the total list.
+            } else {
+                DFsTemp = ClassesABDF.get(feature);
+                ClassesABDF.put(feature, new int[]{DFsTemp[0] /*classA*/, DF /*classB*/});
             }
         }
         ClassBDF.clear(); //TEST

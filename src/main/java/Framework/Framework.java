@@ -10,9 +10,7 @@ import DatasetCreation.DatasetCreator;
 import static DatasetCreation.DatasetCreator.BuildDataset;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
-import Implementations.FeatureExtractorDocStreamPaths;
 import Implementations.FeatureExtractorDocxStructuralPaths;
-import Implementations.FeatureExtractorNgrams;
 import Implementations.FeatureSelectorInfoGainRatio;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,11 +51,12 @@ public class Framework {
         boolean createDatabaseCSV = true;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;
-        boolean printFeaturesDocumentFrequencies = false;
+        boolean printFileFeaturesDocumentFrequencies = false;
         boolean printSelectedFeaturesScore = true;
-        boolean generateTops = true;
+        boolean printFileSelectedFeatures = false;
+        boolean generateTops = false;
 
-        String datasetCSV = BuildDataset(m_benignFolder,
+        StringBuilder datasetCSV = BuildDataset(m_benignFolder,
                 m_maliciousFolder,
                 m_destinationFolder,
                 m_datasetFilenameFormat,
@@ -68,13 +67,14 @@ public class Framework {
                 createDatabaseCSV,
                 addElementIDColumn,
                 addClassificationColumn,
-                printFeaturesDocumentFrequencies,
-                printSelectedFeaturesScore
+                printFileFeaturesDocumentFrequencies,
+                printSelectedFeaturesScore,
+                printFileSelectedFeatures
         );
 
         if (generateTops) {
             Console.Console.PrintLine("Generating tops:", true, false);
-            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, m_destinationFolder,DatasetCreator.m_datasetFilename ,addElementIDColumn, addClassificationColumn);
+            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV.toString(), m_tops, m_destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
     }
 

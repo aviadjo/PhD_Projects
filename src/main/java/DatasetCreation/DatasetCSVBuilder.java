@@ -5,6 +5,7 @@
  */
 package DatasetCreation;
 
+import Console.Console;
 import FeatureExtraction.AFeatureExtractor;
 import Framework.Framework.Clasification;
 import Framework.Framework.FeatureRepresentation;
@@ -155,7 +156,7 @@ public class DatasetCSVBuilder<T> {
         String destinationFile;
         char letter = 'a';
         for (Integer top : tops) {
-            Console.Console.PrintLine(top + "", true, false);
+            Console.PrintLine(String.format("Dataset Top %s generated!", top), true, false);
             destinationFile = String.format("%s_%s_Top(%s).csv", datasetFilename, letter, top);
             topDataset = GetTopXDataset(originalCSVDataset, top, elementIDColumnExist, classificationColumnExist);
             FileWriter.WriteFile(topDataset, destinationFolder + "\\" + destinationFile);
@@ -186,7 +187,7 @@ public class DatasetCSVBuilder<T> {
                 }
             }
         } else {
-            Console.Console.PrintLine(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount), true, false);
+            Console.PrintLine(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount), true, false);
         }
 
         return newCSVDatabase.toString();
@@ -210,5 +211,39 @@ public class DatasetCSVBuilder<T> {
             classColumn = csvLine.substring(indexOdfirstClassColumn, csvLine.length());
         }
         return topFeatures + classColumn;
+    }
+
+    /**
+     * return CSV string contain list of features and their document frequencies
+     *
+     * @param featuresDocumentFrequencies features document frequencies selected
+     * features file to
+     * @return StringBuilder
+     */
+    public static StringBuilder GetFeaturesDocumentFrequenciesCSV(Map<String, int[]> featuresDocumentFrequencies) {
+        String seperator = "|";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Features").append(seperator).append("Benign").append(seperator).append("Malicious").append("\n");
+        int[] value;
+        for (Map.Entry<String, int[]> entry : featuresDocumentFrequencies.entrySet()) {
+            value = entry.getValue();
+            sb.append(entry.getKey()).append(seperator).append(value[0]).append(seperator).append(value[1]).append("\n");
+        }
+        return sb;
+    }
+
+    /**
+     * Print CSV string contain list of selected features
+     *
+     * @param selectedFeatures ArrayList of selected features selected features
+     * @return StringBuilder
+     */
+    public static StringBuilder GetSelectedFeaturesCSV(ArrayList<Pair<String, Integer>> selectedFeatures) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("#,Feature\n");
+        for (int i = 0; i < selectedFeatures.size(); i++) {
+            sb.append(String.format("f%s,%s", i + 1, selectedFeatures.get(i).getKey())).append("\n");
+        }
+        return sb;
     }
 }
