@@ -45,8 +45,8 @@ public class DatasetCreator {
      * @param addClassificationColumn whether to add classification column to
      * the dataset CSV
      * @param destinationFolderPath destination folder path
-     * @param printFileFeaturesDocumentFrequencies whether to print the
-     * features' document frequencies
+     * @param printFileFeaturesFrequencies whether to print the features'
+     * document frequencies
      * @param createDatabaseCSV whether to create the dataset record
      * @param printSelectedFeaturesScore whether to print the score of the
      * selected features
@@ -65,43 +65,43 @@ public class DatasetCreator {
             boolean createDatabaseCSV,
             boolean addElementIDColumn,
             boolean addClassificationColumn,
-            boolean printFileFeaturesDocumentFrequencies,
+            boolean printFileFeaturesFrequencies,
             boolean printSelectedFeaturesScore,
             boolean printFileSelectedFeatures
     ) {
         StopWatch.Start();
 
-        ArrayList<String> ClassAelements = Directories.GetDirectoryFilesPaths(folder_ClassA);
-        ArrayList<String> ClassBelements = Directories.GetDirectoryFilesPaths(folder_ClassB);
-        int totalElementsNum = ClassAelements.size() + ClassBelements.size();
+        ArrayList<String> classAelements = Directories.GetDirectoryFilesPaths(folder_ClassA);
+        ArrayList<String> classBelements = Directories.GetDirectoryFilesPaths(folder_ClassB);
+        int totalElementsNum = classAelements.size() + classBelements.size();
 
         Console.PrintLine(String.format("ClassA folder: %s", folder_ClassA), true, false);
         Console.PrintLine(String.format("ClassB folder: %s", folder_ClassB), true, false);
-        Console.PrintLine(String.format("ClassA elements: %s", GetStringNumber(ClassAelements.size())), true, false);
-        Console.PrintLine(String.format("ClassB elements: %s", GetStringNumber(ClassBelements.size())), true, false);
+        Console.PrintLine(String.format("ClassA elements: %s", GetStringNumber(classAelements.size())), true, false);
+        Console.PrintLine(String.format("ClassB elements: %s", GetStringNumber(classBelements.size())), true, false);
         Console.PrintLine(String.format("Total elements: %s", GetStringNumber(totalElementsNum)), true, false);
 
         //FEATURE EXTRACTION
-        MasterFeatureExtractor<String> CFE = new MasterFeatureExtractor<>();
+        MasterFeatureExtractor<String> MFE = new MasterFeatureExtractor<>();
         Console.PrintLine(String.format("Feature Extraction: %s", featureExtractor.GetName()), true, false);
-        Map<String, Integer> classAFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassAelements, featureExtractor);
-        Console.PrintLine(String.format("ClassA unique features: %s", GetStringNumber(classAFeatures.size())), true, false);
-        Map<String, Integer> classBFeatures = CFE.ExtractFeaturesDocumentFrequencyFromElements(ClassBelements, featureExtractor);
-        Console.PrintLine(String.format("ClassB unique features: %s", GetStringNumber(classBFeatures.size())), true, false);
-        Map<String, int[]> classesABFeatures = CFE.GatherClassAClassBFeatureFrequency(classAFeatures, classBFeatures);
-        Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABFeatures.size())), true, false);
+        Map<String, Integer> classAfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classAelements, featureExtractor);
+        Console.PrintLine(String.format("ClassA unique features: %s", GetStringNumber(classAfeatures.size())), true, false);
+        Map<String, Integer> classBfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classBelements, featureExtractor);
+        Console.PrintLine(String.format("ClassB unique features: %s", GetStringNumber(classBfeatures.size())), true, false);
+        Map<String, int[]> classesABfeatures = MFE.GatherClassAClassBFeatureFrequency(classAfeatures, classBfeatures);
+        Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABfeatures.size())), true, false);
         MapDB.m_db_off_heap_FE.commit();
 
-        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), ClassAelements.size(), ClassBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
+        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), classAelements.size(), classBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
 
         //PRINT FILE - DOCUMENT FREQUENCY
-        if (printFileFeaturesDocumentFrequencies) {
-            PrintCSVFileFeaturesDocumentFrequencies(classesABFeatures, destinationFolderPath);
+        if (printFileFeaturesFrequencies) {
+            PrintCSVFileFeaturesFrequencies(classesABfeatures, destinationFolderPath);
         }
 
         //FEATURE SELECTION
         Console.PrintLine(String.format("Selecting top %s features..", topFeatures), true, false);
-        ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABFeatures, ClassAelements.size(), ClassBelements.size(), topFeatures, printSelectedFeaturesScore);
+        ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABfeatures, classAelements.size(), classBelements.size(), topFeatures, printSelectedFeaturesScore);
 
         //PRINT FILE - SELECTED FEATURES
         if (printFileSelectedFeatures) {
@@ -114,10 +114,10 @@ public class DatasetCreator {
             Console.PrintLine(String.format("Building dataset..."), true, false);
             Console.PrintLine(String.format("Feature representation: %s", featureRepresentation.toString()), true, false);
             //****************
-            DatasetCSVBuilder<String> dataset_builder = new DatasetCSVBuilder<>();
-            String datasetHeaderCSV = dataset_builder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
-            String datasetClassACSV = dataset_builder.BuildDatabaseCSV(ClassAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Benign, addElementIDColumn, addClassificationColumn);
-            String datasetClassBCSV = dataset_builder.BuildDatabaseCSV(ClassBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Malicious, addElementIDColumn, addClassificationColumn);
+            DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
+            String datasetHeaderCSV = datasetBuilder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
+            String datasetClassACSV = datasetBuilder.BuildDatabaseCSV(classAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Benign, addElementIDColumn, addClassificationColumn);
+            String datasetClassBCSV = datasetBuilder.BuildDatabaseCSV(classBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Malicious, addElementIDColumn, addClassificationColumn);
             datasetCSV.append(datasetHeaderCSV).append("\n").append(datasetClassBCSV).append("\n").append(datasetClassACSV);
             StopWatch.Stop();
 
@@ -139,7 +139,7 @@ public class DatasetCreator {
      * @param destinationFolderPath path of the destination folder to print the
      * selected features file to
      */
-    private static void PrintCSVFileFeaturesDocumentFrequencies(Map<String, int[]> GetFeaturesDocumentFrequenciesCSV, String destinationFolderPath) {
+    private static void PrintCSVFileFeaturesFrequencies(Map<String, int[]> GetFeaturesDocumentFrequenciesCSV, String destinationFolderPath) {
         String featuresDocumentFrequenciesFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_FeaturesDF" + ".csv";
         StringBuilder sb = DatasetCSVBuilder.GetFeaturesDocumentFrequenciesCSV(GetFeaturesDocumentFrequenciesCSV);
         FileWriter.WriteFile(sb.toString(), featuresDocumentFrequenciesFilePath);

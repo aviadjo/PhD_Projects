@@ -51,7 +51,7 @@ public class Framework {
         boolean createDatabaseCSV = true;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;
-        boolean printFileFeaturesDocumentFrequencies = false;
+        boolean printFileFeaturesFrequencies = false;
         boolean printSelectedFeaturesScore = true;
         boolean printFileSelectedFeatures = false;
         boolean generateTops = false;
@@ -67,7 +67,7 @@ public class Framework {
                 createDatabaseCSV,
                 addElementIDColumn,
                 addClassificationColumn,
-                printFileFeaturesDocumentFrequencies,
+                printFileFeaturesFrequencies,
                 printSelectedFeaturesScore,
                 printFileSelectedFeatures
         );
