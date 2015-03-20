@@ -56,7 +56,8 @@ public class Framework {
         boolean printFileSelectedFeatures = false;
         boolean generateTops = false;
 
-        StringBuilder datasetCSV = BuildDataset(m_benignFolder,
+        StringBuilder datasetCSV = BuildDataset(
+                m_benignFolder,
                 m_maliciousFolder,
                 m_destinationFolder,
                 m_datasetFilenameFormat,

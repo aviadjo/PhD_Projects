@@ -5,13 +5,7 @@
  */
 package Tester;
 
-import Framework.Framework.FeatureRepresentation;
-import static DatasetCreation.DatasetCreator.BuildDataset;
-import FeatureExtraction.AFeatureExtractor;
-import FeatureSelection.AFeatureSelector;
 import static Framework.Framework.CreateDataset;
-import Implementations.FeatureSelectorInfoGainRatio;
-import Implementations.FeatureExtractorDocxStructuralPaths;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

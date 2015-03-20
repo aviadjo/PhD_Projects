@@ -54,7 +54,8 @@ public class DatasetCreator {
      * features
      * @return dataset CSV
      */
-    public static StringBuilder BuildDataset(String folder_ClassA,
+    public static StringBuilder BuildDataset(
+            String folder_ClassA,
             String folder_ClassB,
             String destinationFolderPath,
             String datasetFilenameFormat,
