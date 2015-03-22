@@ -39,15 +39,11 @@ public class serializer {
         Object serialized = null;
 
         if (Files.IsFile(serializedFilename)) {
-            try {
-                FileInputStream fin = new FileInputStream(serializedFilename);
+            try (FileInputStream fin = new FileInputStream(serializedFilename)) {
                 ObjectInputStream ois = new ObjectInputStream(fin);
                 serialized = ois.readObject();
                 ois.close();
-                fin.close();
-            } catch (IOException ex) {
-                Console.PrintLine(String.format("Error deserilizing object '%s': %s", objectFilename, ex.getMessage()), true, false);
-            } catch (ClassNotFoundException ex) {
+            } catch (IOException | ClassNotFoundException ex) {
                 Console.PrintLine(String.format("Error deserilizing object '%s': %s", objectFilename, ex.getMessage()), true, false);
             }
         }
