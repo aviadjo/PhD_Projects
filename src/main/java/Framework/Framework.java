@@ -12,6 +12,7 @@ import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
+import Implementations.FeatureSelectorInfoGainRatio.SelectionMethod;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,9 +46,9 @@ public class Framework {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgrams<>(3, 1);
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocStreamPaths();
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths();
-        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(false);
+        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(SelectionMethod.InformatioGain);
         int topFeatures = 2000;
-        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.TFIDF;
         boolean createDatabaseCSV = true;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;

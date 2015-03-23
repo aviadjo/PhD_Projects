@@ -6,7 +6,6 @@
 package Implementations;
 
 import DataStructures.DataStructures;
-import DataStructures.MapDB;
 import FeatureSelection.AFeatureSelector;
 import Math.Entropy;
 import Math.MathCalc;
@@ -27,18 +26,24 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
 
     private int m_Class_A_elements_num;
     private int m_Class_B_elements_num;
-    private boolean m_GainRatio;
+    private SelectionMethod m_selectionMethod;
     private int m_elements_num;
     private double m_Class_A_elements_percentage;
     private double m_Class_B_elements_percentage;
     private double m_Total_entropy;
 
-    public FeatureSelectorInfoGainRatio(boolean GainRatio) {
-        m_GainRatio = GainRatio;
+    public FeatureSelectorInfoGainRatio(SelectionMethod GainRatio) {
+        m_selectionMethod = GainRatio;
+    }
+
+    public static enum SelectionMethod {
+
+        InformatioGain,
+        InformationGainRatio
     }
 
     /**
-     * Initialize Feature Selection - Information Gain
+     * Initialize Feature SelectionMethod - Information Gain
      *
      * @param Class_A_elements_num the amount of elements (files, etc..) from
      * Class A
@@ -65,7 +70,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * @param top_features_percent_to_select the percent of top features to
      * select
      * @return ArrayList of features selected by Information Gain Feature
-     * Selection algorithm and their DF
+     * SelectionMethod algorithm and their DF
      */
     @Override
     public ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> featuresDFs, int classAelementsNum, int classBelementsNum, int topFeaturesToSelect, boolean printScores) {
@@ -160,7 +165,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
                 entropy_after_split = (((((double) class_A) + ((double) class_B)) / ((double) m_elements_num)) * entropy)
                         + (((((double) class_Ax) + ((double) class_Bx)) / ((double) m_elements_num)) * entropyx);
                 InfoGain = m_Total_entropy - entropy_after_split;
-                if (m_GainRatio) {
+                if (m_selectionMethod == SelectionMethod.InformationGainRatio) {
                     InfoGain = (InfoGain / entropy);
                 }
                 m_memo.put(values_code, InfoGain);
@@ -175,11 +180,14 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
     }
 
     public String GetName() {
-        if (m_GainRatio) {
-            return "Information Gain Ratio";
-        } else {
-            return "Information Gain";
+        String name = "";
+        switch (m_selectionMethod) {
+            case InformatioGain:
+                name = "Information Gain";
+            case InformationGainRatio:
+                name = "Information Gain Ratio";
         }
+        return name;
     }
 
 }
