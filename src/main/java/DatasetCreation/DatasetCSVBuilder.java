@@ -99,6 +99,7 @@ public class DatasetCSVBuilder<T> {
                 numOfElementsContainTheFeature = selectedFeaturePair.getValue();
                 featureOccurrencesInElement = (elementFeaturesTF.containsKey(selectedFeature)) ? elementFeaturesTF.get(selectedFeature) : 0;
                 TFIDF = MathCalc.GetTFIDF(featureOccurrencesInElement, numOfOccurrencesOfMostCommonFeature, totalElementsNum, numOfElementsContainTheFeature);
+                TFIDF = MathCalc.Round(TFIDF, 3);
                 cellValue = TFIDF + ",";
             }
             featuresVectorCSV.append(cellValue);

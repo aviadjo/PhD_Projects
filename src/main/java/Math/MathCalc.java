@@ -6,6 +6,7 @@
 package Math;
 
 import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -53,5 +54,9 @@ public class MathCalc {
         double TF = ((double) feature_occurrences_in_element) / ((double) num_of_occurrences_of_most_common_feature);
         double IDF = MathCalc.Log((((double) num_of_elements) / ((double) num_of_elements_contain_the_feature)), 2);
         return TF * IDF;
+    }
+
+    public static double Round(double num, int decimalPlaces) {
+        return Precision.round(num, decimalPlaces);
     }
 }
