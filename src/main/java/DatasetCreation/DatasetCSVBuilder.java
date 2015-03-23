@@ -62,47 +62,39 @@ public class DatasetCSVBuilder<T> {
      * @return CSV string which represent the element features vector
      */
     public String GetFeaturesVectorCSV(T element, AFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
-        Map<String, Integer> elementFeaturesTF = featureExtractor.ExtractFeaturesFrequencyFromSingleElement(element);
+        Map<String, Integer> elementFeaturesFrequencies = featureExtractor.ExtractFeaturesFrequencyFromSingleElement(element);
         StringBuilder featuresVectorCSV = new StringBuilder();
 
         if (addElementIDColumn) {
             featuresVectorCSV.append(element.toString()).append(",");
         }
 
-        //To find the value of the most common feature from the selected features
-        String selectedFeature;
-        int selectedFeatureValue;
-        int numOfOccurrencesOfMostCommonFeature = 0;
-        for (Pair<String, Integer> selectedFeaturePair : selectedFeatures) {
-            selectedFeature = selectedFeaturePair.getKey();
-            if (elementFeaturesTF.containsKey(selectedFeature)) {
-                selectedFeatureValue = elementFeaturesTF.get(selectedFeature);
-                if (selectedFeatureValue > numOfOccurrencesOfMostCommonFeature) {
-                    numOfOccurrencesOfMostCommonFeature = selectedFeatureValue;
-                }
-            }
-        }
+        int mostCommonFeatureFrequencyInElement = GetMostCommonSelectedFeatureFrequencyInElement(elementFeaturesFrequencies, selectedFeatures);
 
-        int featureOccurrencesInElement;
+        String selectedFeature;
+        int featureFrequencyInElement;
         int numOfElementsContainTheFeature;
         double TFIDF;
         String cellValue = "";
         for (Pair<String, Integer> selectedFeaturePair : selectedFeatures) {
             selectedFeature = selectedFeaturePair.getKey();
-            if (featureRepresentation == FeatureRepresentation.Binary) {
-                if (elementFeaturesTF.containsKey(selectedFeature)) {
-                    cellValue = 1 + "";
-                } else {
-                    cellValue = 0 + "";
-                }
-            } else if (featureRepresentation == FeatureRepresentation.TFIDF) {
-                numOfElementsContainTheFeature = selectedFeaturePair.getValue();
-                featureOccurrencesInElement = (elementFeaturesTF.containsKey(selectedFeature)) ? elementFeaturesTF.get(selectedFeature) : 0;
-                TFIDF = MathCalc.GetTFIDF(featureOccurrencesInElement, numOfOccurrencesOfMostCommonFeature, totalElementsNum, numOfElementsContainTheFeature);
-                TFIDF = MathCalc.Round(TFIDF, 3);
-                cellValue = TFIDF + "";
+            switch (featureRepresentation) {
+                case Binary:
+                    if (elementFeaturesFrequencies.containsKey(selectedFeature)) {
+                        cellValue = 1 + "";
+                    } else {
+                        cellValue = 0 + "";
+                    }
+                    break;
+                case TFIDF:
+                    numOfElementsContainTheFeature = selectedFeaturePair.getValue();
+                    featureFrequencyInElement = (elementFeaturesFrequencies.containsKey(selectedFeature)) ? elementFeaturesFrequencies.get(selectedFeature) : 0;
+                    TFIDF = MathCalc.GetTFIDF(featureFrequencyInElement, mostCommonFeatureFrequencyInElement, totalElementsNum, numOfElementsContainTheFeature);
+                    TFIDF = MathCalc.Round(TFIDF, 3);
+                    cellValue = TFIDF + "";
+                    break;
             }
-            featuresVectorCSV.append(cellValue + ",");
+            featuresVectorCSV.append(cellValue).append(",");
         }
         if (addClassificationColumn) {
             featuresVectorCSV.append(classification);
@@ -111,6 +103,31 @@ public class DatasetCSVBuilder<T> {
             featuresVectorCSV = new StringBuilder(featuresVectorCSV.substring(0, featuresVectorCSV.length() - 1));
         }
         return featuresVectorCSV.toString();
+    }
+
+    /**
+     * Return the frequency of the most common (selected) feature in Element
+     *
+     * @param elementFeaturesFrequencies features frequencies in element
+     * @param selectedFeatures the top selected features to build the dataset
+     * with
+     * @return the frequency of the most common (selected) feature in Element
+     */
+    private static int GetMostCommonSelectedFeatureFrequencyInElement(Map<String, Integer> elementFeaturesFrequencies, ArrayList<Pair<String, Integer>> selectedFeatures) {
+        //To find the value of the most common feature from the selected features
+        int numOfOccurrencesOfMostCommonFeature = 0;
+        String selectedFeature;
+        int selectedFeatureValue;
+        for (Pair<String, Integer> selectedFeaturePair : selectedFeatures) {
+            selectedFeature = selectedFeaturePair.getKey();
+            if (elementFeaturesFrequencies.containsKey(selectedFeature)) {
+                selectedFeatureValue = elementFeaturesFrequencies.get(selectedFeature);
+                if (selectedFeatureValue > numOfOccurrencesOfMostCommonFeature) {
+                    numOfOccurrencesOfMostCommonFeature = selectedFeatureValue;
+                }
+            }
+        }
+        return numOfOccurrencesOfMostCommonFeature;
     }
 
     /**

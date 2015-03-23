@@ -40,19 +40,19 @@ public class MathCalc {
     /**
      * Return TD*IDF calculation
      *
-     * @param num_of_elements total number of elements in dataset (Malicious +
+     * @param numOfElements total number of elements in dataset (Malicious +
      * Benign)
-     * @param num_of_occurrences_of_most_common_feature add prefix column
-     * identifying the record
-     * @param feature_occurrences_in_element count the number of times a
-     * specific feature appear in element
-     * @param num_of_elements_contain_the_feature add suffix column identifying
-     * the class of the record
+     * @param mostCommonFeatureFrequencyInElement add prefix column identifying
+     * the record
+     * @param featureFrequencyInElement count the number of times a specific
+     * feature appear in element
+     * @param numOfElementsContainTheFeature add suffix column identifying the
+     * class of the record
      * @return TD*IDF calculation
      */
-    public static double GetTFIDF(int feature_occurrences_in_element, int num_of_occurrences_of_most_common_feature, int num_of_elements, int num_of_elements_contain_the_feature) {
-        double TF = ((double) feature_occurrences_in_element) / ((double) num_of_occurrences_of_most_common_feature);
-        double IDF = MathCalc.Log((((double) num_of_elements) / ((double) num_of_elements_contain_the_feature)), 2);
+    public static double GetTFIDF(int featureFrequencyInElement, int mostCommonFeatureFrequencyInElement, int numOfElements, int numOfElementsContainTheFeature) {
+        double TF = ((double) featureFrequencyInElement) / ((double) mostCommonFeatureFrequencyInElement);
+        double IDF = MathCalc.Log((((double) numOfElements) / ((double) numOfElementsContainTheFeature)), 2);
         return TF * IDF;
     }
 
