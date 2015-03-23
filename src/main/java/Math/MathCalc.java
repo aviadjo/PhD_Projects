@@ -56,6 +56,13 @@ public class MathCalc {
         return TF * IDF;
     }
 
+    /**
+     * Return rounded double number
+     *
+     * @param num the number to round
+     * @param decimalPlaces decimal places to cut the number
+     * @return rounded double number
+     */
     public static double Round(double num, int decimalPlaces) {
         return Precision.round(num, decimalPlaces);
     }
