@@ -91,18 +91,18 @@ public class DatasetCSVBuilder<T> {
             selectedFeature = selectedFeaturePair.getKey();
             if (featureRepresentation == FeatureRepresentation.Binary) {
                 if (elementFeaturesTF.containsKey(selectedFeature)) {
-                    cellValue = 1 + ",";
+                    cellValue = 1 + "";
                 } else {
-                    cellValue = 0 + ",";
+                    cellValue = 0 + "";
                 }
             } else if (featureRepresentation == FeatureRepresentation.TFIDF) {
                 numOfElementsContainTheFeature = selectedFeaturePair.getValue();
                 featureOccurrencesInElement = (elementFeaturesTF.containsKey(selectedFeature)) ? elementFeaturesTF.get(selectedFeature) : 0;
                 TFIDF = MathCalc.GetTFIDF(featureOccurrencesInElement, numOfOccurrencesOfMostCommonFeature, totalElementsNum, numOfElementsContainTheFeature);
                 TFIDF = MathCalc.Round(TFIDF, 3);
-                cellValue = TFIDF + ",";
+                cellValue = TFIDF + "";
             }
-            featuresVectorCSV.append(cellValue);
+            featuresVectorCSV.append(cellValue + ",");
         }
         if (addClassificationColumn) {
             featuresVectorCSV.append(classification);
