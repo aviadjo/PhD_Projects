@@ -48,7 +48,7 @@ public class Framework {
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths();
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(SelectionMethod.InformatioGain);
         int topFeatures = 2000;
-        FeatureRepresentation featureRepresentation = FeatureRepresentation.TFIDF;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         boolean createDatabaseCSV = true;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;
