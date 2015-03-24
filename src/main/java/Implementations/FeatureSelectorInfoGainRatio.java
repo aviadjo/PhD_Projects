@@ -38,7 +38,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
 
     public static enum SelectionMethod {
 
-        InformatioGain,
+        InformationGain,
         InformationGainRatio
     }
 
@@ -182,7 +182,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
     public String GetName() {
         String name = "";
         switch (m_selectionMethod) {
-            case InformatioGain:
+            case InformationGain:
                 name = "Information Gain";
             case InformationGainRatio:
                 name = "Information Gain Ratio";

@@ -46,7 +46,7 @@ public class Framework {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgrams<>(3, 1);
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocStreamPaths();
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths();
-        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(SelectionMethod.InformatioGain);
+        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(SelectionMethod.InformationGain);
         int topFeatures = 2000;
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         boolean createDatabaseCSV = true;
