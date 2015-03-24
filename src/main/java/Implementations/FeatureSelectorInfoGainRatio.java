@@ -26,7 +26,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
 
     private int m_Class_A_elements_num;
     private int m_Class_B_elements_num;
-    private SelectionMethod m_selectionMethod;
+    private final SelectionMethod m_selectionMethod;
     private int m_elements_num;
     private double m_Class_A_elements_percentage;
     private double m_Class_B_elements_percentage;
