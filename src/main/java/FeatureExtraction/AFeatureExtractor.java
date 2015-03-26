@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  *
  * @author Aviad
+ * @param <T>
  */
 public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T> {
 
@@ -24,5 +25,6 @@ public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T> {
     @Override
     public abstract Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element);
 
+    @Override
     public abstract String GetName();
 }

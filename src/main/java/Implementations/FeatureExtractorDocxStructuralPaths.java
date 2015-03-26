@@ -27,12 +27,12 @@ import org.w3c.dom.NodeList;
  *
  * @author Aviad
  */
-public class FeatureExtractorDocxStructuralPaths extends AFeatureExtractor {
+public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T> {
 
     private String m_OfficeFileTempFolderPath = "";
 
     @Override
-    public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(Object element) {
+    public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
         String filePath = (String) element;
         String destinationFolder = FileUtils.getTempDirectoryPath() + FilenameUtils.getName(filePath);

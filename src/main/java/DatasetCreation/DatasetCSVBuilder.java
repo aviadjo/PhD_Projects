@@ -6,7 +6,7 @@
 package DatasetCreation;
 
 import Console.Console;
-import FeatureExtraction.AFeatureExtractor;
+import FeatureExtraction.IFeatureExtractor;
 import Framework.Framework.Clasification;
 import Framework.Framework.FeatureRepresentation;
 import IO.FileWriter;
@@ -36,7 +36,7 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the dataset
      */
-    public String BuildDatabaseCSV(ArrayList<T> elements, AFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public String BuildDatabaseCSV(ArrayList<T> elements, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
         StringBuilder datasetCSV = new StringBuilder();
         String elementFeaturesVectorCSV;
 
@@ -61,7 +61,7 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the element features vector
      */
-    public String GetFeaturesVectorCSV(T element, AFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public String GetFeaturesVectorCSV(T element, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
         Map<String, Integer> elementFeaturesFrequencies = featureExtractor.ExtractFeaturesFrequencyFromSingleElement(element);
         StringBuilder featuresVectorCSV = new StringBuilder();
 

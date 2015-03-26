@@ -27,7 +27,7 @@ public class MasterFeatureExtractor<T> {
      * all given elements (using the given Feature Extractor) and their Document
      * Frequency (DF)
      */
-    public Map<String, Integer> ExtractFeaturesFrequenciesFromElements(ArrayList<T> elements, AFeatureExtractor<T> featureExtractor) {
+    public Map<String, Integer> ExtractFeaturesFrequenciesFromElements(ArrayList<T> elements, IFeatureExtractor<T> featureExtractor) {
         Map<String, Integer> elementFeaturesTF = new HashMap<>();
         Map<String, Integer> elementsFeaturesDF = DataStructures.GetMapStringInteger();
 

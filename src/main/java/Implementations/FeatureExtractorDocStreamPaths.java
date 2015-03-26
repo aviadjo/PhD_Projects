@@ -13,10 +13,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.Entry;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -25,10 +21,10 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
  *
  * @author Aviad
  */
-public class FeatureExtractorDocStreamPaths extends AFeatureExtractor {
+public class FeatureExtractorDocStreamPaths<T> extends AFeatureExtractor<T> {
 
     @Override
-    public Map ExtractFeaturesFrequencyFromSingleElement(Object element) {
+    public Map ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> streamPaths = new HashMap<>();
         String filePath = (String) element;
 

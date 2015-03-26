@@ -67,8 +67,6 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
      * @param featuresDFs list of features and Document Frequency for each
      * class, A and B
      * @param topFeaturesToSelect the amount of top features to select
-     * @param top_features_percent_to_select the percent of top features to
-     * select
      * @return ArrayList of features selected by Information Gain Feature
      * SelectionMethod algorithm and their DF
      */

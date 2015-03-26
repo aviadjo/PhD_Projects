@@ -24,12 +24,16 @@ public abstract class AFeatureSelector implements IFeatureSelector {
      *
      * @param featuresDFs list of features and Document Frequency for each
      * class, A and B
-     * @param topFeatures_amount the amount of top feature to select
-     * @param top_features_percent the percent of top features to select
+     * @param classBelementsNum number of element in class B
+     * @param classAelementsNum number of element in class A
+     * @param topFeaturesToSelect the amount of top features to select
+     * @param printScores
      * @return ArrayList of features selected from the given features list using
      * some Feature Selection method and their DF
      */
-    public abstract ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> featuresDFs, int classBelementsNum, int topFeaturesToSelect, int classAelementsNum, boolean printScores);
+    @Override
+    public abstract ArrayList<Pair<String, Integer>> SelectTopFeatures(Map<String, int[]> featuresDFs, int classAelementsNum, int classBelementsNum, int topFeaturesToSelect, boolean printScores);
 
+    @Override
     public abstract String GetName();
 }

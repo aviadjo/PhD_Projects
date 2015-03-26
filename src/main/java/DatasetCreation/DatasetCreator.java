@@ -10,7 +10,7 @@ import static Assistants.General.GetStringNumber;
 import Assistants.StopWatch;
 import Console.Console;
 import DataStructures.MapDB;
-import FeatureExtraction.AFeatureExtractor;
+import FeatureExtraction.IFeatureExtractor;
 import FeatureExtraction.MasterFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework.Clasification;
@@ -32,8 +32,8 @@ public class DatasetCreator {
     /**
      * Return CSV string which represent the dataset
      *
-     * @param folder_ClassA folder of elements from class A
-     * @param folder_ClassB folder of elements from class B
+     * @param ClassAdirectory folder of elements from class A
+     * @param ClassBdirectory folder of elements from class B
      * @param featureExtractor The feature extractor to use
      * @param datasetFilenameFormat the format of the destination file
      * @param featureSelector The feature selector to use
@@ -55,11 +55,11 @@ public class DatasetCreator {
      * @return dataset CSV
      */
     public static StringBuilder BuildDataset(
-            String folder_ClassA,
-            String folder_ClassB,
+            String ClassAdirectory,
+            String ClassBdirectory,
             String destinationFolderPath,
             String datasetFilenameFormat,
-            AFeatureExtractor<String> featureExtractor,
+            IFeatureExtractor<String> featureExtractor,
             AFeatureSelector featureSelector,
             int topFeatures,
             FeatureRepresentation featureRepresentation,
@@ -72,23 +72,23 @@ public class DatasetCreator {
     ) {
         StopWatch.Start();
 
-        ArrayList<String> classAelements = Directories.GetDirectoryFilesPaths(folder_ClassA);
-        ArrayList<String> classBelements = Directories.GetDirectoryFilesPaths(folder_ClassB);
+        ArrayList<String> classAelements = Directories.GetDirectoryFilesPaths(ClassAdirectory);
+        ArrayList<String> classBelements = Directories.GetDirectoryFilesPaths(ClassBdirectory);
         int totalElementsNum = classAelements.size() + classBelements.size();
 
-        Console.PrintLine(String.format("ClassA folder: %s", folder_ClassA), true, false);
-        Console.PrintLine(String.format("ClassB folder: %s", folder_ClassB), true, false);
-        Console.PrintLine(String.format("ClassA elements: %s", GetStringNumber(classAelements.size())), true, false);
-        Console.PrintLine(String.format("ClassB elements: %s", GetStringNumber(classBelements.size())), true, false);
+        Console.PrintLine(String.format("Benign folder: %s", ClassAdirectory), true, false);
+        Console.PrintLine(String.format("Malicious folder: %s", ClassBdirectory), true, false);
+        Console.PrintLine(String.format("Benign elements: %s", GetStringNumber(classAelements.size())), true, false);
+        Console.PrintLine(String.format("Malicious elements: %s", GetStringNumber(classBelements.size())), true, false);
         Console.PrintLine(String.format("Total elements: %s", GetStringNumber(totalElementsNum)), true, false);
 
         //FEATURE EXTRACTION
         MasterFeatureExtractor<String> MFE = new MasterFeatureExtractor<>();
         Console.PrintLine(String.format("Feature Extraction: %s", featureExtractor.GetName()), true, false);
         Map<String, Integer> classAfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classAelements, featureExtractor);
-        Console.PrintLine(String.format("ClassA unique features: %s", GetStringNumber(classAfeatures.size())), true, false);
+        Console.PrintLine(String.format("Benign unique features: %s", GetStringNumber(classAfeatures.size())), true, false);
         Map<String, Integer> classBfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classBelements, featureExtractor);
-        Console.PrintLine(String.format("ClassB unique features: %s", GetStringNumber(classBfeatures.size())), true, false);
+        Console.PrintLine(String.format("Malicious unique features: %s", GetStringNumber(classBfeatures.size())), true, false);
         Map<String, int[]> classesABfeatures = MFE.GatherClassAClassBFeatureFrequency(classAfeatures, classBfeatures);
         Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABfeatures.size())), true, false);
         MapDB.m_db_off_heap_FE.commit();
