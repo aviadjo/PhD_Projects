@@ -87,13 +87,13 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
     /**
      * Add structural path to local Map
      *
-     * @param key the key to add to the map
+     * @param feature the key to add to the map
      */
-    private static void AddPDFStructuralFeature(String key, Map<String, Integer> structuralFeatures) {
-        if (!structuralFeatures.containsKey(key)) {
-            structuralFeatures.put(key, 1);
+    private static void AddPDFStructuralFeature(String feature, Map<String, Integer> structuralFeatures) {
+        if (!structuralFeatures.containsKey(feature)) {
+            structuralFeatures.put(feature, 1);
         } else {
-            structuralFeatures.put(key, structuralFeatures.get(key) + 1);
+            structuralFeatures.put(feature, structuralFeatures.get(feature) + 1);
         }
     }
 

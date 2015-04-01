@@ -15,7 +15,7 @@ import java.util.Map;
 public class Tester {
 
     public static void main(String[] args) {
-        Map<String, Integer> structuralFeatures = PDFBox_SequentialParser.ExtractFeaturesFrequencyFromSingleElement("D:\\4.pdf");
+        Map<String, Integer> structuralFeatures = PDFBox_SequentialParser.ExtractFeaturesFrequencyFromSingleElement("D:\\3.pdf");
 
         int totalStructuralFeatures = 0;
 

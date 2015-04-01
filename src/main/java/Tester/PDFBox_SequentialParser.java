@@ -70,11 +70,17 @@ public class PDFBox_SequentialParser {
             case "COSDictionaryLateBinding":
             case "COSDictionary":
                 AddPDFStructuralPath(objectPath, structuralPaths);
+
                 for (Entry<COSName, COSBase> objectEntry : ((COSDictionary) pdfObject).entrySet()) {
+                    /*if (((COSObject) objectEntry.getValue()).getObjectNumber().intValue() == ((COSObject) pdfObject).getObjectNumber().intValue()) {
+                     continue;
+                     }*/
                     if (!(objectEntry.getKey().getName().equals("Parent")
                             || objectEntry.getKey().getName().equals("ParentTree")
                             || objectEntry.getKey().getName().equals("StructTreeRoot"))) {
                         ExtractPDFStructuralPaths(objectEntry.getValue(), objectEntry.getKey().getName(), objectPath, structuralPaths);
+                    } else {
+                        String a = "";
                     }
                 }
                 break;
@@ -92,6 +98,7 @@ public class PDFBox_SequentialParser {
      * @param key the key to add to the map
      */
     private static void AddPDFStructuralPath(String key, Map<String, Integer> structuralPaths) {
+        Console.PrintLine(key, true, false);
         if (!structuralPaths.containsKey(key)) {
             structuralPaths.put(key, 1);
         } else {
