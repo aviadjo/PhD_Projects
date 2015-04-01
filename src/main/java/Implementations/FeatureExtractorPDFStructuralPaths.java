@@ -30,13 +30,21 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         Map<String, Integer> structuralFeatures = new HashMap<>();
         String filePath = (String) element;
         File input = new File(filePath);
+        PDDocument pdf = new PDDocument();
         try {
             //Using Sequential PDF parser. for non-sequential parser use ".loadNonSeq"
-            PDDocument pdf = PDDocument.load(input);
+            pdf = PDDocument.load(input);
+            pdf.close();
             COSDocument pdfDocument = pdf.getDocument();
             ExtractPDFStructuralPaths(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralFeatures);
         } catch (IOException ex) {
             Console.PrintLine(String.format("Error parsing PDF file: %s", filePath), true, false);
+        } finally {
+            try {
+                pdf.close();
+            } catch (IOException ex) {
+                Console.PrintLine(String.format("Error closing PDF: %s", filePath), true, false);
+            }
         }
         return structuralFeatures;
     }
