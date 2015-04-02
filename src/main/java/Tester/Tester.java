@@ -12,6 +12,7 @@ import Framework.Framework;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
+import Tester.FeatureExtractorPDFStructuralPathsTEST.ParserType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -25,17 +26,17 @@ public class Tester {
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
 
-        GeneratePDFDataset();
+        GeneratePDFDatasets();
         //GenerateDocxDataset();
     }
 
-    private static void GeneratePDFDataset() {
-        String benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
-        String maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
+    private static void GeneratePDFDatasets() {
+        String benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\PDF_ClassA";
+        String maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\PDF_ClassB";
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths();
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
         Framework.FeatureRepresentation featureRepresentation = Framework.FeatureRepresentation.Binary;
@@ -65,7 +66,7 @@ public class Tester {
                 tops);
     }
 
-    private static void GenerateDocxDataset() {
+    private static void GenerateDocxDatasets() {
         String benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
         String maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
         String destinationFolder = "D:\\Dropbox\\DATASETS";
@@ -102,7 +103,8 @@ public class Tester {
     }
 
     private static void TestExtractPDFStructuralFeatures() {
-        Map<String, Integer> structuralFeatures = PDFBox_SequentialParser.ExtractFeaturesFrequencyFromSingleElement("D:\\3.pdf");
+        FeatureExtractorPDFStructuralPathsTEST featureExtractor = new FeatureExtractorPDFStructuralPathsTEST(ParserType.Sequential);
+        Map<String, Integer> structuralFeatures = featureExtractor.ExtractFeaturesFrequencyFromSingleElement("D:\\6.pdf");
 
         int totalStructuralFeatures = 0;
 

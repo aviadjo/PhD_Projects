@@ -101,7 +101,7 @@ public class DatasetCreator {
         }
 
         //FEATURE SELECTION
-        Console.PrintLine(String.format("Selecting top %s features..", topFeatures), true, false);
+        Console.PrintLine(String.format("Selecting top %s features using %s", topFeatures, featureSelector.GetName()), true, false);
         ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABfeatures, classAelements.size(), classBelements.size(), topFeatures, printSelectedFeaturesScore);
 
         //PRINT FILE - SELECTED FEATURES

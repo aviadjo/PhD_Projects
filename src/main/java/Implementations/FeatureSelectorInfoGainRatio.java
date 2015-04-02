@@ -5,6 +5,7 @@
  */
 package Implementations;
 
+import Console.Console;
 import DataStructures.DataStructures;
 import FeatureSelection.AFeatureSelector;
 import Math.Entropy;
@@ -32,8 +33,8 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
     private double m_Class_B_elements_percentage;
     private double m_Total_entropy;
 
-    public FeatureSelectorInfoGainRatio(SelectionMethod GainRatio) {
-        m_selectionMethod = GainRatio;
+    public FeatureSelectorInfoGainRatio(SelectionMethod selectionMethod) {
+        m_selectionMethod = selectionMethod;
     }
 
     public static enum SelectionMethod {
@@ -98,7 +99,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
                 entry = (Map.Entry<String, Double>) iteratorSorted.next();
                 feature = entry.getKey();
                 if (printScores) {
-                    Console.Console.PrintLine(String.format("Feature f%s: %s: %s -> %s", i + 1, GetName(), entry.getValue(), feature), true, false);
+                    Console.PrintLine(String.format("Feature f%s: %s: %s -> %s", i + 1, GetName(), entry.getValue(), feature), true, false);
                 }
                 featureDFofClasses = featuresDFs.get(feature);
                 featureDFtotal = featureDFofClasses[0] + featureDFofClasses[1]; //To be used for TFIDF calculation.
@@ -177,13 +178,16 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         return values[0] + "," + values[1];
     }
 
+    @Override
     public String GetName() {
         String name = "";
         switch (m_selectionMethod) {
             case InformationGain:
                 name = "Information Gain";
+                break;
             case InformationGainRatio:
                 name = "Information Gain Ratio";
+                break;
         }
         return name;
     }

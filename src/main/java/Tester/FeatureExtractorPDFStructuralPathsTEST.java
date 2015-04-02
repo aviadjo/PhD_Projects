@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Implementations;
+package Tester;
 
 import Console.Console;
-import FeatureExtraction.AFeatureExtractor;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
@@ -28,11 +28,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  *
  * @author Aviad
  */
-public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> {
+public class FeatureExtractorPDFStructuralPathsTEST {
 
     public ParserType m_parserType;
 
-    public FeatureExtractorPDFStructuralPaths(ParserType parserType) {
+    public FeatureExtractorPDFStructuralPathsTEST(ParserType parserType) {
         m_parserType = parserType;
     }
 
@@ -42,8 +42,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         NonSequential
     }
 
-    @Override
-    public Map ExtractFeaturesFrequencyFromSingleElement(T element) {
+    public Map ExtractFeaturesFrequencyFromSingleElement(Object element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
         String filePath = (String) element;
 
@@ -105,7 +104,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
             case "COSDictionary":
                 AddPDFStructuralPath(objectPath, structuralPaths);
 
-                for (Map.Entry<COSName, COSBase> objectEntry : ((COSDictionary) pdfObject).entrySet()) {
+                for (Entry<COSName, COSBase> objectEntry : ((COSDictionary) pdfObject).entrySet()) {
                     if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {
                         ExtractPDFStructuralPathsRecursively(objectEntry.getValue(), objectEntry.getKey().getName(), objectPath, structuralPaths);
                     }
@@ -201,16 +200,12 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
      * @param feature (structural path) to add to the Map
      */
     private void AddPDFStructuralPath(String feature, Map<String, Integer> structuralPaths) {
+        Console.PrintLine(feature, true, false);
         if (!structuralPaths.containsKey(feature)) {
             structuralPaths.put(feature, 1);
         } else {
             structuralPaths.put(feature, structuralPaths.get(feature) + 1);
         }
-    }
-
-    @Override
-    public String GetName() {
-        return "PDF Structural Paths";
     }
 
 }
