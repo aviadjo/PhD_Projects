@@ -7,18 +7,10 @@ package Implementations;
 
 import Console.Console;
 import FeatureExtraction.AFeatureExtractor;
-import IO.Directories;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -27,44 +19,14 @@ import org.w3c.dom.NodeList;
  *
  * @author Aviad
  */
-public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T> {
-
-    private String m_OfficeFileTempFolderPath = "";
+public class FeatureExtractorXMLStructuralPaths<T> extends AFeatureExtractor<T> {
 
     @Override
     public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
         String filePath = (String) element;
-        String destinationFolder = FileUtils.getTempDirectoryPath() + FilenameUtils.getName(filePath);
-        m_OfficeFileTempFolderPath = destinationFolder + "\\";
-        if (UnzipFileToFolder(filePath, destinationFolder)) {
-            ExtractFolderStructuralPaths(destinationFolder, structuralPaths);
-        }
-        //Directories.DeleteDirectory(destinationFolder); //TODO
+        AddXMLStructuralPaths(filePath, structuralPaths);
         return structuralPaths;
-    }
-
-    /**
-     * Extracts structural paths from the given folder
-     *
-     * @param folderPath path of a folder
-     * @param structuralPaths the Map to add the extracted features to
-     */
-    private void ExtractFolderStructuralPaths(String folderPath, Map<String, Integer> structuralPaths) {
-        ArrayList<String> directoryPaths = Directories.GetDirectoryFilesPaths(folderPath);
-
-        String fileExtension;
-        for (String path : directoryPaths) {
-            if (!path.equals(folderPath)) {
-                AddStructuralPath(path, structuralPaths);
-                if (Files.isRegularFile(Paths.get(path))) {
-                    fileExtension = FilenameUtils.getExtension(path);
-                    if (fileExtension.equals("rels") || fileExtension.equals("xml")) {
-                        AddXMLStructuralPaths(path, structuralPaths);
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -83,7 +45,7 @@ public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T>
                 AddXMLStructuralPathsRecursively(nodeList.item(i), xmlFilePath, structuralPaths);
             }
         } catch (Exception ex) {
-            //Console.Print_To_Console(String.format("Error traversing XML file: '%s'", xmlFilePath), true, false);
+            Console.PrintLine(String.format("Error traversing XML file: %s", xmlFilePath), true, false);
         }
     }
 
@@ -114,7 +76,6 @@ public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T>
      * @param structuralPaths the Map to add the feature to
      */
     private void AddStructuralPath(String structuralPath, Map<String, Integer> structuralPaths) {
-        structuralPath = structuralPath.replace(m_OfficeFileTempFolderPath, "");
         if (!structuralPaths.containsKey(structuralPath)) {
             structuralPaths.put(structuralPath, 1);
         } else {
@@ -122,33 +83,8 @@ public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T>
         }
     }
 
-    /**
-     * Unzip the given file to the given folder
-     *
-     * @param filePath the full path of the file to unzip
-     * @param destinationFolder the folder to unzip the file to
-     * @return true if the unzipping process done successfully
-     */
-    private boolean UnzipFileToFolder(String filePath, String destinationFolder) {
-        boolean success = false;
-        ZipFile zipFile;
-        try {
-            zipFile = new ZipFile(filePath);
-            if (!zipFile.isEncrypted()) {
-                zipFile.extractAll(destinationFolder);
-                success = true;
-            } else {
-                Console.PrintLine(String.format("file '%s' is password protected!", filePath), true, false);
-            }
-        } catch (ZipException ex) {
-            Console.PrintLine(String.format("Error unzipping file '%s': %s", filePath, ex.getMessage()), true, false);
-        }
-        return success;
-    }
-
     @Override
     public String GetName() {
-        return "Docx Structural Paths";
+        return "XML Structural Paths";
     }
-
 }

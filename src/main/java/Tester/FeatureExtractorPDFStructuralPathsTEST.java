@@ -14,6 +14,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
@@ -23,6 +26,10 @@ import org.apache.pdfbox.cos.COSObject;
 import org.apache.pdfbox.io.RandomAccess;
 import org.apache.pdfbox.io.RandomAccessFile;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
+import org.fit.pdfdom.PDFDomTree;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -53,6 +60,21 @@ public class FeatureExtractorPDFStructuralPathsTEST {
                 case Sequential:
                     try (PDDocument pdf = PDDocument.load(pdfFile)) {
                         COSDocument pdfDocument = pdf.getDocument();
+
+                        try {
+                            PDFDomTree parser = new PDFDomTree();
+                            parser.processDocument(pdf);
+                            Document dom = parser.getDocument();
+
+                            NodeList nl = dom.getChildNodes();
+                            for (int i = 0; i < nl.getLength(); i++) {
+                                Console.PrintLine(nl.item(i).getNodeName(), true, true);
+                            }
+                            String a = "";
+                        } catch (ParserConfigurationException ex) {
+                            Logger.getLogger(FeatureExtractorPDFStructuralPathsTEST.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     }
@@ -62,6 +84,8 @@ public class FeatureExtractorPDFStructuralPathsTEST {
                     RandomAccess randomAccess = new RandomAccessFile(randomAccessFile, "rwd");
                     try (PDDocument pdf = PDDocument.loadNonSeq(pdfFile, randomAccess)) {
                         COSDocument pdfDocument = pdf.getDocument();
+
+                        PDStructureTreeRoot pstr = pdf.getDocumentCatalog().getStructureTreeRoot();
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     }

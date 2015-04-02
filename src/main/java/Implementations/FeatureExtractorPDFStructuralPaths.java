@@ -74,6 +74,14 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         return structuralPaths;
     }
 
+    /**
+     * Extract the PDF structural paths recursively
+     *
+     * @param pdfObject the object
+     * @param pdfObjectName the name of the current object
+     * @param parentPath the path of the parent node
+     * @param structuralPaths the Map to add the feature to
+     */
     public void ExtractPDFStructuralPathsRecursively(COSBase pdfObject, String pdfObjectName, String parentPath, Map<String, Integer> structuralPaths) {
         String objectPath = String.format("%s\\%s", parentPath, pdfObjectName);
 
@@ -93,9 +101,6 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
             case "COSArray":
                 AddPDFStructuralPath(objectPath, structuralPaths);
                 for (int i = 0; i < ((COSArray) pdfObject).size(); i++) {
-                    if (i + 1 == ((COSArray) pdfObject).size()) {
-                        String a = ""; //TODO
-                    }
                     ExtractPDFStructuralPathsRecursively(((COSArray) pdfObject).get(i), ".", objectPath, structuralPaths);
                 }
                 break;
@@ -103,10 +108,11 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
             case "COSStream":
             case "COSDictionaryLateBinding":
             case "COSDictionary":
-                AddPDFStructuralPath(objectPath, structuralPaths);
-
+                AddPDFStructuralPath(objectPath + "(d)", structuralPaths);
                 for (Map.Entry<COSName, COSBase> objectEntry : ((COSDictionary) pdfObject).entrySet()) {
-                    if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {
+                    if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot", "Reference").contains(objectEntry.getKey().getName())
+                            && !objectEntry.getValue().equals(pdfObject) /*To catch parent-child loop*/
+                            && !objectEntry.getKey().getName().equals(pdfObjectName)) {
                         ExtractPDFStructuralPathsRecursively(objectEntry.getValue(), objectEntry.getKey().getName(), objectPath, structuralPaths);
                     }
                 }
@@ -144,6 +150,12 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         }
     }
 
+    /**
+     * Extract the PDF structural paths
+     *
+     * @param pdfRootObject the root of the PDF tree
+     * @param structuralPaths the Map to add the feature to
+     */
     public void ExtractPDFStructuralPathsQUEUE(COSBase pdfRootObject, Map<String, Integer> structuralFeatures) {
         Queue<PDFObject> queue = new LinkedList<>();
 
@@ -179,9 +191,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                 case "COSDictionary":
                     AddPDFStructuralPath(pdfObject.getPath(), structuralFeatures);
                     for (Map.Entry<COSName, COSBase> objectEntry : ((COSDictionary) pdfObject.getObject()).entrySet()) {
-                        if (!(objectEntry.getKey().getName().equals("Parent")
-                                || objectEntry.getKey().getName().equals("ParentTree")
-                                || objectEntry.getKey().getName().equals("StructTreeRoot"))) {
+                        if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot", "Reference").contains(objectEntry.getKey().getName())) {
                             queue.add(new PDFObject(objectEntry.getValue(), objectEntry.getKey().getName(), pdfObject.getPath()));
                         }
                     }
@@ -198,13 +208,15 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
     /**
      * Add structural path to the given Map
      *
-     * @param feature (structural path) to add to the Map
+     * @param structuralPath the key to add to the map
+     * @param structuralPath (structural path) to add to the Map
      */
-    private void AddPDFStructuralPath(String feature, Map<String, Integer> structuralPaths) {
-        if (!structuralPaths.containsKey(feature)) {
-            structuralPaths.put(feature, 1);
+    private void AddPDFStructuralPath(String structuralPath, Map<String, Integer> structuralPaths) {
+        Console.PrintLine(structuralPath, true, false);
+        if (!structuralPaths.containsKey(structuralPath)) {
+            structuralPaths.put(structuralPath, 1);
         } else {
-            structuralPaths.put(feature, structuralPaths.get(feature) + 1);
+            structuralPaths.put(structuralPath, structuralPaths.get(structuralPath) + 1);
         }
     }
 
