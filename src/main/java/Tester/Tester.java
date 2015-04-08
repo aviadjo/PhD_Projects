@@ -24,9 +24,8 @@ import java.util.Map;
 public class Tester {
 
     public static void main(String[] args) {
-        TestExtractPDFStructuralFeatures();
-
-        //GeneratePDFDatasets();
+        //TestExtractPDFStructuralFeatures();
+        GeneratePDFDatasets();
         //GenerateDocxDataset();
     }
 
@@ -104,7 +103,7 @@ public class Tester {
 
     private static void TestExtractPDFStructuralFeatures() {
         FeatureExtractorPDFStructuralPathsTEST featureExtractor = new FeatureExtractorPDFStructuralPathsTEST(ParserType.Sequential);
-        Map<String, Integer> structuralFeatures = featureExtractor.ExtractFeaturesFrequencyFromSingleElement("D:\\6.pdf");
+        Map<String, Integer> structuralFeatures = featureExtractor.ExtractFeaturesFrequencyFromSingleElement("D:\\3.pdf");
 
         int totalStructuralFeatures = 0;
 

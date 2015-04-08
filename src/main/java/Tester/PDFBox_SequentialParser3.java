@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
@@ -22,6 +25,9 @@ import org.apache.pdfbox.cos.COSObject;
 import org.apache.pdfbox.cos.COSString;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.fit.pdfdom.PDFDomTree;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -41,6 +47,20 @@ public class PDFBox_SequentialParser3 {
             PDDocument pdf = PDDocument.load(input);
             COSDocument pdfDocument = pdf.getDocument();
             PDDocumentCatalog pdc = pdf.getDocumentCatalog();
+
+            try {
+                PDFDomTree parser = new PDFDomTree();
+                parser.processDocument(pdf);
+                Document dom = parser.getDocument();
+
+                NodeList nl = dom.getChildNodes();
+                for (int i = 0; i < nl.getLength(); i++) {
+                    Console.PrintLine(nl.item(i).getNodeName(), true, true);
+                }
+                String a = "";
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(FeatureExtractorPDFStructuralPathsTEST.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             //PDStructureTreeRoot pstr = pdc.getStructureTreeRoot();
             //PrintPDFObjects(pdfDocument.getCatalog());

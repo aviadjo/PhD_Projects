@@ -80,9 +80,7 @@ public class Directories {
         } catch (IOException e) {
             Console.PrintLine(String.format("Error getting directory paths: %s", directoryPath), true, false);
         }
-        
         directoryPaths.remove(directoryPath);
-
         return directoryPaths;
     }
 
@@ -96,7 +94,6 @@ public class Directories {
      */
     private static ArrayList<String> GetFolderFilesPaths(String folder_path) {
         ArrayList<String> files_paths_in_folder = new ArrayList<>();
-
         File directory = new File(folder_path);
         if (directory.exists()) {
             File[] directory_files = directory.listFiles();
@@ -104,7 +101,6 @@ public class Directories {
                 files_paths_in_folder.add(file.getPath());
             }
         }
-
         return files_paths_in_folder;
     }
 
@@ -118,13 +114,11 @@ public class Directories {
      */
     public static ArrayList<File> GetFolderFiles(String folder_path) {
         ArrayList<File> files_in_folder = new ArrayList<>();
-
         File directory = new File(folder_path);
         if (directory.exists()) {
             File[] directory_files = directory.listFiles();
             files_in_folder.addAll(Arrays.asList(directory_files));
         }
-
         return files_in_folder;
     }
 
