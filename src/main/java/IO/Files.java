@@ -27,6 +27,12 @@ public class Files {
         return (f.exists() && f.isFile() && !f.isDirectory());
     }
 
+    /**
+     * Returns true if the given file is successfully deleted
+     *
+     * @param filePath file's path to delete
+     * @return true if the given file is successfully deleted
+     */
     public static boolean DeleteFile(String filePath) {
         File file = new File(filePath);
         return file.delete();
