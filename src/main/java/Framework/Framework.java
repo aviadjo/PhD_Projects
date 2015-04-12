@@ -17,6 +17,7 @@ import Implementations.FeatureSelectorInfoGainRatio;
 import Implementations.FeatureSelectorInfoGainRatio.SelectionMethod;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -26,8 +27,20 @@ public class Framework {
 
     public static enum Clasification {
 
-        Benign,
-        Malicious
+        Benign("Benign"),
+        Malicious("Malicious"),
+        Unknown("?");
+
+        private final String toString;
+
+        private Clasification(String toString) {
+            this.toString = toString;
+        }
+
+        @Override
+        public String toString() {
+            return toString;
+        }
     }
 
     public static enum FeatureRepresentation {
@@ -36,11 +49,12 @@ public class Framework {
         TFIDF
     }
 
-    public static String m_benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
-    public static String m_maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
-    public static String m_destinationFolder = "D:\\Dropbox\\DATASETS";
-    public static String m_datasetFilenameFormat = "DATASET_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)";
-    public static ArrayList<Integer> m_tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
+    public static final String m_systemTempDirectory = FileUtils.getTempDirectoryPath();
+    public static final String m_benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
+    public static final String m_maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
+    public static final String m_destinationFolder = "D:\\Dropbox\\DATASETS";
+    public static final String m_datasetFilenameFormat = "DATASET_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)";
+    public static final ArrayList<Integer> m_tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
     private static void CreateDatasetDefaultSettings() {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgrams<>(3, 1);

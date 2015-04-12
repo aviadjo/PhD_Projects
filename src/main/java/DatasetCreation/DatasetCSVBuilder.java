@@ -97,7 +97,7 @@ public class DatasetCSVBuilder<T> {
             featuresVectorCSV.append(cellValue).append(",");
         }
         if (addClassificationColumn) {
-            featuresVectorCSV.append(classification);
+            featuresVectorCSV.append(classification.toString());
         } else {
             //To remove the last feature ","
             featuresVectorCSV = new StringBuilder(featuresVectorCSV.substring(0, featuresVectorCSV.length() - 1));
