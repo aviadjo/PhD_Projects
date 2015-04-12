@@ -56,6 +56,8 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                         COSDocument pdfDocument = pdf.getDocument();
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
+                    } catch (Exception e) {
+                        Console.PrintLine(String.format("Error parsing PDF file: %s", filePath), true, false);
                     }
                     break;
                 case NonSequential:
@@ -65,6 +67,10 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                         COSDocument pdfDocument = pdf.getDocument();
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
+                    } catch (Exception e) {
+                        Console.PrintLine(String.format("Error parsing PDF file: %s", filePath), true, false);
+                    } finally {
+                        randomAccessFile.delete();
                     }
                     break;
             }

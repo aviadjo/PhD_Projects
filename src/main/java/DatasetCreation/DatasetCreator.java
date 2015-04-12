@@ -17,6 +17,7 @@ import Framework.Framework.Clasification;
 import Framework.Framework.FeatureRepresentation;
 import IO.Directories;
 import IO.FileWriter;
+import IO.Serializer;
 import java.util.ArrayList;
 import java.util.Map;
 import javafx.util.Pair;
@@ -105,6 +106,7 @@ public class DatasetCreator {
 
         //PRINT FILE - SELECTED FEATURES
         PrintCSVFileSelectedFeatures(selectedFeatures, destinationFolderPath);
+        SerializeSelectedFeatures(selectedFeatures, destinationFolderPath);
 
         //DATASET CREATION
         StringBuilder datasetCSV = new StringBuilder();
@@ -156,5 +158,9 @@ public class DatasetCreator {
         String featuresFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_FeaturesList" + ".csv";
         FileWriter.WriteFile(sb.toString(), featuresFilePath);
         Console.PrintLine(String.format("Selected Features saved to: %s", featuresFilePath), true, false);
+    }
+
+    private static void SerializeSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, String destinationFolderPath) {
+        Serializer.Serialize(selectedFeatures, destinationFolderPath, m_datasetFilename + "_FeaturesList");
     }
 }
