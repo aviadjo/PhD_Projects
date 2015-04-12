@@ -25,8 +25,9 @@ public class Tester {
 
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
-        GeneratePDFDatasets();
+        //GeneratePDFDatasets();
         //GenerateDocxDataset();
+        TestCode();
     }
 
     private static void GeneratePDFDatasets() {
@@ -113,6 +114,17 @@ public class Tester {
 
         Console.PrintLine(String.format("Total features: %s", totalStructuralFeatures), true, false);
         Console.PrintLine(String.format("Unique features: %s", structuralFeatures.size()), true, false);
+    }
+
+    private static void TestCode() {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 100000000; i++) {
+            list.add(i);
+        }
+
+        list.stream().map(x -> x * 2);
+
+        String a = "";
     }
 
 }
