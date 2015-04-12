@@ -19,12 +19,17 @@ public class Files {
     /**
      * Returns true if the given file path exists
      *
-     * @param file_path file's path
+     * @param filePath file's path
      * @return true if the given file path exists
      */
-    public static boolean IsFile(String file_path) {
-        File f = new File(file_path);
+    public static boolean IsFile(String filePath) {
+        File f = new File(filePath);
         return (f.exists() && f.isFile() && !f.isDirectory());
+    }
+
+    public static boolean DeleteFile(String filePath) {
+        File file = new File(filePath);
+        return file.delete();
     }
 
     /**

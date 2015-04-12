@@ -9,6 +9,7 @@ import Console.Console;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
+import IO.Serializer;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
@@ -27,7 +28,8 @@ public class Tester {
         //TestExtractPDFStructuralFeatures();
         //GeneratePDFDatasets();
         //GenerateDocxDataset();
-        TestCode();
+        //TestCode();
+        TestSerilizer();
     }
 
     private static void GeneratePDFDatasets() {
@@ -125,6 +127,18 @@ public class Tester {
         list.stream().map(x -> x * 2);
 
         String a = "";
+    }
+
+    private static void TestSerilizer() {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 100000; i++) {
+            list.add(i);
+        }
+
+        Serializer.Serialize(list, "D:\\", "serializerTemp");
+
+        ArrayList<Integer> deserializedList = (ArrayList<Integer>) Serializer.Deserialize("D:\\", "serializerTemp", true);
+        Console.PrintLine("ArrayListCount: " + deserializedList.size(), true, false);
     }
 
 }
