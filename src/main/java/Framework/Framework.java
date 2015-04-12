@@ -68,7 +68,6 @@ public class Framework {
         boolean addClassificationColumn = true;
         boolean printFileFeaturesFrequencies = false;
         boolean printSelectedFeaturesScore = true;
-        boolean printFileSelectedFeatures = false;
         boolean generateTops = false;
 
         StringBuilder datasetCSV = BuildDataset(
@@ -84,8 +83,7 @@ public class Framework {
                 addElementIDColumn,
                 addClassificationColumn,
                 printFileFeaturesFrequencies,
-                printSelectedFeaturesScore,
-                printFileSelectedFeatures
+                printSelectedFeaturesScore
         );
 
         if (generateTops) {
@@ -107,7 +105,6 @@ public class Framework {
             boolean addClassificationColumn,
             boolean printFileFeaturesFrequencies,
             boolean printSelectedFeaturesScore,
-            boolean printFileSelectedFeatures,
             boolean generateTopsDatasets,
             ArrayList<Integer> tops) {
         StringBuilder datasetCSV = BuildDataset(
@@ -123,8 +120,7 @@ public class Framework {
                 addElementIDColumn,
                 addClassificationColumn,
                 printFileFeaturesFrequencies,
-                printSelectedFeaturesScore,
-                printFileSelectedFeatures
+                printSelectedFeaturesScore
         );
 
         if (generateTopsDatasets) {

@@ -67,8 +67,7 @@ public class DatasetCreator {
             boolean addElementIDColumn,
             boolean addClassificationColumn,
             boolean printFileFeaturesFrequencies,
-            boolean printSelectedFeaturesScore,
-            boolean printFileSelectedFeatures
+            boolean printSelectedFeaturesScore
     ) {
         StopWatch.Start();
 
@@ -105,9 +104,7 @@ public class DatasetCreator {
         ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABfeatures, classAelements.size(), classBelements.size(), topFeatures, printSelectedFeaturesScore);
 
         //PRINT FILE - SELECTED FEATURES
-        if (printFileSelectedFeatures) {
-            PrintCSVFileSelectedFeatures(selectedFeatures, destinationFolderPath);
-        }
+        PrintCSVFileSelectedFeatures(selectedFeatures, destinationFolderPath);
 
         //DATASET CREATION
         StringBuilder datasetCSV = new StringBuilder();

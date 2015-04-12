@@ -47,7 +47,6 @@ public class Tester {
         boolean addClassificationColumn = true;
         boolean printFileFeaturesFrequencies = false;
         boolean printSelectedFeaturesScore = true;
-        boolean printFileSelectedFeatures = true;
         boolean generateTops = true;
 
         Framework.GenerateDatasets(
@@ -63,7 +62,6 @@ public class Tester {
                 addClassificationColumn,
                 printFileFeaturesFrequencies,
                 printSelectedFeaturesScore,
-                printFileSelectedFeatures,
                 generateTops,
                 tops);
     }
@@ -83,7 +81,6 @@ public class Tester {
         boolean addClassificationColumn = true;
         boolean printFileFeaturesFrequencies = false;
         boolean printSelectedFeaturesScore = true;
-        boolean printFileSelectedFeatures = true;
         boolean generateTops = true;
 
         Framework.GenerateDatasets(
@@ -99,7 +96,6 @@ public class Tester {
                 addClassificationColumn,
                 printFileFeaturesFrequencies,
                 printSelectedFeaturesScore,
-                printFileSelectedFeatures,
                 generateTops,
                 tops);
     }

@@ -258,9 +258,11 @@ public class DatasetCSVBuilder<T> {
      */
     public static StringBuilder GetSelectedFeaturesCSV(ArrayList<Pair<String, Integer>> selectedFeatures) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#,Feature\n");
+        sb.append("#,Feature,DocumentFrequency\n");
+        Pair pair;
         for (int i = 0; i < selectedFeatures.size(); i++) {
-            sb.append(String.format("f%s,%s", i + 1, selectedFeatures.get(i).getKey())).append("\n");
+            pair = selectedFeatures.get(i);
+            sb.append(String.format("f%s,%s,%s", i + 1, pair.getKey(), pair.getValue())).append("\n");
         }
         return sb;
     }
