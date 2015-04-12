@@ -5,6 +5,7 @@
  */
 package Implementations;
 
+import Console.Console;
 import FeatureExtraction.AFeatureExtractor;
 import java.io.File;
 import java.io.IOException;
@@ -43,10 +44,8 @@ public class FeatureExtractorNgramsByte<T> extends AFeatureExtractor<T> {
         if (file.exists()) {
             try {
                 byte[] fileBytes = FileUtils.readFileToByteArray(file);
-
                 String ngram = "";
                 for (int i = 0; i <= fileBytes.length - m_grams; i = i + m_skip) {
-
                     for (int j = 0; j < m_grams; j++) {
                         ngram += (char) fileBytes[i + j];
                     }
@@ -58,16 +57,15 @@ public class FeatureExtractorNgramsByte<T> extends AFeatureExtractor<T> {
                     ngram = "";
                 }
             } catch (IOException e) {
-
+                Console.PrintLine(String.format("Error extracting Byte n-grams from file: '%s'", filePath), true, false);
             }
-
         }
         return ngrams;
     }
 
     @Override
     public String GetName() {
-        return String.format("byte n-gram (grams=%s skip=%s)", m_grams, m_skip);
+        return String.format("Byte n-gram (grams=%s skip=%s)", m_grams, m_skip);
     }
 
 }
