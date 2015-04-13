@@ -26,8 +26,8 @@ public class Tester {
 
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
-        //GeneratePDFDatasets();
-        GenerateDocxDatasets();
+        GeneratePDFDatasets();
+        //GenerateDocxDatasets();
         //TestCode();
         //TestSerilizer();
     }

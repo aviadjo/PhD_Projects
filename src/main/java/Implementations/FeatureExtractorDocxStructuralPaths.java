@@ -25,7 +25,8 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * @author Aviad
+ * @author Aviad. Check http://www.docx4java.org/trac/docx4j to analyze OLE
+ * objects found in XML Based documents
  */
 public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T> {
 
@@ -114,6 +115,10 @@ public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T>
      * @param structuralPaths the Map to add the feature to
      */
     private void AddStructuralPath(String structuralPath, Map<String, Integer> structuralPaths) {
+        //String fileName;
+        //fileName = FilenameUtils.getBaseName(path);
+        //firstname1 = fileName.replaceAll("[0-9]","");
+        //http://stackoverflow.com/questions/17516049/java-removing-numeric-values-from-string
         structuralPath = structuralPath.replace(m_OfficeFileTempFolderPath, "");
         if (!structuralPaths.containsKey(structuralPath)) {
             structuralPaths.put(structuralPath, 1);
