@@ -16,7 +16,7 @@ import java.io.ObjectOutputStream;
  *
  * @author Aviad
  */
-public class Serializer1 {
+public class Serializer {
 
     private static final String m_serializedFileExtension = "ser";
 
