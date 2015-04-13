@@ -10,7 +10,7 @@ import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
 import IO.Serializer;
-import Implementations.FeatureExtractorDocxStructuralPaths;
+import Implementations.FeatureExtractorNgramsString;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Tester.FeatureExtractorPDFStructuralPathsTEST.ParserType;
@@ -72,7 +72,8 @@ public class Tester {
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths<>();
+        //AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths<>();
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgramsString<>(3, 1);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
         Framework.FeatureRepresentation featureRepresentation = Framework.FeatureRepresentation.Binary;
