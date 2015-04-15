@@ -169,7 +169,7 @@ public class DatasetCSVBuilder<T> {
      * @param classificationColumnExist is column identifying the class of the
      * record exists
      */
-    public static void GenerateTopDatasets(String originalCSVDataset, ArrayList<Integer> tops, String destinationFolder, String datasetFilename, boolean elementIDColumnExist, boolean classificationColumnExist) {
+    public static void GenerateTopDatasets(StringBuilder originalCSVDataset, ArrayList<Integer> tops, String destinationFolder, String datasetFilename, boolean elementIDColumnExist, boolean classificationColumnExist) {
         String topDataset;
         String destinationFile;
         char letter = 'a';
@@ -190,10 +190,10 @@ public class DatasetCSVBuilder<T> {
      * @param topX top X features to extract
      * @return CSV string of the top X features from the given dataset
      */
-    public static String GetTopXDataset(String originalCSVDataset, int topX, boolean elementIDColumnExist, boolean classificationColumnExist) {
+    public static String GetTopXDataset(StringBuilder originalCSVDataset, int topX, boolean elementIDColumnExist, boolean classificationColumnExist) {
         StringBuilder newCSVDatabase = new StringBuilder();
 
-        String[] lines = originalCSVDataset.split("\n");
+        String[] lines = originalCSVDataset.toString().split("\n");
         int originalFeaturesCount = lines[0].split(",").length + ((elementIDColumnExist) ? -1 : 0) + ((classificationColumnExist) ? -1 : 0);
 
         if (originalFeaturesCount >= topX) {

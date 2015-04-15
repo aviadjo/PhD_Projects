@@ -88,7 +88,7 @@ public class Framework {
 
         if (generateTops) {
             Console.PrintLine("Generating tops:", true, false);
-            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV.toString(), m_tops, m_destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
+            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, m_destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
     }
 
@@ -125,7 +125,7 @@ public class Framework {
 
         if (generateTopsDatasets) {
             Console.PrintLine("Generating tops:", true, false);
-            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV.toString(), tops, destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
+            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, tops, destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
     }
 

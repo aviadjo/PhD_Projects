@@ -12,7 +12,6 @@ import Math.Entropy;
 import Math.MathCalc;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import javafx.util.Pair;
@@ -76,17 +75,8 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
         SetTotalInfo(classAelementsNum, classBelementsNum);
         Map<String, Double> featuresInfoGain = GetFeaturesInfoGain(featuresDFs);
 
-        //Comparator used for iterator
-        Comparator featuresComperator = new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                return ((Map.Entry<String, Double>) o2).getValue().compareTo(
-                        ((Map.Entry<String, Double>) o1).getValue());
-            }
-        };
-
         //Initialize an Iterator over the sorted map
-        Iterator iteratorSorted = Pump.sort(featuresInfoGain.entrySet().iterator(), false, 1000000000, featuresComperator, Serializer.BASIC);
+        Iterator iteratorSorted = Pump.sort(featuresInfoGain.entrySet().iterator(), false, 1000000000, new FeatureSelectionComperator(), Serializer.BASIC);
 
         int amount_to_select = ((topFeaturesToSelect < featuresInfoGain.size()) ? topFeaturesToSelect : featuresInfoGain.size());
         ArrayList<Pair<String, Integer>> topFeatures = new ArrayList<>();
