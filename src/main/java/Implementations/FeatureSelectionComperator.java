@@ -20,10 +20,10 @@ public class FeatureSelectionComperator implements Comparator<Map.Entry<String, 
         if (comp != 0) {
             return comp;
         } else {
-            //When Score is equal, compare by feature string name
+            //When Score is equal, compare by feature name
             return o1.getKey().compareToIgnoreCase(o2.getKey());
         }
-        /*return o2.getValue().compareTo(o1.getValue());*/
+        //return o2.getValue().compareTo(o1.getValue());
     }
 
 }
