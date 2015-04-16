@@ -115,9 +115,9 @@ public class DatasetCreator {
             Console.PrintLine(String.format("Feature representation: %s", featureRepresentation.toString()), true, false);
             //****************
             DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
-            String datasetHeaderCSV = datasetBuilder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
-            String datasetClassACSV = datasetBuilder.BuildDatabaseCSV(classAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Benign, addElementIDColumn, addClassificationColumn);
-            String datasetClassBCSV = datasetBuilder.BuildDatabaseCSV(classBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Malicious, addElementIDColumn, addClassificationColumn);
+            StringBuilder datasetHeaderCSV = datasetBuilder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
+            StringBuilder datasetClassACSV = datasetBuilder.BuildDatabaseCSV(classAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Benign, addElementIDColumn, addClassificationColumn);
+            StringBuilder datasetClassBCSV = datasetBuilder.BuildDatabaseCSV(classBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Malicious, addElementIDColumn, addClassificationColumn);
             datasetCSV.append(datasetHeaderCSV).append("\n").append(datasetClassBCSV).append("\n").append(datasetClassACSV);
             StopWatch.Stop();
 
@@ -155,12 +155,19 @@ public class DatasetCreator {
      */
     private static void PrintCSVFileSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, String destinationFolderPath) {
         StringBuilder sb = DatasetCSVBuilder.GetSelectedFeaturesCSV(selectedFeatures);
-        String featuresFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_FeaturesList" + ".csv";
+        String featuresFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_a_FeaturesList" + ".csv";
         FileWriter.WriteFile(sb.toString(), featuresFilePath);
         Console.PrintLine(String.format("Selected Features saved to: %s", featuresFilePath), true, false);
     }
 
+    /**
+     * Print SERIALIZED file contain list of selected features
+     *
+     * @param selectedFeatures ArrayList of selected features selected features
+     * @param destinationFolderPath path of the destination folder to print the
+     * selected features file to
+     */
     private static void SerializeSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, String destinationFolderPath) {
-        Serializer.Serialize(selectedFeatures, destinationFolderPath, m_datasetFilename + "_FeaturesList");
+        Serializer.Serialize(selectedFeatures, destinationFolderPath, m_datasetFilename + "_a_FeaturesList");
     }
 }

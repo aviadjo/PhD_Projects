@@ -77,6 +77,14 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         return structuralPaths;
     }
 
+    public boolean IsCompatiblePDF(File pdfFile) {
+        try (PDDocument pdf = PDDocument.load(pdfFile)) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * Extract the PDF structural paths recursively
      *
@@ -85,7 +93,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
      * @param parentPath the path of the parent node
      * @param structuralPaths the Map to add the feature to
      */
-    public void ExtractPDFStructuralPathsRecursively(COSBase pdfObject, String pdfObjectName, String parentPath, Map<String, Integer> structuralPaths, HashSet<COSBase> visitedObjects) {
+    private void ExtractPDFStructuralPathsRecursively(COSBase pdfObject, String pdfObjectName, String parentPath, Map<String, Integer> structuralPaths, HashSet<COSBase> visitedObjects) {
         String objectPath = String.format("%s\\%s", parentPath, pdfObjectName);
         visitedObjects.add(pdfObject);
 

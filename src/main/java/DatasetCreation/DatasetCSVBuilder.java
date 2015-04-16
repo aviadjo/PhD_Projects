@@ -36,16 +36,18 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the dataset
      */
-    public String BuildDatabaseCSV(ArrayList<T> elements, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public StringBuilder BuildDatabaseCSV(ArrayList<T> elements, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
         StringBuilder datasetCSV = new StringBuilder();
-        String elementFeaturesVectorCSV;
+        StringBuilder elementFeaturesVectorCSV;
 
         for (T element : elements) {
             elementFeaturesVectorCSV = GetFeaturesVectorCSV(element, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, classification, addElementIDColumn, addClassificationColumn);
             datasetCSV.append(elementFeaturesVectorCSV);
             datasetCSV.append("\n");
         }
-        return datasetCSV.toString().substring(0, datasetCSV.lastIndexOf("\n"));
+        datasetCSV.deleteCharAt(datasetCSV.lastIndexOf("\n"));
+        //return datasetCSV.substring(0, datasetCSV.lastIndexOf("\n")); //TODO - REMOVELINE
+        return datasetCSV;
     }
 
     /**
@@ -61,7 +63,7 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the element features vector
      */
-    public String GetFeaturesVectorCSV(T element, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public StringBuilder GetFeaturesVectorCSV(T element, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
         Map<String, Integer> elementFeaturesFrequencies = featureExtractor.ExtractFeaturesFrequencyFromSingleElement(element);
         StringBuilder featuresVectorCSV = new StringBuilder();
 
@@ -100,9 +102,9 @@ public class DatasetCSVBuilder<T> {
             featuresVectorCSV.append(classification.toString());
         } else {
             //To remove the last feature ","
-            featuresVectorCSV = new StringBuilder(featuresVectorCSV.substring(0, featuresVectorCSV.length() - 1));
+            featuresVectorCSV.deleteCharAt(featuresVectorCSV.length() - 1);
         }
-        return featuresVectorCSV.toString();
+        return featuresVectorCSV;
     }
 
     /**
@@ -140,7 +142,7 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the header row of the dataset
      */
-    public static String GetDatasetHeaderCSV(int selectedFeaturesNum, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public static StringBuilder GetDatasetHeaderCSV(int selectedFeaturesNum, boolean addElementIDColumn, boolean addClassificationColumn) {
         StringBuilder datasetHeaderCSV = new StringBuilder();
         if (addElementIDColumn) {
             datasetHeaderCSV.append("Element,");
@@ -154,7 +156,7 @@ public class DatasetCSVBuilder<T> {
             //To remove the last feature ","
             datasetHeaderCSV = new StringBuilder(datasetHeaderCSV.substring(0, datasetHeaderCSV.length() - 1));
         }
-        return datasetHeaderCSV.toString();
+        return datasetHeaderCSV;
     }
 
     /**
@@ -207,7 +209,6 @@ public class DatasetCSVBuilder<T> {
         } else {
             Console.PrintLine(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount), true, false);
         }
-
         return newCSVDatabase.toString();
     }
 

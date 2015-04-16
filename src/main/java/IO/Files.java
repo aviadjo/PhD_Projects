@@ -38,6 +38,38 @@ public class Files {
         return file.delete();
     }
 
+    public static boolean MoveFileToFolder(String filePath, String destinationFolderPath) {
+        return false;
+    }
+
+    /**
+     * Returns true if the given file is successfully moved to the destination
+     * folder
+     *
+     * @param file source file
+     * @param subFolderName the name of the subfolder to create and move the
+     * file to
+     * @return true if the given file is successfully moved to the destination
+     * folder
+     */
+    public static boolean MoveFileToSubFolder(File file, String subFolderName) {
+        String filename = file.getName();
+        File destinationFolder = new File(file.getParent() + "\\" + subFolderName);
+        String destinationFilePath = destinationFolder + "\\" + filename;
+
+        if (!destinationFolder.exists()) {
+            destinationFolder.mkdir();
+        }
+
+        if (file.renameTo(new File(destinationFilePath))) {
+            //System.out.println(String.format("File '%s' is moved successful to folder:\n%s\n", filename, destinationFolder));
+            return true;
+        } else {
+            //System.out.println(String.format("File '%s' is failed to move to folder: \n%s\n", filename, destinationFolder));
+            return false;
+        }
+    }
+
     /**
      * Return the file extension
      *

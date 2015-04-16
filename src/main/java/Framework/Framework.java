@@ -52,11 +52,12 @@ public class Framework {
     public static final String m_systemTempDirectory = FileUtils.getTempDirectoryPath();
     public static final String m_benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
     public static final String m_maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
+    public static final String m_testFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
     public static final String m_destinationFolder = "D:\\Dropbox\\DATASETS";
     public static final String m_datasetFilenameFormat = "DATASET_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)";
     public static final ArrayList<Integer> m_tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
-    private static void CreateDatasetDefaultSettings() {
+    private static void CreateTrainSetDefaultSettings() {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgrams<>(3, 1);
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocStreamPaths();
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths();
@@ -92,7 +93,7 @@ public class Framework {
         }
     }
 
-    public static void GenerateDatasets(
+    public static void GenerateTrainSet(
             String benignFolder,
             String maliciousFolder,
             String destinationFolder,
@@ -129,7 +130,16 @@ public class Framework {
         }
     }
 
+    public static void GenerateTestSet(
+            String testFolder,
+            IFeatureExtractor<String> featureExtractor,
+            String selectedFeaturesSerializedFilePath,
+            FeatureRepresentation featureRepresentation,
+            boolean addElementIDColumn,
+            boolean addClassificationColumn) {
+    }
+
     public static void main(String[] args) {
-        CreateDatasetDefaultSettings();
+        CreateTrainSetDefaultSettings();
     }
 }

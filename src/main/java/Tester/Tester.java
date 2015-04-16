@@ -57,7 +57,7 @@ public class Tester {
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
 
-        Framework.GenerateDatasets(
+        Framework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
@@ -92,7 +92,7 @@ public class Tester {
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
 
-        Framework.GenerateDatasets(
+        Framework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
