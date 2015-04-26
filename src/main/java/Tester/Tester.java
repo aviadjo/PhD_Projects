@@ -34,10 +34,10 @@ public class Tester {
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
         //GeneratePDFDatasets();
-        GenerateDocxDatasets();
+        //GenerateDocxDatasets();
         //TestCode();
         //TestSerilizer();
-        //TestWEKA();
+        TestWEKA();
     }
 
     private static void GeneratePDFDatasets() {
@@ -149,6 +149,7 @@ public class Tester {
     private static void TestWEKA() {
         String datasetCSV = FileReader.ReadFile("D:\\String n-gram (String grams=3 skip=1))_FS(Information Gain)_Rep(Binary)_j_Top(100).csv");
         Instances data = GetDatasetInstances(datasetCSV);
+
     }
 
     private static Instances GetDatasetInstances(String stringDataset) {
