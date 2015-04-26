@@ -12,11 +12,13 @@ import static DatasetCreation.DatasetCreator.BuildDataset;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
+import IO.Directories;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Implementations.FeatureSelectorInfoGainRatio.SelectionMethod;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -25,7 +27,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class Framework {
 
-    public static enum Clasification {
+    public static enum Classification {
 
         Benign("Benign"),
         Malicious("Malicious"),
@@ -33,7 +35,7 @@ public class Framework {
 
         private final String toString;
 
-        private Clasification(String toString) {
+        private Classification(String toString) {
             this.toString = toString;
         }
 
@@ -132,11 +134,33 @@ public class Framework {
 
     public static void GenerateTestSet(
             String testFolder,
+            String destinationFolder,
             IFeatureExtractor<String> featureExtractor,
             String selectedFeaturesSerializedFilePath,
+            int numOfElementsInTrainset,
             FeatureRepresentation featureRepresentation,
             boolean addElementIDColumn,
-            boolean addClassificationColumn) {
+            boolean addClassificationColumn,
+            boolean generateTopsDatasets,
+            ArrayList<Integer> tops) {
+
+        DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
+        ArrayList<String> testElements = Directories.GetDirectoryFilesPaths(testFolder);
+        ArrayList<Pair<String, Integer>> selectedFeatures = new ArrayList<>();
+        StringBuilder datasetCSV = datasetBuilder.BuildDatabaseCSV(
+                testElements,
+                featureExtractor,
+                selectedFeatures,
+                numOfElementsInTrainset,
+                featureRepresentation,
+                Classification.Unknown,
+                addElementIDColumn,
+                addClassificationColumn);
+
+        if (generateTopsDatasets) {
+            Console.PrintLine("Generating tops:", true, false);
+            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, tops, destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
+        }
     }
 
     public static void main(String[] args) {
