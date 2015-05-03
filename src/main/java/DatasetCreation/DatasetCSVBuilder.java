@@ -7,7 +7,7 @@ package DatasetCreation;
 
 import Console.Console;
 import FeatureExtraction.IFeatureExtractor;
-import Framework.Framework.Clasification;
+import Framework.Framework.Classification;
 import Framework.Framework.FeatureRepresentation;
 import IO.FileWriter;
 import Math.MathCalc;
@@ -36,7 +36,7 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the dataset
      */
-    public StringBuilder BuildDatabaseCSV(ArrayList<T> elements, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public StringBuilder BuildDatabaseCSV(ArrayList<T> elements, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Classification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
         StringBuilder datasetCSV = new StringBuilder();
         StringBuilder elementFeaturesVectorCSV;
 
@@ -46,7 +46,6 @@ public class DatasetCSVBuilder<T> {
             datasetCSV.append("\n");
         }
         datasetCSV.deleteCharAt(datasetCSV.lastIndexOf("\n"));
-        //return datasetCSV.substring(0, datasetCSV.lastIndexOf("\n")); //TODO - REMOVELINE
         return datasetCSV;
     }
 
@@ -63,7 +62,7 @@ public class DatasetCSVBuilder<T> {
      * the record
      * @return CSV string which represent the element features vector
      */
-    public StringBuilder GetFeaturesVectorCSV(T element, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Clasification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
+    public StringBuilder GetFeaturesVectorCSV(T element, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Classification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
         Map<String, Integer> elementFeaturesFrequencies = featureExtractor.ExtractFeaturesFrequencyFromSingleElement(element);
         StringBuilder featuresVectorCSV = new StringBuilder();
 

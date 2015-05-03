@@ -15,7 +15,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,14 +28,14 @@ public class FileReader {
     /**
      * Read a given file
      *
-     * @param file_path the source file path
+     * @param filePath the source file path
      * @return string represents the file's content
      */
-    public static String ReadFile(String file_path) {
+    public static String ReadFile(String filePath) {
         byte[] encoded = new byte[0];
 
         try {
-            encoded = Files.readAllBytes(Paths.get(file_path));
+            encoded = Files.readAllBytes(Paths.get(filePath));
         } catch (IOException exception) {
             Console.PrintLine(exception.getMessage(), true, false);
         }
@@ -46,14 +45,14 @@ public class FileReader {
     /**
      * Read a all the text file from the given folder to list of strings
      *
-     * @param folder_path path of a folder
+     * @param folderPath path of a folder
      * @return Arraylist of string contains the text of all files within the
      * given folder
      */
-    public static ArrayList<String> ReadTextFilesFromFolder(String folder_path) {
+    public static ArrayList<String> ReadTextFilesFromFolder(String folderPath) {
         ArrayList<String> list_of_strings = new ArrayList<>();
 
-        File directory = new File(folder_path);
+        File directory = new File(folderPath);
         if (directory.exists()) {
             File[] directory_files = directory.listFiles();
             String file_text = "";
@@ -65,7 +64,7 @@ public class FileReader {
                     }
                 }
             } else {
-                Console.PrintLine(String.format("Directory %s do not exist!", folder_path), true, false);
+                Console.PrintLine(String.format("Directory %s do not exist!", folderPath), true, false);
             }
         }
         return list_of_strings;
@@ -92,14 +91,14 @@ public class FileReader {
     /**
      * Read a given file
      *
-     * @param file_path the source file path
+     * @param filePath the source file path
      * @return InputStream represents a file located in the given path
      */
-    public static InputStream ReadFileToInputStream(String file_path) {
+    public static InputStream ReadFileToInputStream(String filePath) {
         InputStream is = null;
 
         try {
-            is = new FileInputStream(file_path);
+            is = new FileInputStream(filePath);
             is.close();
         } catch (FileNotFoundException exception) {
             Console.PrintLine(exception.getMessage(), true, false);

@@ -13,7 +13,7 @@ import DataStructures.MapDB;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureExtraction.MasterFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
-import Framework.Framework.Clasification;
+import Framework.Framework.Classification;
 import Framework.Framework.FeatureRepresentation;
 import IO.Directories;
 import IO.FileWriter;
@@ -116,8 +116,8 @@ public class DatasetCreator {
             //****************
             DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
             StringBuilder datasetHeaderCSV = datasetBuilder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
-            StringBuilder datasetClassACSV = datasetBuilder.BuildDatabaseCSV(classAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Benign, addElementIDColumn, addClassificationColumn);
-            StringBuilder datasetClassBCSV = datasetBuilder.BuildDatabaseCSV(classBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Clasification.Malicious, addElementIDColumn, addClassificationColumn);
+            StringBuilder datasetClassACSV = datasetBuilder.BuildDatabaseCSV(classAelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Classification.Benign, addElementIDColumn, addClassificationColumn);
+            StringBuilder datasetClassBCSV = datasetBuilder.BuildDatabaseCSV(classBelements, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, Classification.Malicious, addElementIDColumn, addClassificationColumn);
             datasetCSV.append(datasetHeaderCSV).append("\n").append(datasetClassBCSV).append("\n").append(datasetClassACSV);
             StopWatch.Stop();
 

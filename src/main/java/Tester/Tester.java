@@ -9,21 +9,25 @@ import Console.Console;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
+import Framework.Framework.FeatureRepresentation;
 import IO.FileReader;
 import IO.Serializer;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
+import Implementations.FeatureSelectorInfoGainRatio.SelectionMethod;
 import Tester.FeatureExtractorPDFStructuralPathsTEST.ParserType;
-import java.io.File;
-import java.io.IOException;
+import Weka.DatasetProperties;
+import Weka.TrainedClassifier;
+import Weka.Weka;
+import Weka.Weka.ClassifierName;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import weka.classifiers.Classifier;
+import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.converters.CSVLoader;
 
 /**
  *
@@ -37,7 +41,7 @@ public class Tester {
         //GenerateDocxDatasets();
         //TestCode();
         //TestSerilizer();
-        TestWEKA();
+        TestWekaClassification();
     }
 
     private static void GeneratePDFDatasets() {
@@ -57,7 +61,7 @@ public class Tester {
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
 
-        Framework.GenerateTrainSet(
+        StringBuilder datasetCSV = Framework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
@@ -92,7 +96,7 @@ public class Tester {
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
 
-        Framework.GenerateTrainSet(
+        StringBuilder datasetCSV = Framework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
@@ -146,21 +150,36 @@ public class Tester {
         Console.PrintLine("ArrayListCount: " + deserializedList.size(), true, false);
     }
 
-    private static void TestWEKA() {
-        String datasetCSV = FileReader.ReadFile("D:\\String n-gram (String grams=3 skip=1))_FS(Information Gain)_Rep(Binary)_j_Top(100).csv");
-        Instances data = GetDatasetInstances(datasetCSV);
+    private static void TestClassifierSerialization() {
 
     }
 
-    private static Instances GetDatasetInstances(String stringDataset) {
-        CSVLoader loader = new CSVLoader();
-        try {
-            loader.setSource(new File("D:\\String n-gram (String grams=3 skip=1))_FS(Information Gain)_Rep(Binary)_j_Top(100).csv"));
-            return loader.getDataSet();
-        } catch (IOException ex) {
-            Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+    private static void TestWekaClassification() {
+        String csvDataset = FileReader.ReadFile("D:\\String n-gram (String grams=3 skip=1))_FS(Information Gain)_Rep(Binary)_j_Top(100).csv");
+        Instances data = Weka.GetInstances(csvDataset);
+
+        DatasetProperties dspr = new DatasetProperties(data,
+                new FeatureExtractorDocxStructuralPaths(),
+                new FeatureSelectorInfoGainRatio(SelectionMethod.InformationGain),
+                FeatureRepresentation.Binary);
+
+        Classifier classifier = Weka.GetClassifier(ClassifierName.J48);
+        TrainedClassifier trainedClassifier = new TrainedClassifier(classifier, data, dspr);
+
+        trainedClassifier.GetDatasetProperties().GetClassAttribute()
+
+        ArrayList<Object> classifications = Collections.list(data.classAttribute().enumerateValues());
+
+        String classification;
+        double[] classificationDist;
+        Instance instance;
+        for (int i = 0; i < data.numInstances(); i++) {
+            instance = data.instance(i);
+            classification = trainedClassifier.GetClassification(instance).toString();
+            classificationDist = trainedClassifier.GetDistribution(instance);
+            Console.PrintLine(String.format("Instance %s classification: %s", i, classification), true, false);
+            Console.PrintLine(String.format("Instance %s distribution: %s , %s", i, classificationDist[0], classificationDist[1]), true, false);
+            Console.PrintLine("", true, false);
         }
     }
-
 }

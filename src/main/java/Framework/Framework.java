@@ -27,6 +27,16 @@ import org.apache.commons.io.FileUtils;
  */
 public class Framework {
 
+    public static final String m_systemTempDirectory = FileUtils.getTempDirectoryPath();
+    public static final String m_benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
+    public static final String m_maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
+    public static final String m_testFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
+    public static final String m_destinationFolder = "D:\\Dropbox\\DATASETS";
+    public static final String m_datasetFilenameFormat = "Dataset_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)";
+    public static final ArrayList<Integer> m_tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
+
+    public static final String m_classificationModelsFolder = "";
+
     public static enum Classification {
 
         Benign("Benign"),
@@ -45,21 +55,24 @@ public class Framework {
         }
     }
 
+    public Classification GetClassicitaion(String classificationString) {
+        Classification classification = Classification.Unknown;
+        switch (classificationString) {
+            case "Benign":
+                classification = Classification.Benign;
+            case "Malicious":
+                classification = Classification.Malicious;
+        }
+        return classification;
+    }
+
     public static enum FeatureRepresentation {
 
         Binary,
         TFIDF
     }
 
-    public static final String m_systemTempDirectory = FileUtils.getTempDirectoryPath();
-    public static final String m_benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
-    public static final String m_maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
-    public static final String m_testFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
-    public static final String m_destinationFolder = "D:\\Dropbox\\DATASETS";
-    public static final String m_datasetFilenameFormat = "DATASET_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)";
-    public static final ArrayList<Integer> m_tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
-
-    private static void CreateTrainSetDefaultSettings() {
+    private static StringBuilder CreateTrainSetDefaultSettings() {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgrams<>(3, 1);
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocStreamPaths();
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths();
@@ -93,9 +106,11 @@ public class Framework {
             Console.PrintLine("Generating tops:", true, false);
             DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, m_destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
+
+        return datasetCSV;
     }
 
-    public static void GenerateTrainSet(
+    public static StringBuilder GenerateTrainSet(
             String benignFolder,
             String maliciousFolder,
             String destinationFolder,
@@ -130,9 +145,11 @@ public class Framework {
             Console.PrintLine("Generating tops:", true, false);
             DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, tops, destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
+
+        return datasetCSV;
     }
 
-    public static void GenerateTestSet(
+    public static StringBuilder GenerateTestSet(
             String testFolder,
             String destinationFolder,
             IFeatureExtractor<String> featureExtractor,
@@ -161,6 +178,8 @@ public class Framework {
             Console.PrintLine("Generating tops:", true, false);
             DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, tops, destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
+
+        return datasetCSV;
     }
 
     public static void main(String[] args) {
