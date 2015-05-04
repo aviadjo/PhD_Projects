@@ -51,21 +51,17 @@ public class Serializer {
      * @param deleteSerializedFile whether to delete the serialized file
      * @return Deserialized object
      */
-    public static Object Deserialize(String sourceFolder, String objectFilename, boolean deleteSerializedFile) {
+    public static Object Deserialize(String serializedFilePath, boolean deleteSerializedFile) {
         Object serialized = null;
-        if (Directories.IsDirectory(sourceFolder)) {
-            String serializedFilename = String.format("%s\\%s.%s", sourceFolder, objectFilename, m_serializedFileExtension);
-            if (Files.IsFile(serializedFilename)) {
-                try (FileInputStream fin = new FileInputStream(serializedFilename); ObjectInputStream ois = new ObjectInputStream(fin)) {
-                    serialized = ois.readObject();
-                } catch (IOException | ClassNotFoundException ex) {
-                    Console.PrintLine(String.format("Error deserilizing object '%s': %s", objectFilename, ex.getMessage()), true, false);
-                }
-                if (deleteSerializedFile) {
-                    Files.DeleteFile(serializedFilename);
-                }
+        if (Files.IsFile(serializedFilePath)) {
+            try (FileInputStream fin = new FileInputStream(serializedFilePath); ObjectInputStream ois = new ObjectInputStream(fin)) {
+                serialized = ois.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                Console.PrintLine(String.format("Error deserilizing file '%s': %s", serializedFilePath, ex.getMessage()), true, false);
             }
-
+            if (deleteSerializedFile) {
+                Files.DeleteFile(serializedFilePath);
+            }
         }
         return serialized;
     }
