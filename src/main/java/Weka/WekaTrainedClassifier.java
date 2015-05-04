@@ -16,14 +16,14 @@ import weka.core.Instances;
  *
  * @author Aviad
  */
-public class TrainedClassifier {
+public class WekaTrainedClassifier {
 
     private final Classifier m_classifier;
     private final String m_classifierName;
-    private final DatasetProperties m_datasetProperties;
+    private final WekaDatasetProperties m_datasetProperties;
     private final String m_serializationFileName;
 
-    public TrainedClassifier(Classifier classifier, Instances dataset, DatasetProperties datasetProperties) {
+    public WekaTrainedClassifier(Classifier classifier, Instances dataset, WekaDatasetProperties datasetProperties) {
         m_classifier = Weka.TrainClassifier(classifier, dataset);
         m_classifierName = Weka.GetClassifierName(classifier);
         m_datasetProperties = datasetProperties;
@@ -38,12 +38,26 @@ public class TrainedClassifier {
         return m_classifierName;
     }
 
-    public DatasetProperties GetDatasetProperties() {
+    public WekaDatasetProperties GetDatasetProperties() {
         return m_datasetProperties;
     }
 
     public String GetSerializationName() {
         return m_serializationFileName;
+    }
+
+    public String GetClassifierSpecification() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Trained classifier specification").append("\n");
+        stringBuilder.append("--------------------------------").append("\n");
+        stringBuilder.append(String.format("Classifier: %s", m_classifierName)).append("\n");
+        stringBuilder.append(String.format("training benign: %s", m_datasetProperties.GetBenignNum())).append("\n");
+        stringBuilder.append(String.format("training malicious: %s", m_datasetProperties.GetMaliciousNum())).append("\n");
+        stringBuilder.append(String.format("Feature extractor: %s", m_datasetProperties.GetFeatureExtractorName())).append("\n");
+        stringBuilder.append(String.format("Feature selector: %s", m_datasetProperties.GetFeatureSelectorName())).append("\n");
+        stringBuilder.append(String.format("Feature representation: %s", m_datasetProperties.GetFeatureRepresentationName())).append("\n");
+        stringBuilder.append(String.format("Top feature selection: %s", m_datasetProperties.GetTopFeatures())).append("\n");
+        return stringBuilder.toString();
     }
 
     public Classification GetClassification(Instance instance) {

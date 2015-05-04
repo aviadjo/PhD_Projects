@@ -17,18 +17,18 @@ import weka.core.Instances;
  *
  * @author Aviad
  */
-public class DatasetProperties {
+public class WekaDatasetProperties {
 
     private int m_benignNum;
     private int m_maliciousNum;
-    private final int m_attributesNum;
+    private final int m_topFeatures;
     private final Attribute m_classAttribute;
     private final String m_featureExtractorName;
     private final String m_featureSelectorName;
     private final String m_featureRepresentationName;
 
-    public DatasetProperties(Instances dataset, AFeatureExtractor featureExtractor, AFeatureSelector featureSelector, FeatureRepresentation featureRepresentation) {
-        m_attributesNum = dataset.numAttributes();
+    public WekaDatasetProperties(Instances dataset, AFeatureExtractor featureExtractor, AFeatureSelector featureSelector, FeatureRepresentation featureRepresentation) {
+        m_topFeatures = dataset.numAttributes();
         m_classAttribute = dataset.classAttribute();
         m_featureExtractorName = featureExtractor.GetName();
         m_featureSelectorName = featureSelector.GetName();
@@ -63,6 +63,14 @@ public class DatasetProperties {
         return m_maliciousNum;
     }
 
+    public int GetTopFeatures() {
+        return m_topFeatures;
+    }
+
+    public Attribute GetClassAttribute() {
+        return m_classAttribute;
+    }
+
     public String GetFeatureExtractorName() {
         return m_featureExtractorName;
     }
@@ -73,10 +81,6 @@ public class DatasetProperties {
 
     public String GetFeatureRepresentationName() {
         return m_featureRepresentationName;
-    }
-
-    public Attribute GetClassAttribute() {
-        return m_classAttribute;
     }
 
 }

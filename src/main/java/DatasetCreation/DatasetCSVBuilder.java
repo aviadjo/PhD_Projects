@@ -153,7 +153,7 @@ public class DatasetCSVBuilder<T> {
             datasetHeaderCSV.append("Class");
         } else {
             //To remove the last feature ","
-            datasetHeaderCSV = new StringBuilder(datasetHeaderCSV.substring(0, datasetHeaderCSV.length() - 1));
+            datasetHeaderCSV.deleteCharAt(datasetHeaderCSV.length() - 1);
         }
         return datasetHeaderCSV;
     }

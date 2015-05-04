@@ -155,7 +155,7 @@ public class DatasetCreator {
      */
     private static void PrintCSVFileSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, String destinationFolderPath) {
         StringBuilder sb = DatasetCSVBuilder.GetSelectedFeaturesCSV(selectedFeatures);
-        String featuresFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_a_FeaturesList" + ".csv";
+        String featuresFilePath = String.format("%s\\%s_%s(%s).csv", destinationFolderPath, m_datasetFilename, "a_SelectedFeatures", selectedFeatures.size());
         FileWriter.WriteFile(sb.toString(), featuresFilePath);
         Console.PrintLine(String.format("Selected Features saved to: %s", featuresFilePath), true, false);
     }
@@ -168,6 +168,6 @@ public class DatasetCreator {
      * selected features file to
      */
     private static void SerializeSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, String destinationFolderPath) {
-        Serializer.Serialize(selectedFeatures, destinationFolderPath, m_datasetFilename + "_a_FeaturesList");
+        Serializer.Serialize(selectedFeatures, destinationFolderPath, m_datasetFilename + "a_SelectedFeatures(" + selectedFeatures.size() + ")");
     }
 }

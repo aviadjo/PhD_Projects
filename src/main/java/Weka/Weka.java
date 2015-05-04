@@ -178,13 +178,13 @@ public class Weka {
      * @param trainedClassifierFilePath trained classifier file location on disk
      * @return trained classifier
      */
-    private static TrainedClassifier LoadTrainedClassifier(String trainedClassifierFilePath) {
-        TrainedClassifier classifier = null;
+    private static WekaTrainedClassifier LoadTrainedClassifier(String trainedClassifierFilePath) {
+        WekaTrainedClassifier classifier = null;
         FileInputStream fileInputStream;
         try {
             fileInputStream = new FileInputStream(trainedClassifierFilePath);
             try (ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-                classifier = (TrainedClassifier) objectInputStream.readObject();
+                classifier = (WekaTrainedClassifier) objectInputStream.readObject();
             } catch (ClassNotFoundException ex) {
             }
         } catch (FileNotFoundException ex) {

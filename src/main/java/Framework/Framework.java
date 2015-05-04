@@ -13,6 +13,7 @@ import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import IO.Directories;
+import IO.Serializer;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Implementations.FeatureSelectorInfoGainRatio.SelectionMethod;
@@ -151,19 +152,20 @@ public class Framework {
 
     public static StringBuilder GenerateTestSet(
             String testFolder,
-            String destinationFolder,
             IFeatureExtractor<String> featureExtractor,
             String selectedFeaturesSerializedFilePath,
+            int topFeatures,
             int numOfElementsInTrainset,
             FeatureRepresentation featureRepresentation,
             boolean addElementIDColumn,
-            boolean addClassificationColumn,
-            boolean generateTopsDatasets,
-            ArrayList<Integer> tops) {
+            boolean addClassificationColumn
+    ) {
 
         DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
         ArrayList<String> testElements = Directories.GetDirectoryFilesPaths(testFolder);
-        ArrayList<Pair<String, Integer>> selectedFeatures = new ArrayList<>();
+        ArrayList<Pair<String, Integer>> selectedFeatures = (ArrayList<Pair<String, Integer>>) Serializer.Deserialize(selectedFeaturesSerializedFilePath, false);
+        selectedFeatures = new ArrayList<Pair<String, Integer>>(selectedFeatures.subList(0, topFeatures));
+        StringBuilder testsetCSVHeader = DatasetCSVBuilder.GetDatasetHeaderCSV(topFeatures, addElementIDColumn, addClassificationColumn);
         StringBuilder datasetCSV = datasetBuilder.BuildDatabaseCSV(
                 testElements,
                 featureExtractor,
@@ -172,14 +174,10 @@ public class Framework {
                 featureRepresentation,
                 Classification.Unknown,
                 addElementIDColumn,
-                addClassificationColumn);
+                addClassificationColumn
+        );
 
-        if (generateTopsDatasets) {
-            Console.PrintLine("Generating tops:", true, false);
-            DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, tops, destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
-        }
-
-        return datasetCSV;
+        return testsetCSVHeader.append("\n").append(datasetCSV);
     }
 
     public static void main(String[] args) {
