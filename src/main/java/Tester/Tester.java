@@ -23,22 +23,22 @@ import java.util.Map;
  * @author Aviad
  */
 public class Tester {
-    
+
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
         //GeneratePDFDatasets();
-        //GenerateDocxDatasets();
+        GenerateDocxDatasets();
         //TestCode();
         //TestSerilizer();
-        TestDetector();
+        //TestDetector();
     }
-    
+
     private static void GeneratePDFDatasets() {
         String benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\PDF_ClassA";
         String maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\PDF_ClassB";
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
-        
+
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
@@ -49,7 +49,7 @@ public class Tester {
         boolean printFileFeaturesFrequencies = false;
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
-        
+
         StringBuilder datasetCSV = Framework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
@@ -66,13 +66,13 @@ public class Tester {
                 generateTops,
                 tops);
     }
-    
+
     private static void GenerateDocxDatasets() {
         String benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
         String maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
-        
+
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths<>();
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgramsString<>(3, 1);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
@@ -84,7 +84,7 @@ public class Tester {
         boolean printFileFeaturesFrequencies = false;
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
-        
+
         StringBuilder datasetCSV = Framework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
@@ -101,7 +101,7 @@ public class Tester {
                 generateTops,
                 tops);
     }
-    
+
     private static void TestExtractPDFStructuralFeatures() {
         FeatureExtractorPDFStructuralPathsTEST featureExtractor = new FeatureExtractorPDFStructuralPathsTEST(ParserType.Sequential);
         Map<String, Integer> structuralFeatures = featureExtractor.ExtractFeaturesFrequencyFromSingleElement("D:\\3.pdf");
@@ -112,7 +112,7 @@ public class Tester {
         Console.PrintLine(String.format("Total features: %s", totalStructuralFeatures), true, false);
         Console.PrintLine(String.format("Unique features: %s", structuralFeatures.size()), true, false);
     }
-    
+
     private static void TestCode() {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < 100000000; i++) {
@@ -120,9 +120,9 @@ public class Tester {
         }
         list.stream().map(x -> x * 2);
     }
-    
+
     private static void TestDetector() {
         Detector.ApplyDetectorToTestSet();
     }
-    
+
 }
