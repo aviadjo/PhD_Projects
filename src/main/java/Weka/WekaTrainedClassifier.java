@@ -71,7 +71,7 @@ public class WekaTrainedClassifier {
 
     public void SaveToDisk(String destinationFolder) {
         if (Directories.IsDirectory(destinationFolder)) {
-            Serializer.Serialize(this, destinationFolder, m_serializationFileName);
+            Serializer.Serialize(this, destinationFolder + "\\" + m_serializationFileName);
         }
     }
 
