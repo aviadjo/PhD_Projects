@@ -5,6 +5,7 @@
  */
 package FeatureExtraction;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Map;
  * @author Aviad
  * @param <T>
  */
-public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T> {
+public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T>, Serializable {
 
     /**
      * Return list of features (and occurrences) extracted from the given source

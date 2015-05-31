@@ -5,6 +5,7 @@
  */
 package FeatureSelection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ import javafx.util.Pair;
  *
  * @author Aviad
  */
-public abstract class AFeatureSelector implements IFeatureSelector {
+public abstract class AFeatureSelector implements IFeatureSelector, Serializable {
 
     public final Map<String, Double> m_memo = new HashMap<>();
 

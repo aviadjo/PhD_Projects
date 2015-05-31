@@ -13,7 +13,6 @@ import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import IO.Directories;
-import IO.Serializer;
 import Implementations.FeatureExtractorDocxStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Implementations.FeatureSelectorInfoGainRatio.SelectionMethod;
@@ -152,18 +151,16 @@ public class Framework {
 
     public static StringBuilder GenerateTestSet(
             String testFolder,
-            IFeatureExtractor<String> featureExtractor,
-            String selectedFeaturesSerializedFilePath,
+            AFeatureExtractor<String> featureExtractor,
+            ArrayList<Pair<String, Integer>> selectedFeatures,
             int topFeatures,
             int numOfElementsInTrainset,
             FeatureRepresentation featureRepresentation,
             boolean addElementIDColumn,
             boolean addClassificationColumn
     ) {
-
         DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
         ArrayList<String> testElements = Directories.GetDirectoryFilesPaths(testFolder);
-        ArrayList<Pair<String, Integer>> selectedFeatures = (ArrayList<Pair<String, Integer>>) Serializer.Deserialize(selectedFeaturesSerializedFilePath, false);
         selectedFeatures = new ArrayList<Pair<String, Integer>>(selectedFeatures.subList(0, topFeatures));
         StringBuilder testsetCSVHeader = DatasetCSVBuilder.GetDatasetHeaderCSV(topFeatures, addElementIDColumn, addClassificationColumn);
         StringBuilder datasetCSV = datasetBuilder.BuildDatabaseCSV(
@@ -176,7 +173,6 @@ public class Framework {
                 addElementIDColumn,
                 addClassificationColumn
         );
-
         return testsetCSVHeader.append("\n").append(datasetCSV);
     }
 

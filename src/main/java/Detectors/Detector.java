@@ -6,14 +6,19 @@
 package Detectors;
 
 import Console.Console;
+import FeatureExtraction.AFeatureExtractor;
+import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
+import Framework.Framework.FeatureRepresentation;
 import IO.FileReader;
-import Implementations.FeatureExtractorDocxStructuralPaths;
-import Implementations.FeatureExtractorDocxStructuralPathsEnhanced;
-import Implementations.FeatureSelectorInfoGainRatio;
+import IO.Serializer;
 import Weka.Weka;
+import static Weka.Weka.GetInstancesFromCSVWithFormat;
+import Weka.Weka.WekaClassifier;
 import Weka.WekaDatasetProperties;
 import Weka.WekaTrainedClassifier;
+import java.util.ArrayList;
+import javafx.util.Pair;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -24,53 +29,75 @@ import weka.core.Instances;
  */
 public class Detector {
 
-    public static void ApplyDetectorToTestSet() {
-        WekaTrainedClassifier classifer = GetTrainedClassifier();
-        Instances testset = Weka.GetInstances(GetTestset());
-        ClassifyInstances(classifer, testset);
-    }
-
-    private static WekaTrainedClassifier GetTrainedClassifier() {
-        String csvDataset = FileReader.ReadFile("D:\\DATASET_2015.05.03_10.23.58_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv");
-        Instances data = Weka.GetInstances(csvDataset);
+    public static WekaTrainedClassifier GetTrainedClassifier(
+            WekaClassifier wekaClassifier,
+            String traningsetCSVFilePath,
+            String selectedFeaturesSerializedFilePath,
+            AFeatureExtractor<String> featureExtractor,
+            AFeatureSelector featureSelector,
+            FeatureRepresentation featureRepresentation
+    ) {
+        String csvDataset = FileReader.ReadFile(traningsetCSVFilePath);
+        Instances trainset = Weka.GetInstancesFromCSV(csvDataset);
+        ArrayList<Pair<String, Integer>> selectedFeatures = (ArrayList<Pair<String, Integer>>) Serializer.Deserialize(selectedFeaturesSerializedFilePath);
 
         WekaDatasetProperties datasetProperties = new WekaDatasetProperties(
-                data,
-                new FeatureExtractorDocxStructuralPathsEnhanced(),
-                new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain),
-                Framework.FeatureRepresentation.Binary
+                trainset,
+                selectedFeatures,
+                featureExtractor,
+                featureSelector,
+                featureRepresentation
         );
 
-        Classifier classifier = Weka.GetClassifier(Weka.ClassifierName.J48);
-        return new WekaTrainedClassifier(classifier, data, datasetProperties);
+        Classifier classifier = Weka.GetClassifier(wekaClassifier);
+        return new WekaTrainedClassifier(classifier, trainset, datasetProperties);
     }
 
-    private static String GetTestset() {
-        StringBuilder testsetCSV = Framework.GenerateTestSet(
-                "D:\\TEST\\DocX_ClassA_20",
-                new FeatureExtractorDocxStructuralPaths<String>(),
-                "D:\\DATASET_2015.05.03_10.23.58_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_a_FeaturesList.ser",
-                100,
-                16431,
-                Framework.FeatureRepresentation.Binary,
-                false,
-                true
-        );
-        return testsetCSV.toString();
+    public static void GenerateAndSaveDetector(
+            String traningsetCSVFilePath,
+            String selectedFeaturesSerializedFilePath,
+            AFeatureExtractor<String> featureExtractor,
+            AFeatureSelector featureSelector,
+            FeatureRepresentation featureRepresentation,
+            WekaClassifier wekaClassifier,
+            String saveToDestinationPath
+    ) {
+        WekaTrainedClassifier trainedClassifier = GetTrainedClassifier(wekaClassifier, traningsetCSVFilePath, selectedFeaturesSerializedFilePath, featureExtractor, featureSelector, featureRepresentation);
+        trainedClassifier.SaveToDisk(saveToDestinationPath);
+    }
+
+    public static void ApplyDetectorToTestFolder(String wekaTrainedClassifierFilePath, String testFolder) {
+        WekaTrainedClassifier trainedClassifier = (WekaTrainedClassifier) Serializer.Deserialize(wekaTrainedClassifierFilePath);
+
+        //Generate Testset
+        int topFeatures = trainedClassifier.GetDatasetProperties().GetTopFeatures();
+        int numOfElementsInTrainset = trainedClassifier.GetDatasetProperties().GetInstancesNum();
+        AFeatureExtractor featureExtractor = trainedClassifier.GetDatasetProperties().GetFeatureExtractor();
+        FeatureRepresentation featureRepresentation = trainedClassifier.GetDatasetProperties().GetFeatureRepresentation();
+        ArrayList<Pair<String, Integer>> selectedFeatures = trainedClassifier.GetDatasetProperties().GetSelectedFeatures();
+        boolean hasElementIDAttribute = false;
+        boolean hasClassificationAttribute = trainedClassifier.GetDatasetProperties().HasClassificationAttribute();
+        StringBuilder testsetCSV = Framework.GenerateTestSet(testFolder, featureExtractor, selectedFeatures, topFeatures, numOfElementsInTrainset, featureRepresentation, hasElementIDAttribute, hasClassificationAttribute);
+        Instances testset = GetInstancesFromCSVWithFormat(testsetCSV.toString());
+
+        //Classify Instances
+        ClassifyInstances(trainedClassifier, testset);
     }
 
     private static void ClassifyInstances(WekaTrainedClassifier trainedClassifier, Instances testset) {
         String classification;
+        double classificationIndex;
         double[] classificationDist;
         Instance instance;
         for (int i = 0; i < testset.numInstances(); i++) {
             instance = testset.instance(i);
             //Print classification
-            classification = trainedClassifier.GetClassification(instance).toString();
-            Console.PrintLine(String.format("Instance %s classification: %s", i, classification), true, false);
+            classification = trainedClassifier.GetClassification(instance);
+            classificationIndex = trainedClassifier.GetClassificationIndex(instance);
+            Console.PrintLine(String.format("Instance %s classification: %s", i + 1, classification), true, false);
             //Print classification distribution
-            //classificationDist = trainedClassifier.GetDistribution(instance);
-            //Console.PrintLine(String.format("Instance %s distribution: %s , %s", i, classificationDist[0], classificationDist[1]), true, false);
+            classificationDist = trainedClassifier.GetDistribution(instance);
+            Console.PrintLine(String.format("Instance %s distribution: %s , %s", i + 1, classificationDist[0], classificationDist[1]), true, false);
             Console.PrintLine("", true, false);
         }
     }

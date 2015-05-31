@@ -7,9 +7,10 @@ package Weka;
 
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
-import Framework.Framework.Classification;
 import Framework.Framework.FeatureRepresentation;
-import weka.core.Attribute;
+import java.io.Serializable;
+import java.util.ArrayList;
+import javafx.util.Pair;
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -17,38 +18,58 @@ import weka.core.Instances;
  *
  * @author Aviad
  */
-public class WekaDatasetProperties {
+public class WekaDatasetProperties implements Serializable {
 
     private int m_benignNum;
     private int m_maliciousNum;
+    private final int m_instancesNum;
     private final int m_topFeatures;
-    private final Attribute m_classAttribute;
-    private final String m_featureExtractorName;
-    private final String m_featureSelectorName;
-    private final String m_featureRepresentationName;
+    //private Map<Double, String> m_classes;
+    private String[] m_classes;
+    private final ArrayList<Pair<String, Integer>> m_selectedFeatures;
+    private final boolean m_hasElementIDAttribute;
+    private final boolean m_hasClassificationAttribute;
+    private final AFeatureExtractor m_featureExtractor;
+    private final AFeatureSelector m_featureSelector;
+    private final FeatureRepresentation m_featureRepresentation;
 
-    public WekaDatasetProperties(Instances dataset, AFeatureExtractor featureExtractor, AFeatureSelector featureSelector, FeatureRepresentation featureRepresentation) {
-        m_topFeatures = dataset.numAttributes();
-        m_classAttribute = dataset.classAttribute();
-        m_featureExtractorName = featureExtractor.GetName();
-        m_featureSelectorName = featureSelector.GetName();
-        m_featureRepresentationName = featureRepresentation.toString();
+    public WekaDatasetProperties(Instances dataset, ArrayList<Pair<String, Integer>> selectedFeatures, AFeatureExtractor featureExtractor, AFeatureSelector featureSelector, FeatureRepresentation featureRepresentation) {
+        SetClasses(dataset);
         SetBenignMaliciousInstancesNum(dataset);
+        m_instancesNum = dataset.numInstances();
+        m_topFeatures = (dataset.classIndex() > 0) ? dataset.numAttributes() - 1 : dataset.numAttributes();
+        m_selectedFeatures = selectedFeatures;
+        m_hasElementIDAttribute = !(dataset.attribute(0).name().equals("f1"));
+        m_hasClassificationAttribute = (dataset.attribute(dataset.numAttributes() - 1).name().equals("Class"));
+        m_featureExtractor = featureExtractor;
+        m_featureSelector = featureSelector;
+        m_featureRepresentation = featureRepresentation;
+    }
+
+    private void SetClasses(Instances dataset) {
+        /*m_classes = new HashMap<>();
+         for (int i = 0; i < dataset.classAttribute().numValues(); i++) {
+         m_classes.put((double) i, dataset.classAttribute().value(i));
+         }*/
+        m_classes = new String[dataset.classAttribute().numValues()];
+        for (int i = 0; i < dataset.classAttribute().numValues(); i++) {
+            m_classes[i] = dataset.classAttribute().value(i);
+        }
     }
 
     private void SetBenignMaliciousInstancesNum(Instances dataset) {
         m_benignNum = 0;
         m_maliciousNum = 0;
-        double classificationValue;
-        Classification classification;
+        double classificationIndex;
+        String classification;
         for (Instance instance : dataset) {
-            classificationValue = instance.classValue();
-            classification = Weka.ConvertClassIndexToClassification(classificationValue, m_classAttribute);
+            classificationIndex = instance.classValue();
+            classification = GetClassValue(classificationIndex);
             switch (classification) {
-                case Benign:
+                case "Benign":
                     m_benignNum++;
                     break;
-                case Malicious:
+                case "Malicious":
                     m_maliciousNum++;
                     break;
             }
@@ -63,24 +84,41 @@ public class WekaDatasetProperties {
         return m_maliciousNum;
     }
 
+    public int GetInstancesNum() {
+        return m_instancesNum;
+    }
+
     public int GetTopFeatures() {
         return m_topFeatures;
     }
 
-    public Attribute GetClassAttribute() {
-        return m_classAttribute;
+    public ArrayList<Pair<String, Integer>> GetSelectedFeatures() {
+        return m_selectedFeatures;
     }
 
-    public String GetFeatureExtractorName() {
-        return m_featureExtractorName;
+    public boolean HasElementIDAttribute() {
+        return m_hasElementIDAttribute;
     }
 
-    public String GetFeatureSelectorName() {
-        return m_featureSelectorName;
+    public boolean HasClassificationAttribute() {
+        return m_hasClassificationAttribute;
     }
 
-    public String GetFeatureRepresentationName() {
-        return m_featureRepresentationName;
+    public String GetClassValue(double classIndex) {
+        return m_classes[(int) classIndex];
+        //return m_classes.get(classIndex);
+    }
+
+    public AFeatureExtractor GetFeatureExtractor() {
+        return m_featureExtractor;
+    }
+
+    public AFeatureSelector GetFeatureSelector() {
+        return m_featureSelector;
+    }
+
+    public FeatureRepresentation GetFeatureRepresentation() {
+        return m_featureRepresentation;
     }
 
 }

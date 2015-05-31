@@ -12,7 +12,9 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.util.Arrays;
 import java.util.Random;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -23,8 +25,10 @@ import weka.classifiers.meta.LogitBoost;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Attribute;
+import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffLoader.ArffReader;
 import weka.core.converters.CSVLoader;
 
 /**
@@ -33,7 +37,7 @@ import weka.core.converters.CSVLoader;
  */
 public class Weka {
 
-    public enum ClassifierName {
+    public enum WekaClassifier {
 
         J48,
         RandomForest,
@@ -49,7 +53,7 @@ public class Weka {
      * @param classifierName the name of the wanted classifier
      * @return Classifier
      */
-    public static Classifier GetClassifier(ClassifierName classifierName) {
+    public static Classifier GetClassifier(WekaClassifier classifierName) {
         Classifier classifier = null;
         switch (classifierName) {
             case J48:
@@ -83,7 +87,7 @@ public class Weka {
      */
     public static Classifier TrainClassifier(Classifier classifier, Instances data) {
         try {
-            Console.PrintLine(String.format("Training classifier %s...", classifier.getClass().getName()), true, false);
+            Console.PrintLine(String.format("Training classifier %s...", classifier.getClass().getSimpleName()), true, false);
             classifier.buildClassifier(data);
             return classifier;
         } catch (Exception ex) {
@@ -98,17 +102,71 @@ public class Weka {
      * @param csvDataset CSV dataset
      * @return Instances created from the given CSV string
      */
-    public static Instances GetInstances(String csvDataset) {
+    public static Instances GetInstancesFromCSV(String csvDataset) {
         CSVLoader loader = new CSVLoader();
-        Instances data = null;
+        Instances instances = null;
         try {
             loader.setSource(new ByteArrayInputStream(csvDataset.getBytes()));
-            data = loader.getDataSet();
-            data.setClassIndex(data.numAttributes() - 1);
+            instances = loader.getDataSet();
+            instances.setClassIndex(instances.numAttributes() - 1);
         } catch (IOException ex) {
             Console.PrintLine(String.format("Error loading csv to Instances: %s", ex.getMessage()), true, false);
         }
-        return data;
+        return instances;
+    }
+
+    /**
+     * return Instances that contain only the dataset structure (without data)
+     *
+     * @param numOfFeatures number of features in the dataset
+     * @return Instances that contain only the dataset structure (without data)
+     */
+    public static Instances GetDatasetFormat(int numOfFeatures) {
+        FastVector attributes = new FastVector();
+        //Add Attributes
+        for (int i = 1; i <= numOfFeatures; i++) {
+            attributes.addElement(new Attribute("f" + i));
+        }
+        //Add Class Attribute
+        attributes.addElement(new Attribute("Class", Arrays.asList("Malicious", "Benign")));
+
+        Instances dataset = new Instances("Dataset", attributes, 0);
+        dataset.setClassIndex(dataset.numAttributes() - 1);
+        return dataset;
+    }
+
+    /**
+     * return Instances that contain data from the given CSV and with the
+     * correct format of attributes and class
+     *
+     * @param csvDataset CSV dataset
+     * @return Instances that contain data from the given CSV and with the
+     * correct format of attributes and class
+     */
+    public static Instances GetInstancesFromCSVWithFormat(String csvDataset) {
+        Instances data = GetInstancesFromCSV(csvDataset);
+        Instances format = GetDatasetFormat(data.numAttributes() - 1);
+        if (data != null && format != null) {
+            format.addAll(data);
+        }
+        return format;
+    }
+
+    /**
+     * return Instances created from the given CSV string
+     *
+     * @param csvDataset CSV dataset
+     * @return Instances created from the given CSV string
+     */
+    public static Instances GetInstancesFromARFF(String arffDataset) {
+        Instances instances = null;
+        try {
+            ArffReader arffReader = new ArffReader(new InputStreamReader(new ByteArrayInputStream(arffDataset.getBytes())));
+            instances = arffReader.getData();
+        } catch (IOException ex) {
+            Console.PrintLine(String.format("Error loading arff to Instances: %s", ex.getMessage()), true, false);
+        }
+        return instances;
     }
 
     /**
@@ -118,7 +176,7 @@ public class Weka {
      * @param instance given test instance
      * @return classification for the given instance
      */
-    public static double GetClassification(Classifier classifier, Instance instance) {
+    public static double GetClassificationIndex(Classifier classifier, Instance instance) {
         double classification = -1;
         try {
             classification = classifier.classifyInstance(instance);
@@ -140,7 +198,7 @@ public class Weka {
      * @return classification distribution for the given instance
      */
     public static double[] GetDistribution(Classifier classifier, Instance instance) {
-        double[] classification = {0, 0};
+        double[] classification = {};
         try {
             classification = classifier.distributionForInstance(instance);
             for (int i = 0; i < classification.length; i++) {
