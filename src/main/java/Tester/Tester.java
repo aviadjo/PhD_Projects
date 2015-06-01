@@ -11,7 +11,9 @@ import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
 import Framework.Framework.FeatureRepresentation;
+import IO.FileWriter;
 import Implementations.FeatureExtractorDocxStructuralPaths;
+import Implementations.FeatureExtractorDocxStructuralPathsMemory;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Tester.FeatureExtractorPDFStructuralPathsTEST.ParserType;
@@ -42,8 +44,8 @@ public class Tester {
         //CreateDetectorDOCX();
         //TestDetectionDOCX();
         //CreateDetectorPDF();
-        TestDetectionPDF();
-        //TestUnzipFileInMemory();
+        //TestDetectionPDF();
+        TestUnzipFileInMemory();
     }
 
     private static void GeneratePDFDatasets() {
@@ -86,7 +88,7 @@ public class Tester {
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths<>();
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPathsMemory<>();
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgramsString<>(3, 1);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
@@ -179,6 +181,39 @@ public class Tester {
     }
 
     private static void TestUnzipFileInMemory() {
+        FeatureExtractorDocxStructuralPaths s = new FeatureExtractorDocxStructuralPaths();
+        FeatureExtractorDocxStructuralPathsMemory s_memory = new FeatureExtractorDocxStructuralPathsMemory();
+
+        String filePath = "d:\\e.docx";
+        Map<String, Integer> structuralPaths = s.ExtractFeaturesFrequencyFromSingleElement(filePath);
+        Map<String, Integer> structuralPathsMemory = s_memory.ExtractFeaturesFrequencyFromSingleElement(filePath);
+        int SFsize = structuralPaths.size();
+        int SFsizeMemory = structuralPathsMemory.size();
+
+        Console.PrintLine("SP regular: " + SFsize, true, false);
+        Console.PrintLine("SP memory: " + SFsizeMemory, true, false);
+        Console.PrintLine("Diff: " + (SFsize - SFsizeMemory), true, false);
+
+        PrintDicToFile(structuralPaths, "D:\\dic.csv");
+        PrintDicToFile(structuralPathsMemory, "D:\\dicMemory.csv");
+
+        //MEASURE CPU TIME
+        long start = System.nanoTime();
+        //Task
+        long time = System.nanoTime() - start;
+        Console.PrintLine("Time: " + time, true, false);
+        //MEASURE CPU TIME
+    }
+
+    private static void PrintDicToFile(Map<String, Integer> dic, String destFilePath) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : dic.entrySet()) {
+            sb.append(entry.getKey()).append(",").append("\n");
+        }
+        FileWriter.WriteFile(sb.toString(), destFilePath);
+    }
+
+    private static void TestUnzipFileInMemory2() {
         try {
             ZipFile fis = new ZipFile("d:\\a.docx");
 

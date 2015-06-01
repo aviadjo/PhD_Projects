@@ -49,6 +49,9 @@ public class FeatureExtractorDocxStructuralPathsMemory<T> extends AFeatureExtrac
                 directoryPath = FilenameUtils.getFullPath(path);
                 fileExtension = FilenameUtils.getExtension(path);
 
+                AddStructuralPath(directoryPath, structuralPaths);
+                AddStructuralPath(path, structuralPaths);
+
                 if (fileExtension.equals("rels") || fileExtension.equals("xml")) {
                     AddXMLStructuralPaths(zipFile.getInputStream(entry), path, structuralPaths);
                 }
@@ -105,15 +108,13 @@ public class FeatureExtractorDocxStructuralPathsMemory<T> extends AFeatureExtrac
      * @param structuralPaths the Map to add the feature to
      */
     private void AddStructuralPath(String structuralPath, Map<String, Integer> structuralPaths) {
-        //String fileName;
-        //fileName = FilenameUtils.getBaseName(path);
-        //firstname1 = fileName.replaceAll("[0-9]","");
-        //http://stackoverflow.com/questions/17516049/java-removing-numeric-values-from-string
-        //structuralPath = structuralPath.replace(m_OfficeFileTempFolderPath, "");
-        if (!structuralPaths.containsKey(structuralPath)) {
-            structuralPaths.put(structuralPath, 1);
-        } else {
-            structuralPaths.put(structuralPath, structuralPaths.get(structuralPath) + 1);
+        structuralPath = structuralPath.replace("/", "\\");
+        if (!structuralPath.equals("")) {
+            if (!structuralPaths.containsKey(structuralPath)) {
+                structuralPaths.put(structuralPath, 1);
+            } else {
+                structuralPaths.put(structuralPath, structuralPaths.get(structuralPath) + 1);
+            }
         }
     }
 

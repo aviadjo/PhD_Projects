@@ -53,7 +53,6 @@ public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T>
      */
     private void ExtractFolderStructuralPaths(String folderPath, Map<String, Integer> structuralPaths) {
         ArrayList<String> directoryPaths = Directories.GetDirectoryFilesPaths(folderPath);
-
         String fileExtension;
         for (String path : directoryPaths) {
             if (!path.equals(folderPath)) {
@@ -84,7 +83,7 @@ public class FeatureExtractorDocxStructuralPaths<T> extends AFeatureExtractor<T>
                 AddXMLStructuralPathsRecursively(nodeList.item(i), xmlFilePath, structuralPaths);
             }
         } catch (Exception ex) {
-            //Console.Print_To_Console(String.format("Error traversing XML file: '%s'", xmlFilePath), true, false);
+            //Console.PrintLine(String.format("Error traversing XML file: '%s'", xmlFilePath), true, false);
         }
     }
 
