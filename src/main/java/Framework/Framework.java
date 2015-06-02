@@ -13,7 +13,7 @@ import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import IO.Directories;
-import Implementations.FeatureExtractorOOXMLStructuralPathsDisk;
+import Implementations.FeatureExtractorOOXMLStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Implementations.FeatureSelectorInfoGainRatio.SelectionMethod;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class Framework {
     private static StringBuilder CreateTrainSetDefaultSettings() {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgrams<>(3, 1);
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocStreamPaths();
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPathsDisk();
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths(false);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(SelectionMethod.InformationGain);
         int topFeatures = 2000;
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;

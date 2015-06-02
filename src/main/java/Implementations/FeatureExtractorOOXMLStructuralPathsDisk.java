@@ -31,6 +31,11 @@ import org.w3c.dom.NodeList;
 public class FeatureExtractorOOXMLStructuralPathsDisk<T> extends AFeatureExtractor<T> {
 
     private String m_OfficeFileTempFolderPath = "";
+    private final boolean m_ignoreNumbersInFeatures;
+
+    public FeatureExtractorOOXMLStructuralPathsDisk(boolean ignoreNumbersInFeatures) {
+        m_ignoreNumbersInFeatures = ignoreNumbersInFeatures;
+    }
 
     @Override
     public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {
@@ -114,11 +119,12 @@ public class FeatureExtractorOOXMLStructuralPathsDisk<T> extends AFeatureExtract
      * @param structuralPaths the Map to add the feature to
      */
     private void AddStructuralPath(String structuralPath, Map<String, Integer> structuralPaths) {
-        //String fileName;
-        //fileName = FilenameUtils.getBaseName(path);
-        //firstname1 = fileName.replaceAll("[0-9]","");
-        //http://stackoverflow.com/questions/17516049/java-removing-numeric-values-from-string
         structuralPath = structuralPath.replace(m_OfficeFileTempFolderPath, "");
+
+        if (m_ignoreNumbersInFeatures) {
+            structuralPath = structuralPath.replaceAll("[0-9]", "");
+        }
+
         if (!structuralPaths.containsKey(structuralPath)) {
             structuralPaths.put(structuralPath, 1);
         } else {
@@ -152,7 +158,11 @@ public class FeatureExtractorOOXMLStructuralPathsDisk<T> extends AFeatureExtract
 
     @Override
     public String GetName() {
-        return "OOXML Structural Paths";
+        if (m_ignoreNumbersInFeatures) {
+            return "OOXML Structural Paths Disk NN";
+        } else {
+            return "OOXML Structural Paths Disk";
+        }
     }
 
 }

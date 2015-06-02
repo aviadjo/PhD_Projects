@@ -27,7 +27,12 @@ import org.w3c.dom.NodeList;
  */
 public class FeatureExtractorOOXMLStructuralPaths<T> extends AFeatureExtractor<T> {
 
-    //private String m_OfficeFileTempFolderPath = "";
+    private final boolean m_ignoreNumbersInFeatures;
+
+    public FeatureExtractorOOXMLStructuralPaths(boolean ignoreNumbersInFeatures) {
+        m_ignoreNumbersInFeatures = ignoreNumbersInFeatures;
+    }
+
     @Override
     public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
@@ -109,6 +114,10 @@ public class FeatureExtractorOOXMLStructuralPaths<T> extends AFeatureExtractor<T
      */
     private void AddStructuralPath(String structuralPath, Map<String, Integer> structuralPaths) {
         structuralPath = structuralPath.replace("/", "\\");
+        if (m_ignoreNumbersInFeatures) {
+            structuralPath = structuralPath.replaceAll("[0-9]", "");
+        }
+
         if (!structuralPath.equals("")) {
             if (!structuralPaths.containsKey(structuralPath)) {
                 structuralPaths.put(structuralPath, 1);
@@ -120,7 +129,11 @@ public class FeatureExtractorOOXMLStructuralPaths<T> extends AFeatureExtractor<T
 
     @Override
     public String GetName() {
-        return "OOXML Structural Paths";
+        if (m_ignoreNumbersInFeatures) {
+            return "OOXML Structural Paths NN";
+        } else {
+            return "OOXML Structural Paths";
+        }
     }
 
 }
