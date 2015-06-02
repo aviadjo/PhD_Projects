@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList;
  * @author Aviad. Check http://www.docx4java.org/trac/docx4j to analyze OLE
  * objects found in XML Based documents
  */
-public class FeatureExtractorDocxStructuralPathsEnhanced<T> extends AFeatureExtractor<T> {
+public class FeatureExtractorOOXMLStructuralPathsDiskEnhanced<T> extends AFeatureExtractor<T> {
 
     private String m_OfficeFileTempFolderPath = "";
 
@@ -149,7 +149,7 @@ public class FeatureExtractorDocxStructuralPathsEnhanced<T> extends AFeatureExtr
 
     @Override
     public String GetName() {
-        return "Docx Structural Paths Enhanced";
+        return "OOXML Structural Paths Enhanced";
     }
 
 }

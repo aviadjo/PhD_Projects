@@ -12,22 +12,15 @@ import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
 import Framework.Framework.FeatureRepresentation;
 import IO.FileWriter;
-import Implementations.FeatureExtractorDocxStructuralPaths;
-import Implementations.FeatureExtractorDocxStructuralPathsMemory;
+import Implementations.FeatureExtractorOOXMLStructuralPathsDisk;
+import Implementations.FeatureExtractorOOXMLStructuralPaths;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Tester.FeatureExtractorPDFStructuralPathsTEST.ParserType;
 import Weka.Weka.WekaClassifier;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  *
@@ -88,7 +81,7 @@ public class Tester {
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPathsMemory<>();
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>();
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgramsString<>(3, 1);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
@@ -150,7 +143,7 @@ public class Tester {
     private static void CreateDetectorDOCX() {
         String traningsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
         String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_a_FeaturesList.ser";
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocxStructuralPaths<>();
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPathsDisk<>();
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         FeatureRepresentation featureRepresentation = Framework.FeatureRepresentation.Binary;
         WekaClassifier wekaClassifier = WekaClassifier.RandomForest;
@@ -181,8 +174,8 @@ public class Tester {
     }
 
     private static void TestUnzipFileInMemory() {
-        FeatureExtractorDocxStructuralPaths s = new FeatureExtractorDocxStructuralPaths();
-        FeatureExtractorDocxStructuralPathsMemory s_memory = new FeatureExtractorDocxStructuralPathsMemory();
+        FeatureExtractorOOXMLStructuralPathsDisk s = new FeatureExtractorOOXMLStructuralPathsDisk();
+        FeatureExtractorOOXMLStructuralPaths s_memory = new FeatureExtractorOOXMLStructuralPaths();
 
         String filePath = "d:\\e.docx";
         Map<String, Integer> structuralPaths = s.ExtractFeaturesFrequencyFromSingleElement(filePath);
@@ -211,35 +204,6 @@ public class Tester {
             sb.append(entry.getKey()).append(",").append("\n");
         }
         FileWriter.WriteFile(sb.toString(), destFilePath);
-    }
-
-    private static void TestUnzipFileInMemory2() {
-        try {
-            ZipFile fis = new ZipFile("d:\\a.docx");
-
-            int i = 0;
-            for (Enumeration e = fis.entries(); e.hasMoreElements();) {
-                InputStream in = null;
-                try {
-                    ZipEntry entry = (ZipEntry) e.nextElement();
-                    System.out.println(entry);
-                    in = fis.getInputStream(entry);
-                } catch (IOException ex) {
-                    Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    try {
-                        in.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        //String theString = IOUtils.toString(inputStream, encoding); 
     }
 
 }

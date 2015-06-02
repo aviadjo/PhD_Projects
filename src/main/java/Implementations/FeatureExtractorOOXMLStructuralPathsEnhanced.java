@@ -25,18 +25,18 @@ import org.w3c.dom.NodeList;
  *
  * @author Aviad
  */
-public class FeatureExtractorDocxStructuralPathsMemory<T> extends AFeatureExtractor<T> {
+public class FeatureExtractorOOXMLStructuralPathsEnhanced<T> extends AFeatureExtractor<T> {
 
     //private String m_OfficeFileTempFolderPath = "";
     @Override
     public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
         String filePath = (String) element;
-        ExtractFilesFeaturesInMemory(filePath, structuralPaths);
+        ExtractStructuralFeaturesInMemory(filePath, structuralPaths);
         return structuralPaths;
     }
 
-    private void ExtractFilesFeaturesInMemory(String filePath, Map<String, Integer> structuralPaths) {
+    private void ExtractStructuralFeaturesInMemory(String filePath, Map<String, Integer> structuralPaths) {
         String path;
         String directoryPath;
         String fileExtension;
@@ -108,7 +108,7 @@ public class FeatureExtractorDocxStructuralPathsMemory<T> extends AFeatureExtrac
      * @param structuralPaths the Map to add the feature to
      */
     private void AddStructuralPath(String structuralPath, Map<String, Integer> structuralPaths) {
-        structuralPath = structuralPath.replace("/", "\\");
+        structuralPath = structuralPath.replace("/", "\\").replaceAll("[0-9]", "");
         if (!structuralPath.equals("")) {
             if (!structuralPaths.containsKey(structuralPath)) {
                 structuralPaths.put(structuralPath, 1);
@@ -120,7 +120,7 @@ public class FeatureExtractorDocxStructuralPathsMemory<T> extends AFeatureExtrac
 
     @Override
     public String GetName() {
-        return "Docx Structural Paths In Momory";
+        return "OOXML Structural Paths Enhanced";
     }
 
 }
