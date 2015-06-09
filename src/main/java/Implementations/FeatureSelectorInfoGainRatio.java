@@ -5,7 +5,7 @@
  */
 package Implementations;
 
-import Console.Console;
+import IO.Console;
 import DataStructures.DataStructures;
 import FeatureSelection.AFeatureSelector;
 import Math.Entropy;
@@ -89,7 +89,7 @@ public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
                 entry = (Map.Entry<String, Double>) iteratorSorted.next();
                 feature = entry.getKey();
                 if (printScores) {
-                    Console.PrintLine(String.format("Feature f%s: %s: %s -> %s", i + 1, GetName(), entry.getValue(), feature), true, false);
+                    Console.PrintLine(String.format("Feature f%s: %s: %s -> %s", i + 1, GetName(), entry.getValue(), feature));
                 }
                 featureDFofClasses = featuresDFs.get(feature);
                 featureDFtotal = featureDFofClasses[0] + featureDFofClasses[1]; //To be used for TFIDF calculation.

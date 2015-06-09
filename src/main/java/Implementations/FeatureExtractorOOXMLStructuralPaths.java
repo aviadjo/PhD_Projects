@@ -5,7 +5,7 @@
  */
 package Implementations;
 
-import Console.Console;
+import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +62,7 @@ public class FeatureExtractorOOXMLStructuralPaths<T> extends AFeatureExtractor<T
                 }
             }
         } catch (IOException ex) {
-            Console.PrintLine(String.format("Error extracting structural features from file: %s", filePath), true, false);
+            Console.PrintException(String.format("Error extracting OOXML structural features from file: %s", filePath), ex);
         }
     }
 

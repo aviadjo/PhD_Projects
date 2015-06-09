@@ -5,10 +5,10 @@
  */
 package Framework;
 
-import Console.Console;
+import IO.Console;
 import DatasetCreation.DatasetCSVBuilder;
 import DatasetCreation.DatasetCreator;
-import static DatasetCreation.DatasetCreator.BuildDataset;
+import static DatasetCreation.DatasetCreator.BuildDatasetCSV;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
@@ -86,7 +86,7 @@ public class Framework {
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = false;
 
-        StringBuilder datasetCSV = BuildDataset(
+        StringBuilder datasetCSV = BuildDatasetCSV(
                 m_benignFolder,
                 m_maliciousFolder,
                 m_destinationFolder,
@@ -103,7 +103,7 @@ public class Framework {
         );
 
         if (generateTops) {
-            Console.PrintLine("Generating tops:", true, false);
+            Console.PrintLine("Generating tops:");
             DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, m_destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
 
@@ -125,7 +125,7 @@ public class Framework {
             boolean printSelectedFeaturesScore,
             boolean generateTopsDatasets,
             ArrayList<Integer> tops) {
-        StringBuilder datasetCSV = BuildDataset(
+        StringBuilder datasetCSV = BuildDatasetCSV(
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
@@ -142,7 +142,7 @@ public class Framework {
         );
 
         if (generateTopsDatasets) {
-            Console.PrintLine("Generating tops:", true, false);
+            Console.PrintLine("Generating tops:");
             DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, tops, destinationFolder, DatasetCreator.m_datasetFilename, addElementIDColumn, addClassificationColumn);
         }
 

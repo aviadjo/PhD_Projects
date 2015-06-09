@@ -5,7 +5,7 @@
  */
 package Weka;
 
-import Console.Console;
+import IO.Console;
 import Framework.Framework.Classification;
 import Math.MathCalc;
 import java.io.ByteArrayInputStream;
@@ -87,11 +87,11 @@ public class Weka {
      */
     public static Classifier TrainClassifier(Classifier classifier, Instances data) {
         try {
-            Console.PrintLine(String.format("Training classifier %s...", classifier.getClass().getSimpleName()), true, false);
+            Console.PrintLine(String.format("Training classifier %s...", classifier.getClass().getSimpleName()));
             classifier.buildClassifier(data);
             return classifier;
         } catch (Exception ex) {
-            Console.PrintLine(String.format("Error training classifier: %s", ex.getMessage()), true, false);
+            Console.PrintException(String.format("Error training classifier: %s", classifier.getClass().getSimpleName()), ex);
             return null;
         }
     }
@@ -110,7 +110,7 @@ public class Weka {
             instances = loader.getDataSet();
             instances.setClassIndex(instances.numAttributes() - 1);
         } catch (IOException ex) {
-            Console.PrintLine(String.format("Error loading csv to Instances: %s", ex.getMessage()), true, false);
+            Console.PrintException(String.format("Error loading csv to Instances"), ex);
         }
         return instances;
     }
@@ -164,7 +164,7 @@ public class Weka {
             ArffReader arffReader = new ArffReader(new InputStreamReader(new ByteArrayInputStream(arffDataset.getBytes())));
             instances = arffReader.getData();
         } catch (IOException ex) {
-            Console.PrintLine(String.format("Error loading arff to Instances: %s", ex.getMessage()), true, false);
+            Console.PrintException(String.format("Error loading arff to Instances"), ex);
         }
         return instances;
     }
@@ -181,7 +181,7 @@ public class Weka {
         try {
             classification = classifier.classifyInstance(instance);
         } catch (Exception ex) {
-            Console.PrintLine("Error classifying instance!", true, false);
+            Console.PrintException("Error providing classification index!", ex);
         }
         return classification;
     }
@@ -205,7 +205,7 @@ public class Weka {
                 classification[i] = MathCalc.Round(classification[i], 3);
             }
         } catch (Exception ex) {
-            Console.PrintLine("Error classifying instance!", true, false);
+            Console.PrintException("Error providing distribution for instance!", ex);
         }
         return classification;
     }

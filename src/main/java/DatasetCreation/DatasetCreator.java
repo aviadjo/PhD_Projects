@@ -8,7 +8,7 @@ package DatasetCreation;
 import Assistants.General;
 import static Assistants.General.GetStringNumber;
 import Assistants.StopWatch;
-import Console.Console;
+import IO.Console;
 import DataStructures.MapDB;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureExtraction.MasterFeatureExtractor;
@@ -55,7 +55,7 @@ public class DatasetCreator {
      * features
      * @return dataset CSV
      */
-    public static StringBuilder BuildDataset(
+    public static StringBuilder BuildDatasetCSV(
             String ClassAdirectory,
             String ClassBdirectory,
             String destinationFolderPath,
@@ -76,21 +76,21 @@ public class DatasetCreator {
         ArrayList<String> classBelements = Directories.GetDirectoryFilesPaths(ClassBdirectory);
         int totalElementsNum = classAelements.size() + classBelements.size();
 
-        Console.PrintLine(String.format("Benign folder: %s", ClassAdirectory), true, false);
-        Console.PrintLine(String.format("Malicious folder: %s", ClassBdirectory), true, false);
-        Console.PrintLine(String.format("Benign elements: %s", GetStringNumber(classAelements.size())), true, false);
-        Console.PrintLine(String.format("Malicious elements: %s", GetStringNumber(classBelements.size())), true, false);
-        Console.PrintLine(String.format("Total elements: %s", GetStringNumber(totalElementsNum)), true, false);
+        Console.PrintLine(String.format("Benign folder: %s", ClassAdirectory));
+        Console.PrintLine(String.format("Malicious folder: %s", ClassBdirectory));
+        Console.PrintLine(String.format("Benign elements: %s", GetStringNumber(classAelements.size())));
+        Console.PrintLine(String.format("Malicious elements: %s", GetStringNumber(classBelements.size())));
+        Console.PrintLine(String.format("Total elements: %s", GetStringNumber(totalElementsNum)));
 
         //FEATURE EXTRACTION
         MasterFeatureExtractor<String> MFE = new MasterFeatureExtractor<>();
-        Console.PrintLine(String.format("Feature Extraction: %s", featureExtractor.GetName()), true, false);
+        Console.PrintLine(String.format("Feature Extraction: %s", featureExtractor.GetName()));
         Map<String, Integer> classAfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classAelements, featureExtractor);
-        Console.PrintLine(String.format("Benign unique features: %s", GetStringNumber(classAfeatures.size())), true, false);
+        Console.PrintLine(String.format("Benign unique features: %s", GetStringNumber(classAfeatures.size())));
         Map<String, Integer> classBfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classBelements, featureExtractor);
-        Console.PrintLine(String.format("Malicious unique features: %s", GetStringNumber(classBfeatures.size())), true, false);
+        Console.PrintLine(String.format("Malicious unique features: %s", GetStringNumber(classBfeatures.size())));
         Map<String, int[]> classesABfeatures = MFE.GatherClassAClassBFeatureFrequency(classAfeatures, classBfeatures);
-        Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABfeatures.size())), true, false);
+        Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABfeatures.size())));
         MapDB.m_db_off_heap_FE.commit();
 
         m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), classAelements.size(), classBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
@@ -101,7 +101,7 @@ public class DatasetCreator {
         }
 
         //FEATURE SELECTION
-        Console.PrintLine(String.format("Selecting top %s features using %s", topFeatures, featureSelector.GetName()), true, false);
+        Console.PrintLine(String.format("Selecting top %s features using %s", topFeatures, featureSelector.GetName()));
         ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABfeatures, classAelements.size(), classBelements.size(), topFeatures, printSelectedFeaturesScore);
 
         //PRINT FILE - SELECTED FEATURES
@@ -111,8 +111,8 @@ public class DatasetCreator {
         //DATASET CREATION
         StringBuilder datasetCSV = new StringBuilder();
         if (createDatabaseCSV) {
-            Console.PrintLine(String.format("Building dataset..."), true, false);
-            Console.PrintLine(String.format("Feature representation: %s", featureRepresentation.toString()), true, false);
+            Console.PrintLine(String.format("Building dataset..."));
+            Console.PrintLine(String.format("Feature representation: %s", featureRepresentation.toString()));
             //****************
             DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
             StringBuilder datasetHeaderCSV = datasetBuilder.GetDatasetHeaderCSV(selectedFeatures.size(), addElementIDColumn, addClassificationColumn);
@@ -124,8 +124,8 @@ public class DatasetCreator {
             //OUTPUTS
             String datasetPath = destinationFolderPath + "\\" + m_datasetFilename + ".csv";
             FileWriter.WriteFile(datasetCSV.toString(), datasetPath);
-            Console.PrintLine(String.format("Running time: %s", StopWatch.GetTimeSecondsString()), true, false);
-            Console.PrintLine(String.format("Dataset saved to: %s", datasetPath), true, false);
+            Console.PrintLine(String.format("Running time: %s", StopWatch.GetTimeSecondsString()));
+            Console.PrintLine(String.format("Dataset saved to: %s", datasetPath));
             //Console.PrintLine(String.format("Entropy Values: %s", Entropy.m_memoEntropies.size()), true, false);
             //Console.PrintLine(String.format("InfoGain Values: %s", featureSelector.m_memo.size()), true, false);
         }
@@ -143,7 +143,7 @@ public class DatasetCreator {
         String featuresDocumentFrequenciesFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_FeaturesDF" + ".csv";
         StringBuilder sb = DatasetCSVBuilder.GetFeaturesDocumentFrequenciesCSV(GetFeaturesDocumentFrequenciesCSV);
         FileWriter.WriteFile(sb.toString(), featuresDocumentFrequenciesFilePath);
-        Console.PrintLine(String.format("Features Document Frequencies saved to: %s", featuresDocumentFrequenciesFilePath), true, false);
+        Console.PrintLine(String.format("Features Document Frequencies saved to: %s", featuresDocumentFrequenciesFilePath));
     }
 
     /**
@@ -157,7 +157,7 @@ public class DatasetCreator {
         StringBuilder sb = DatasetCSVBuilder.GetSelectedFeaturesCSV(selectedFeatures);
         String featuresFilePath = String.format("%s\\%s__%s(%s).csv", destinationFolderPath, m_datasetFilename, "SelectedFeatures", selectedFeatures.size());
         FileWriter.WriteFile(sb.toString(), featuresFilePath);
-        Console.PrintLine(String.format("Selected Features saved to: %s", featuresFilePath), true, false);
+        Console.PrintLine(String.format("Selected Features saved to: %s", featuresFilePath));
     }
 
     /**

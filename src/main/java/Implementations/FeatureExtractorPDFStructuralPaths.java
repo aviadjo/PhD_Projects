@@ -5,7 +5,7 @@
  */
 package Implementations;
 
-import Console.Console;
+import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     } catch (Exception e) {
-                        Console.PrintLine(String.format("Error parsing PDF file: %s", filePath), true, false);
+                        Console.PrintException(String.format("Error parsing PDF file: '%s'", filePath), e);
                     }
                     break;
                 case NonSequential:
@@ -65,14 +65,14 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     } catch (Exception e) {
-                        Console.PrintLine(String.format("Error parsing PDF file: %s", filePath), true, false);
+                        Console.PrintException(String.format("Error parsing PDF file: '%s'", filePath), e);
                     } finally {
                         randomAccessFile.delete();
                     }
                     break;
             }
-        } catch (IOException ex) {
-            Console.PrintLine(String.format("Error parsing PDF file: %s", filePath), true, false);
+        } catch (IOException e) {
+            Console.PrintException(String.format("Error parsing PDF file: '%s'", filePath), e);
         }
         return structuralPaths;
     }

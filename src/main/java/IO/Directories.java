@@ -5,7 +5,6 @@
  */
 package IO;
 
-import Console.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -43,7 +42,7 @@ public class Directories {
         if (!destinationDirectory.exists()) {
             directoryCreated = destinationDirectory.mkdir();
             if (!directoryCreated) {
-                Console.PrintLine(String.format("Error creating directory: %s", directoryPath), true, false);
+                Console.PrintException(String.format("Error creating directory: %s", directoryPath), null);
             }
         }
         return destinationDirectory;
@@ -60,7 +59,7 @@ public class Directories {
             FileUtils.deleteDirectory(new File(directoryPath));
             return true;
         } catch (IOException e) {
-            Console.PrintLine(String.format("Error deleting directory: %s", directoryPath), true, false);
+            Console.PrintException(String.format("Error deleting directory: %s", directoryPath), e);
             return false;
         }
     }
@@ -78,7 +77,7 @@ public class Directories {
                 directoryPaths.add(filePath.toString());
             });
         } catch (IOException e) {
-            Console.PrintLine(String.format("Error getting directory paths: %s", directoryPath), true, false);
+            Console.PrintException(String.format("Error getting directory paths: %s", directoryPath), e);
         }
         directoryPaths.remove(directoryPath);
         return directoryPaths;
@@ -121,5 +120,4 @@ public class Directories {
         }
         return files_in_folder;
     }
-
 }

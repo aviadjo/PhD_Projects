@@ -5,6 +5,7 @@
  */
 package Implementations;
 
+import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,9 +37,9 @@ public class FeatureExtractorDocStreamPaths<T> extends AFeatureExtractor<T> {
             GetStreamsPaths(directoryNode, "", streamPaths);
 
         } catch (FileNotFoundException ex) {
-            Console.Console.PrintLine(String.format("File %s not found!", filePath), true, false);
+            Console.PrintException(String.format("Error extracting DOC features from file: %s", filePath), ex);
         } catch (IOException ex) {
-            Console.Console.PrintLine(String.format("Error occurred when parsing file: %s", filePath), true, false);
+            Console.PrintException(String.format("Error extracting DOC features from file: %s", filePath), ex);
         }
 
         return streamPaths;

@@ -5,7 +5,7 @@
  */
 package Implementations;
 
-import Console.Console;
+import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class FeatureExtractorNgramsByte<T> extends AFeatureExtractor<T> {
                     ngram = "";
                 }
             } catch (IOException e) {
-                Console.PrintLine(String.format("Error extracting Byte n-grams from file: '%s'", filePath), true, false);
+                Console.PrintException(String.format("Error extracting Byte n-grams features from file: %s", filePath), e);
             }
         }
         return ngrams;

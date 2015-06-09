@@ -5,7 +5,7 @@
  */
 package Math;
 
-import Console.Console;
+import IO.Console;
 import static Math.MathCalc.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ import org.apache.commons.math3.util.FastMath;
  * @author Aviad
  */
 public class Entropy {
+
     public static Map<String, Double> m_memoEntropies = new HashMap<>();
 
     /**
@@ -62,7 +63,7 @@ public class Entropy {
         if (FastMath.round(values_sum) == 1) {
             return true;
         } else {
-            Console.PrintLine("Error: Get_Entropy() was provided with value that do not sum to 1!", true, false);
+            Console.PrintException("Error: Get_Entropy() was provided with value that do not sum to 1!", null);
             return false;
         }
     }

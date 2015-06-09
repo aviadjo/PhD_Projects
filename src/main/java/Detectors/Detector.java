@@ -5,7 +5,7 @@
  */
 package Detectors;
 
-import Console.Console;
+import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
@@ -94,11 +94,11 @@ public class Detector {
             //Print classification
             classification = trainedClassifier.GetClassification(instance);
             classificationIndex = trainedClassifier.GetClassificationIndex(instance);
-            Console.PrintLine(String.format("Instance %s classification: %s", i + 1, classification), true, false);
+            Console.PrintLine(String.format("Instance %s classification: %s", i + 1, classification));
             //Print classification distribution
             classificationDist = trainedClassifier.GetDistribution(instance);
-            Console.PrintLine(String.format("Instance %s distribution: %s , %s", i + 1, classificationDist[0], classificationDist[1]), true, false);
-            Console.PrintLine("", true, false);
+            Console.PrintLine(String.format("Instance %s distribution: %s , %s", i + 1, classificationDist[0], classificationDist[1]));
+            Console.PrintLine("");
         }
     }
 }

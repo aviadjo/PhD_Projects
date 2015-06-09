@@ -5,15 +5,18 @@
  */
 package Implementations;
 
-import Console.Console;
+import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -44,8 +47,8 @@ public class FeatureExtractorXMLStructuralPaths<T> extends AFeatureExtractor<T> 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 AddXMLStructuralPathsRecursively(nodeList.item(i), xmlFilePath, structuralPaths);
             }
-        } catch (Exception ex) {
-            Console.PrintLine(String.format("Error traversing XML file: %s", xmlFilePath), true, false);
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Console.PrintException(String.format("Error traversing XML file: '%s'", xmlFilePath), ex);
         }
     }
 

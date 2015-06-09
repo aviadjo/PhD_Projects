@@ -5,7 +5,7 @@
  */
 package DatasetCreation;
 
-import Console.Console;
+import IO.Console;
 import FeatureExtraction.IFeatureExtractor;
 import Framework.Framework.Classification;
 import Framework.Framework.FeatureRepresentation;
@@ -175,7 +175,7 @@ public class DatasetCSVBuilder<T> {
         String destinationFile;
         char letter = 'a';
         for (Integer top : tops) {
-            Console.PrintLine(String.format("Dataset Top %s generated!", top), true, false);
+            Console.PrintLine(String.format("Dataset Top %s generated!", top));
             destinationFile = String.format("%s_%s_Top(%s).csv", datasetFilename, letter, top);
             topDataset = GetTopXDataset(originalCSVDataset, top, elementIDColumnExist, classificationColumnExist);
             FileWriter.WriteFile(topDataset, destinationFolder + "\\" + destinationFile);
@@ -206,7 +206,7 @@ public class DatasetCSVBuilder<T> {
                 }
             }
         } else {
-            Console.PrintLine(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount), true, false);
+            Console.PrintLine(String.format("Requested top %s features out of %s!", topX, originalFeaturesCount));
         }
         return newCSVDatabase.toString();
     }

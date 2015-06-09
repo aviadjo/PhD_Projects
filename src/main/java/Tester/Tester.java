@@ -5,7 +5,7 @@
  */
 package Tester;
 
-import Console.Console;
+import IO.Console;
 import Detectors.Detector;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
@@ -16,7 +16,6 @@ import Implementations.FeatureExtractorOOXMLStructuralPaths;
 import Implementations.FeatureExtractorOOXMLStructuralPathsDisk;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
-import Tester.FeatureExtractorPDFStructuralPathsTEST.ParserType;
 import Weka.Weka.WekaClassifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,17 +109,6 @@ public class Tester {
                 tops);
     }
 
-    private static void TestExtractPDFStructuralFeatures() {
-        FeatureExtractorPDFStructuralPathsTEST featureExtractor = new FeatureExtractorPDFStructuralPathsTEST(ParserType.Sequential);
-        Map<String, Integer> structuralFeatures = featureExtractor.ExtractFeaturesFrequencyFromSingleElement("D:\\3.pdf");
-        int totalStructuralFeatures = 0;
-        for (Integer value : structuralFeatures.values()) {
-            totalStructuralFeatures += value;
-        }
-        Console.PrintLine(String.format("Total features: %s", totalStructuralFeatures), true, false);
-        Console.PrintLine(String.format("Unique features: %s", structuralFeatures.size()), true, false);
-    }
-
     private static void CreateDetectorPDF() {
         String traningsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
         String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_FeaturesList.ser";
@@ -183,9 +171,9 @@ public class Tester {
         int SFsize = structuralPaths.size();
         int SFsizeMemory = structuralPathsMemory.size();
 
-        Console.PrintLine("SP regular: " + SFsize, true, false);
-        Console.PrintLine("SP memory: " + SFsizeMemory, true, false);
-        Console.PrintLine("Diff: " + (SFsize - SFsizeMemory), true, false);
+        Console.PrintLine("SP regular: " + SFsize);
+        Console.PrintLine("SP memory: " + SFsizeMemory);
+        Console.PrintLine("Diff: " + (SFsize - SFsizeMemory));
 
         PrintDicToFile(structuralPaths, "D:\\dic.csv");
         PrintDicToFile(structuralPathsMemory, "D:\\dicMemory.csv");
@@ -194,7 +182,7 @@ public class Tester {
         long start = System.nanoTime();
         //Task
         long time = System.nanoTime() - start;
-        Console.PrintLine("Time: " + time, true, false);
+        Console.PrintLine("Time: " + time);
         //MEASURE CPU TIME
     }
 
