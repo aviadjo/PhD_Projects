@@ -36,7 +36,7 @@ public class FileWriter {
             }
             return true;
         } catch (IOException exception) {
-            Console.PrintException("Error save InputStream to file!", exception);
+            Console.PrintException("Error save InputStream to file", exception);
         }
         return false;
     }
@@ -51,7 +51,7 @@ public class FileWriter {
         try {
             FileUtils.writeStringToFile(new File(destination_file_path), text);
         } catch (IOException e) {
-            Console.PrintException("Error writing string to file!", e);
+            Console.PrintException("Error writing string to file", e);
         }
     }
 }

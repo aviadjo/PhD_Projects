@@ -5,11 +5,11 @@
  */
 package Detectors;
 
-import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
 import Framework.Framework;
 import Framework.Framework.FeatureRepresentation;
+import IO.Console;
 import IO.FileReader;
 import IO.Serializer;
 import Weka.Weka;
@@ -75,7 +75,7 @@ public class Detector {
         AFeatureExtractor featureExtractor = trainedClassifier.GetDatasetProperties().GetFeatureExtractor();
         FeatureRepresentation featureRepresentation = trainedClassifier.GetDatasetProperties().GetFeatureRepresentation();
         ArrayList<Pair<String, Integer>> selectedFeatures = trainedClassifier.GetDatasetProperties().GetSelectedFeatures();
-        boolean hasElementIDAttribute = false;
+        boolean hasElementIDAttribute = trainedClassifier.GetDatasetProperties().HasElementIDAttribute();
         boolean hasClassificationAttribute = trainedClassifier.GetDatasetProperties().HasClassificationAttribute();
         StringBuilder testsetCSV = Framework.GenerateTestSet(testFolder, featureExtractor, selectedFeatures, topFeatures, numOfElementsInTrainset, featureRepresentation, hasElementIDAttribute, hasClassificationAttribute);
         Instances testset = GetInstancesFromCSVWithFormat(testsetCSV.toString());

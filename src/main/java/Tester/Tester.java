@@ -5,7 +5,6 @@
  */
 package Tester;
 
-import IO.Console;
 import Detectors.Detector;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
@@ -37,7 +36,8 @@ public class Tester {
         //TestDetectionDOCX();
         //CreateDetectorPDF();
         //TestDetectionPDF();
-        TestUnzipFileInMemory();
+        //TestUnzipFileInMemory();
+        TestDetectionPDF();
     }
 
     private static void GeneratePDFDatasets() {
@@ -159,31 +159,6 @@ public class Tester {
                 "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers\\WekaTrainedClassifier(J48)_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_Top(100).ser",
                 "D:\\TEST\\PDF_Benign"
         );
-    }
-
-    private static void TestUnzipFileInMemory() {
-        AFeatureExtractor<String> s = new FeatureExtractorOOXMLStructuralPathsDisk(false);
-        AFeatureExtractor<String> s_memory = new FeatureExtractorOOXMLStructuralPaths(false);
-
-        String filePath = "d:\\e.docx";
-        Map<String, Integer> structuralPaths = s.ExtractFeaturesFrequencyFromSingleElement(filePath);
-        Map<String, Integer> structuralPathsMemory = s_memory.ExtractFeaturesFrequencyFromSingleElement(filePath);
-        int SFsize = structuralPaths.size();
-        int SFsizeMemory = structuralPathsMemory.size();
-
-        Console.PrintLine("SP regular: " + SFsize);
-        Console.PrintLine("SP memory: " + SFsizeMemory);
-        Console.PrintLine("Diff: " + (SFsize - SFsizeMemory));
-
-        PrintDicToFile(structuralPaths, "D:\\dic.csv");
-        PrintDicToFile(structuralPathsMemory, "D:\\dicMemory.csv");
-
-        //MEASURE CPU TIME
-        long start = System.nanoTime();
-        //Task
-        long time = System.nanoTime() - start;
-        Console.PrintLine("Time: " + time);
-        //MEASURE CPU TIME
     }
 
     private static void PrintDicToFile(Map<String, Integer> dic, String destFilePath) {

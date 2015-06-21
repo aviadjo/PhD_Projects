@@ -5,8 +5,8 @@
  */
 package Weka;
 
-import IO.Console;
 import Framework.Framework.Classification;
+import IO.Console;
 import Math.MathCalc;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -181,7 +181,7 @@ public class Weka {
         try {
             classification = classifier.classifyInstance(instance);
         } catch (Exception ex) {
-            Console.PrintException("Error providing classification index!", ex);
+            Console.PrintException("Error providing classification index", ex);
         }
         return classification;
     }
@@ -205,7 +205,7 @@ public class Weka {
                 classification[i] = MathCalc.Round(classification[i], 3);
             }
         } catch (Exception ex) {
-            Console.PrintException("Error providing distribution for instance!", ex);
+            Console.PrintException("Error providing distribution for instance", ex);
         }
         return classification;
     }

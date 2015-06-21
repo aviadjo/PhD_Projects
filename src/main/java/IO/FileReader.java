@@ -36,7 +36,7 @@ public class FileReader {
         try {
             encoded = Files.readAllBytes(Paths.get(filePath));
         } catch (IOException exception) {
-            Console.PrintException("Error reading file!", exception);
+            Console.PrintException("Error reading file", exception);
         }
         return new String(encoded, m_encoding).trim();
     }
@@ -54,9 +54,9 @@ public class FileReader {
             is = new FileInputStream(filePath);
             is.close();
         } catch (FileNotFoundException exception) {
-            Console.PrintException("Error reading file to InputStream!", exception);
+            Console.PrintException("Error reading file to InputStream", exception);
         } catch (IOException exception) {
-            Console.PrintException("Error reading file to InputStream!", exception);
+            Console.PrintException("Error reading file to InputStream", exception);
         }
         return is;
     }
@@ -73,7 +73,7 @@ public class FileReader {
         try {
             lines = Files.readAllLines(Paths.get(filePath), m_encoding);
         } catch (IOException exception) {
-            Console.PrintException("Error reading file lines!", exception);
+            Console.PrintException("Error reading file lines", exception);
         }
 
         return lines;
@@ -101,7 +101,7 @@ public class FileReader {
                     }
                 }
             } else {
-                Console.PrintException(String.format("Directory %s do not exist!", folderPath), null);
+                Console.PrintException(String.format("Directory %s do not exist", folderPath), null);
             }
         }
         return list_of_strings;

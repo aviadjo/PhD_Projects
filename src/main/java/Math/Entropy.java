@@ -63,7 +63,7 @@ public class Entropy {
         if (FastMath.round(values_sum) == 1) {
             return true;
         } else {
-            Console.PrintException("Error: Get_Entropy() was provided with value that do not sum to 1!", null);
+            Console.PrintException("Error: Get_Entropy() was provided with value that do not sum to 1", null);
             return false;
         }
     }

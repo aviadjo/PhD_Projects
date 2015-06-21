@@ -5,8 +5,8 @@
  */
 package Implementations;
 
-import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
+import IO.Console;
 import IO.Directories;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -148,7 +148,7 @@ public class FeatureExtractorOOXMLStructuralPathsDisk<T> extends AFeatureExtract
                 zipFile.extractAll(destinationFolder);
                 success = true;
             } else {
-                Console.PrintException(String.format("Error unzipping file '%s' - password protected!", filePath), null);
+                Console.PrintException(String.format("Error unzipping file '%s' - password protected", filePath), null);
             }
         } catch (ZipException ex) {
             Console.PrintException(String.format("Error unzipping file '%s'", filePath), ex);

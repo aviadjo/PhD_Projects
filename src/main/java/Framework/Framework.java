@@ -5,13 +5,13 @@
  */
 package Framework;
 
-import IO.Console;
 import DatasetCreation.DatasetCSVBuilder;
 import DatasetCreation.DatasetCreator;
 import static DatasetCreation.DatasetCreator.BuildDatasetCSV;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureSelection.AFeatureSelector;
+import IO.Console;
 import IO.Directories;
 import Implementations.FeatureExtractorOOXMLStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
@@ -110,6 +110,29 @@ public class Framework {
         return datasetCSV;
     }
 
+    /**
+     * Return CSV string which represent the dataset
+     *
+     * @param benignFolder the folder which contain the training benign files
+     * @param maliciousFolder the folder which contain the training malicious
+     * files
+     * @param destinationFolder the destination folder to write the dataset
+     * @param featureExtractor a Feature Extractor object
+     * @param featureSelector a Feature Selector object
+     * @param topFeatures the number of top features to extract
+     * @param featureRepresentation featureRepresentation
+     * @param createDatabaseCSV indicated whether to write CSV training set to
+     * disk or not
+     * @param addElementIDColumn add prefix column identifying the record
+     * @param addClassificationColumn add suffix column identifying the class of
+     * the record
+     * @param printFileFeaturesFrequencies indicated whether to write Features
+     * Frequencies file to disk or not
+     * @param printSelectedFeaturesScore indicated whether to print to the
+     * console the selected features' score
+     * @param generateTopsDatasets indicated whether to generate Top datasets
+     * @return CSV string which represent the dataset
+     */
     public static StringBuilder GenerateTrainSet(
             String benignFolder,
             String maliciousFolder,
@@ -149,6 +172,22 @@ public class Framework {
         return datasetCSV;
     }
 
+    /**
+     * Return CSV string which represent the dataset
+     *
+     * @param testFolder the folder in which the files for test are located
+     * @param featureExtractor a Feature Extractor object
+     * @param selectedFeatures the top selected features to build the dataset
+     * with
+     * @param topFeatures the number of top features to extract
+     * @param numOfElementsInTrainset number of elements in the training from
+     * which the classifier were trained
+     * @param featureRepresentation featureRepresentation
+     * @param addElementIDColumn add prefix column identifying the record
+     * @param addClassificationColumn add suffix column identifying the class of
+     * the record
+     * @return CSV string which represent the dataset
+     */
     public static StringBuilder GenerateTestSet(
             String testFolder,
             AFeatureExtractor<String> featureExtractor,
@@ -161,7 +200,7 @@ public class Framework {
     ) {
         DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
         ArrayList<String> testElements = Directories.GetDirectoryFilesPaths(testFolder);
-        selectedFeatures = new ArrayList<Pair<String, Integer>>(selectedFeatures.subList(0, topFeatures));
+        selectedFeatures = new ArrayList<>(selectedFeatures.subList(0, topFeatures));
         StringBuilder testsetCSVHeader = DatasetCSVBuilder.GetDatasetHeaderCSV(topFeatures, addElementIDColumn, addClassificationColumn);
         StringBuilder datasetCSV = datasetBuilder.BuildDatabaseCSV(
                 testElements,
