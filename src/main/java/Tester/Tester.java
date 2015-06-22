@@ -7,9 +7,9 @@ package Tester;
 
 import Detectors.Detector;
 import FeatureExtraction.AFeatureExtractor;
+import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
 import FeatureSelection.AFeatureSelector;
-import Framework.Framework;
-import Framework.Framework.FeatureRepresentation;
+import Framework.DBFramework;
 import IO.FileWriter;
 import Implementations.FeatureExtractorOOXMLStructuralPaths;
 import Implementations.FeatureExtractorOOXMLStructuralPathsDisk;
@@ -49,7 +49,7 @@ public class Tester {
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
-        Framework.FeatureRepresentation featureRepresentation = Framework.FeatureRepresentation.Binary;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         boolean createDatabaseCSV = true;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;
@@ -57,7 +57,7 @@ public class Tester {
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
 
-        StringBuilder datasetCSV = Framework.GenerateTrainSet(
+        StringBuilder datasetCSV = DBFramework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
@@ -84,7 +84,7 @@ public class Tester {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgramsString<>(3, 1);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
-        Framework.FeatureRepresentation featureRepresentation = Framework.FeatureRepresentation.Binary;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         boolean createDatabaseCSV = true;
         boolean addElementIDColumn = false;
         boolean addClassificationColumn = true;
@@ -92,7 +92,7 @@ public class Tester {
         boolean printSelectedFeaturesScore = true;
         boolean generateTops = true;
 
-        StringBuilder datasetCSV = Framework.GenerateTrainSet(
+        StringBuilder datasetCSV = DBFramework.GenerateTrainSet(
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
@@ -114,7 +114,7 @@ public class Tester {
         String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_FeaturesList.ser";
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
-        FeatureRepresentation featureRepresentation = Framework.FeatureRepresentation.Binary;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         WekaClassifier wekaClassifier = WekaClassifier.J48;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
         Detector.GenerateAndSaveDetector(
@@ -133,7 +133,7 @@ public class Tester {
         String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_a_FeaturesList.ser";
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPathsDisk<>(false);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
-        FeatureRepresentation featureRepresentation = Framework.FeatureRepresentation.Binary;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         WekaClassifier wekaClassifier = WekaClassifier.RandomForest;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
         Detector.GenerateAndSaveDetector(

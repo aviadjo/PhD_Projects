@@ -6,9 +6,9 @@
 package Detectors;
 
 import FeatureExtraction.AFeatureExtractor;
+import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
 import FeatureSelection.AFeatureSelector;
-import Framework.Framework;
-import Framework.Framework.FeatureRepresentation;
+import Framework.DBFramework;
 import IO.Console;
 import IO.FileReader;
 import IO.Serializer;
@@ -77,7 +77,7 @@ public class Detector {
         ArrayList<Pair<String, Integer>> selectedFeatures = trainedClassifier.GetDatasetProperties().GetSelectedFeatures();
         boolean hasElementIDAttribute = trainedClassifier.GetDatasetProperties().HasElementIDAttribute();
         boolean hasClassificationAttribute = trainedClassifier.GetDatasetProperties().HasClassificationAttribute();
-        StringBuilder testsetCSV = Framework.GenerateTestSet(testFolder, featureExtractor, selectedFeatures, topFeatures, numOfElementsInTrainset, featureRepresentation, hasElementIDAttribute, hasClassificationAttribute);
+        StringBuilder testsetCSV = DBFramework.GenerateTestSet(testFolder, featureExtractor, selectedFeatures, topFeatures, numOfElementsInTrainset, featureRepresentation, hasElementIDAttribute, hasClassificationAttribute);
         Instances testset = GetInstancesFromCSVWithFormat(testsetCSV.toString());
 
         //Classify Instances

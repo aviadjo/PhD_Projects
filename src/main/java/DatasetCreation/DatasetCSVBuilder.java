@@ -5,10 +5,10 @@
  */
 package DatasetCreation;
 
-import IO.Console;
 import FeatureExtraction.IFeatureExtractor;
-import Framework.Framework.Classification;
-import Framework.Framework.FeatureRepresentation;
+import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
+import Framework.DBFramework.Classification;
+import IO.Console;
 import IO.FileWriter;
 import Math.MathCalc;
 import java.util.ArrayList;
@@ -100,7 +100,6 @@ public class DatasetCSVBuilder<T> {
         if (addClassificationColumn) {
             featuresVectorCSV.append(classification.toString());
         } else {
-            //To remove the last feature ","
             featuresVectorCSV.deleteCharAt(featuresVectorCSV.length() - 1);
         }
         return featuresVectorCSV;

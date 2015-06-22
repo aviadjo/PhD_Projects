@@ -5,7 +5,7 @@
  */
 package Weka;
 
-import Framework.Framework.Classification;
+import Framework.DBFramework.Classification;
 import IO.Console;
 import Math.MathCalc;
 import java.io.ByteArrayInputStream;

@@ -6,8 +6,8 @@
 package Weka;
 
 import FeatureExtraction.AFeatureExtractor;
+import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
 import FeatureSelection.AFeatureSelector;
-import Framework.Framework.FeatureRepresentation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javafx.util.Pair;

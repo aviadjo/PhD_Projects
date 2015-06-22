@@ -10,6 +10,7 @@ import DatasetCreation.DatasetCreator;
 import static DatasetCreation.DatasetCreator.BuildDatasetCSV;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.IFeatureExtractor;
+import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
 import FeatureSelection.AFeatureSelector;
 import IO.Console;
 import IO.Directories;
@@ -25,7 +26,7 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Aviad
  */
-public class Framework {
+public class DBFramework {
 
     public static final String m_systemTempDirectory = FileUtils.getTempDirectoryPath();
     public static final String m_benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
@@ -64,12 +65,6 @@ public class Framework {
                 classification = Classification.Malicious;
         }
         return classification;
-    }
-
-    public static enum FeatureRepresentation {
-
-        Binary,
-        TFIDF
     }
 
     private static StringBuilder CreateTrainSetDefaultSettings() {
@@ -201,7 +196,7 @@ public class Framework {
         DatasetCSVBuilder<String> datasetBuilder = new DatasetCSVBuilder<>();
         ArrayList<String> testElements = Directories.GetDirectoryFilesPaths(testFolder);
         selectedFeatures = new ArrayList<>(selectedFeatures.subList(0, topFeatures));
-        StringBuilder testsetCSVHeader = DatasetCSVBuilder.GetDatasetHeaderCSV(topFeatures, addElementIDColumn, addClassificationColumn);
+        StringBuilder datasetCSVHeader = DatasetCSVBuilder.GetDatasetHeaderCSV(topFeatures, addElementIDColumn, addClassificationColumn);
         StringBuilder datasetCSV = datasetBuilder.BuildDatabaseCSV(
                 testElements,
                 featureExtractor,
@@ -212,7 +207,7 @@ public class Framework {
                 addElementIDColumn,
                 addClassificationColumn
         );
-        return testsetCSVHeader.append("\n").append(datasetCSV);
+        return datasetCSVHeader.append("\n").append(datasetCSV);
     }
 
     public static void main(String[] args) {
