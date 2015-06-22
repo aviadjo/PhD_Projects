@@ -12,7 +12,6 @@ import FeatureSelection.AFeatureSelector;
 import Framework.DBFramework;
 import IO.FileWriter;
 import Implementations.FeatureExtractorOOXMLStructuralPaths;
-import Implementations.FeatureExtractorOOXMLStructuralPathsDisk;
 import Implementations.FeatureExtractorPDFStructuralPaths;
 import Implementations.FeatureSelectorInfoGainRatio;
 import Weka.Weka.WekaClassifier;
@@ -32,12 +31,12 @@ public class Tester {
         //GenerateDocxDatasets();
         //TestCode();
         //TestSerilizer();
-        //CreateDetectorDOCX();
         //TestDetectionDOCX();
         //CreateDetectorPDF();
+        CreateDetectorDOCX();
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
-        TestDetectionPDF();
+        //TestDetectionPDF();
     }
 
     private static void GeneratePDFDatasets() {
@@ -131,10 +130,10 @@ public class Tester {
     private static void CreateDetectorDOCX() {
         String traningsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
         String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_a_FeaturesList.ser";
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPathsDisk<>(false);
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>(false);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
-        WekaClassifier wekaClassifier = WekaClassifier.RandomForest;
+        WekaClassifier wekaClassifier = WekaClassifier.J48;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
         Detector.GenerateAndSaveDetector(
                 traningsetCSVFilePath,

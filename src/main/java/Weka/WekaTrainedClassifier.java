@@ -18,6 +18,7 @@ import weka.core.Instances;
  */
 public class WekaTrainedClassifier implements Serializable {
 
+    private final long serialVersionUID = 1L;
     private final Classifier m_classifier;
     private final String m_classifierName;
     private final WekaDatasetProperties m_datasetProperties;

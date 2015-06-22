@@ -42,8 +42,11 @@ public class DatasetCSVBuilder<T> {
 
         for (T element : elements) {
             elementFeaturesVectorCSV = GetFeaturesVectorCSV(element, featureExtractor, selectedFeatures, totalElementsNum, featureRepresentation, classification, addElementIDColumn, addClassificationColumn);
-            datasetCSV.append(elementFeaturesVectorCSV);
-            datasetCSV.append("\n");
+
+            if (elementFeaturesVectorCSV != null) {
+                datasetCSV.append(elementFeaturesVectorCSV);
+                datasetCSV.append("\n");
+            }
         }
         datasetCSV.deleteCharAt(datasetCSV.lastIndexOf("\n"));
         return datasetCSV;
@@ -64,45 +67,50 @@ public class DatasetCSVBuilder<T> {
      */
     public StringBuilder GetFeaturesVectorCSV(T element, IFeatureExtractor<T> featureExtractor, ArrayList<Pair<String, Integer>> selectedFeatures, int totalElementsNum, FeatureRepresentation featureRepresentation, Classification classification, boolean addElementIDColumn, boolean addClassificationColumn) {
         Map<String, Integer> elementFeaturesFrequencies = featureExtractor.ExtractFeaturesFrequencyFromSingleElement(element);
-        StringBuilder featuresVectorCSV = new StringBuilder();
 
-        if (addElementIDColumn) {
-            featuresVectorCSV.append(element.toString()).append(",");
-        }
+        if (elementFeaturesFrequencies.size() > 0) {
+            StringBuilder featuresVectorCSV = new StringBuilder();
 
-        int mostCommonFeatureFrequencyInElement = GetMostCommonSelectedFeatureFrequencyInElement(elementFeaturesFrequencies, selectedFeatures);
-
-        String selectedFeature;
-        int featureFrequencyInElement;
-        int numOfElementsContainTheFeature;
-        double TFIDF;
-        String cellValue = "";
-        for (Pair<String, Integer> selectedFeaturePair : selectedFeatures) {
-            selectedFeature = selectedFeaturePair.getKey();
-            switch (featureRepresentation) {
-                case Binary:
-                    if (elementFeaturesFrequencies.containsKey(selectedFeature)) {
-                        cellValue = 1 + "";
-                    } else {
-                        cellValue = 0 + "";
-                    }
-                    break;
-                case TFIDF:
-                    numOfElementsContainTheFeature = selectedFeaturePair.getValue();
-                    featureFrequencyInElement = (elementFeaturesFrequencies.containsKey(selectedFeature)) ? elementFeaturesFrequencies.get(selectedFeature) : 0;
-                    TFIDF = MathCalc.GetTFIDF(featureFrequencyInElement, mostCommonFeatureFrequencyInElement, totalElementsNum, numOfElementsContainTheFeature);
-                    TFIDF = MathCalc.Round(TFIDF, 3);
-                    cellValue = TFIDF + "";
-                    break;
+            if (addElementIDColumn) {
+                featuresVectorCSV.append(element.toString()).append(",");
             }
-            featuresVectorCSV.append(cellValue).append(",");
-        }
-        if (addClassificationColumn) {
-            featuresVectorCSV.append(classification.toString());
+
+            int mostCommonFeatureFrequencyInElement = GetMostCommonSelectedFeatureFrequencyInElement(elementFeaturesFrequencies, selectedFeatures);
+
+            String selectedFeature;
+            int featureFrequencyInElement;
+            int numOfElementsContainTheFeature;
+            double TFIDF;
+            String cellValue = "";
+            for (Pair<String, Integer> selectedFeaturePair : selectedFeatures) {
+                selectedFeature = selectedFeaturePair.getKey();
+                switch (featureRepresentation) {
+                    case Binary:
+                        if (elementFeaturesFrequencies.containsKey(selectedFeature)) {
+                            cellValue = 1 + "";
+                        } else {
+                            cellValue = 0 + "";
+                        }
+                        break;
+                    case TFIDF:
+                        numOfElementsContainTheFeature = selectedFeaturePair.getValue();
+                        featureFrequencyInElement = (elementFeaturesFrequencies.containsKey(selectedFeature)) ? elementFeaturesFrequencies.get(selectedFeature) : 0;
+                        TFIDF = MathCalc.GetTFIDF(featureFrequencyInElement, mostCommonFeatureFrequencyInElement, totalElementsNum, numOfElementsContainTheFeature);
+                        TFIDF = MathCalc.Round(TFIDF, 3);
+                        cellValue = TFIDF + "";
+                        break;
+                }
+                featuresVectorCSV.append(cellValue).append(",");
+            }
+            if (addClassificationColumn) {
+                featuresVectorCSV.append(classification.toString());
+            } else {
+                featuresVectorCSV.deleteCharAt(featuresVectorCSV.length() - 1);
+            }
+            return featuresVectorCSV;
         } else {
-            featuresVectorCSV.deleteCharAt(featuresVectorCSV.length() - 1);
+            return null;
         }
-        return featuresVectorCSV;
     }
 
     /**
