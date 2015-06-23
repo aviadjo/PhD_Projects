@@ -6,6 +6,7 @@
 package IO;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,8 +26,10 @@ public class FileWriter {
      * @return true if the file was successfully written to the disk
      */
     public static boolean SaveInputStreamToFile(InputStream is, String file_path) {
+        boolean success = false;
         try {
             File f = new File(file_path);
+            is.reset();
             try (FileOutputStream fos = new FileOutputStream(f)) {
                 byte[] buf = new byte[4096];
                 int bytesRead;
@@ -34,11 +37,17 @@ public class FileWriter {
                     fos.write(buf, 0, bytesRead);
                 }
             }
-            return true;
+            success = true;
+            is.reset();
+        } catch (FileNotFoundException exception) {
+            //Cope with filenames in exotic languages like chinees
+            String fileName = Files.GetFileNameWithoutExtension(file_path);
+            file_path = file_path.replace(fileName, fileName.hashCode() + "");
+            success = SaveInputStreamToFile(is, file_path);
         } catch (IOException exception) {
             Console.PrintException("Error save InputStream to file", exception);
         }
-        return false;
+        return success;
     }
 
     /**

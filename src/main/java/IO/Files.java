@@ -80,6 +80,28 @@ public class Files {
         return FilenameUtils.getExtension(filename);
     }
 
+    /**
+     * Return the file name include extension
+     *
+     * @param filename a file name without the full path
+     * @return the file name include extension
+     */
+    public static String GetFileName(String filename) {
+        return FilenameUtils.getName(filename);
+    }
+
+    /**
+     * Return the file name without extension
+     *
+     * @param filename a file name without the full path
+     * @return the file name without extension
+     */
+    public static String GetFileNameWithoutExtension(String filename) {
+        String fileName = Files.GetFileName(filename);
+        String fileExtension = Files.GetFileExtansion(filename);
+        return fileName.replace("." + fileExtension, "");
+    }
+
     static Object walk(Path get) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
