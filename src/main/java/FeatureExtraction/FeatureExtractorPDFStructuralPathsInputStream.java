@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Implementations;
+package FeatureExtraction;
 
-import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
+import IO.Console;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,11 +27,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  *
  * @author Aviad
  */
-public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> {
+public class FeatureExtractorPDFStructuralPathsInputStream<T> extends AFeatureExtractor<T> {
 
     public ParserType m_parserType;
 
-    public FeatureExtractorPDFStructuralPaths(ParserType parserType) {
+    public FeatureExtractorPDFStructuralPathsInputStream(ParserType parserType) {
         m_parserType = parserType;
     }
 
@@ -44,12 +45,12 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
     public Map ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
         HashSet<COSBase> visitedObjects = new HashSet<>();
-        String filePath = (String) element;
-        File pdfFile = new File(filePath);
+        InputStream fileInputStream = (InputStream) element;
+        String filePath = "";
         try {
             switch (m_parserType) {
                 case Sequential:
-                    try (PDDocument pdf = PDDocument.load(pdfFile)) {
+                    try (PDDocument pdf = PDDocument.load(fileInputStream)) {
                         COSDocument pdfDocument = pdf.getDocument();
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
@@ -60,7 +61,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                 case NonSequential:
                     File randomAccessFile = new File(filePath + ".ra");
                     RandomAccess randomAccess = new RandomAccessFile(randomAccessFile, "rwd");
-                    try (PDDocument pdf = PDDocument.loadNonSeq(pdfFile, randomAccess)) {
+                    try (PDDocument pdf = PDDocument.loadNonSeq(fileInputStream, randomAccess)) {
                         COSDocument pdfDocument = pdf.getDocument();
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);

@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Implementations;
+package FeatureExtraction;
 
-import IO.Console;
 import FeatureExtraction.AFeatureExtractor;
+import IO.Console;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -17,6 +19,7 @@ import java.util.zip.ZipFile;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -25,28 +28,33 @@ import org.w3c.dom.NodeList;
  *
  * @author Aviad
  */
-public class FeatureExtractorOOXMLStructuralPaths<T> extends AFeatureExtractor<T> {
+public class FeatureExtractorOOXMLStructuralPathsInputStream<T> extends AFeatureExtractor<T> {
 
     private final boolean m_ignoreNumbersInFeatures;
 
-    public FeatureExtractorOOXMLStructuralPaths(boolean ignoreNumbersInFeatures) {
+    public FeatureExtractorOOXMLStructuralPathsInputStream(boolean ignoreNumbersInFeatures) {
         m_ignoreNumbersInFeatures = ignoreNumbersInFeatures;
     }
 
     @Override
     public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
-        String filePath = (String) element;
-        ExtractStructuralFeaturesInMemory(filePath, structuralPaths);
+        InputStream fileInputStream = (InputStream) element;
+        ExtractStructuralFeaturesInMemory(fileInputStream, structuralPaths);
         return structuralPaths;
     }
 
-    private void ExtractStructuralFeaturesInMemory(String filePath, Map<String, Integer> structuralPaths) {
+    private void ExtractStructuralFeaturesInMemory(InputStream fileInputStream, Map<String, Integer> structuralPaths) {
         String path;
         String directoryPath;
         String fileExtension;
         try {
-            ZipFile zipFile = new ZipFile(filePath);
+            File file = new File(fileInputStream.hashCode() + "");
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                IOUtils.copy(fileInputStream, fos);
+            }
+
+            ZipFile zipFile = new ZipFile(file);
 
             for (Enumeration e = zipFile.entries(); e.hasMoreElements();) {
                 ZipEntry entry = (ZipEntry) e.nextElement();
@@ -62,7 +70,7 @@ public class FeatureExtractorOOXMLStructuralPaths<T> extends AFeatureExtractor<T
                 }
             }
         } catch (IOException ex) {
-            Console.PrintException(String.format("Error extracting OOXML structural features from file: %s", filePath), ex);
+            Console.PrintException(String.format("Error extracting OOXML structural features from file in memory"), ex);
         }
     }
 
