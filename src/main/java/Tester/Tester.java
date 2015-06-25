@@ -32,7 +32,7 @@ public class Tester {
         //TestCode();
         //TestSerilizer();
         //TestDetectionDOCX();
-        //CreateDetectorPDF();
+        CreateDetectorPDF();
         CreateDetectorDOCX();
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
