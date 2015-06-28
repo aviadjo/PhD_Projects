@@ -86,7 +86,7 @@ public class Files {
      * @param filename a file name without the full path
      * @return the file name include extension
      */
-    public static String GetFileName(String filename) {
+    public static String GetFileNameWithExtension(String filename) {
         return FilenameUtils.getName(filename);
     }
 
@@ -97,7 +97,7 @@ public class Files {
      * @return the file name without extension
      */
     public static String GetFileNameWithoutExtension(String filename) {
-        String fileName = Files.GetFileName(filename);
+        String fileName = Files.GetFileNameWithExtension(filename);
         String fileExtension = Files.GetFileExtansion(filename);
         return fileName.replace("." + fileExtension, "");
     }
