@@ -56,6 +56,7 @@ public class DatasetCreator {
      * @return dataset CSV
      */
     public static StringBuilder BuildDatasetCSV(
+            String fileType,
             String ClassAdirectory,
             String ClassBdirectory,
             String destinationFolderPath,
@@ -76,6 +77,7 @@ public class DatasetCreator {
         ArrayList<String> classBelements = Directories.GetDirectoryFilesPaths(ClassBdirectory);
         int totalElementsNum = classAelements.size() + classBelements.size();
 
+        Console.PrintLine(String.format("File type: %s", fileType));
         Console.PrintLine(String.format("Benign folder: %s", ClassAdirectory));
         Console.PrintLine(String.format("Malicious folder: %s", ClassBdirectory));
         Console.PrintLine(String.format("Benign elements: %s", GetStringNumber(classAelements.size())));
@@ -93,7 +95,7 @@ public class DatasetCreator {
         Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABfeatures.size())));
         MapDB.m_db_off_heap_FE.commit();
 
-        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), classAelements.size(), classBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
+        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), classAelements.size(), classBelements.size(), fileType, featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
 
         //PRINT FILE - DOCUMENT FREQUENCY
         if (printFileFeaturesFrequencies) {

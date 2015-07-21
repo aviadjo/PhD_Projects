@@ -7,13 +7,13 @@ package Tester;
 
 import Detectors.Detector;
 import FeatureExtraction.AFeatureExtractor;
-import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
-import FeatureSelection.AFeatureSelector;
-import Framework.DBFramework;
-import IO.FileWriter;
 import FeatureExtraction.FeatureExtractorOOXMLStructuralPaths;
 import FeatureExtraction.FeatureExtractorPDFStructuralPaths;
+import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
+import FeatureSelection.AFeatureSelector;
 import FeatureSelection.FeatureSelectorInfoGainRatio;
+import Framework.DBFramework;
+import IO.FileWriter;
 import Weka.Weka.WekaClassifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,12 +28,21 @@ public class Tester {
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
         //GeneratePDFDatasets();
-        //GenerateDocxDatasets();
+        boolean nnSFExtraction = false;
+        GenerateDocxDatasets1(nnSFExtraction);
+        GenerateDocxDatasets2(nnSFExtraction);
+        GenerateDocxDatasets3(nnSFExtraction);
+        GenerateDocxDatasets4(nnSFExtraction);
+        nnSFExtraction = true;
+        GenerateDocxDatasets1(nnSFExtraction);
+        GenerateDocxDatasets2(nnSFExtraction);
+        GenerateDocxDatasets3(nnSFExtraction);
+        GenerateDocxDatasets4(nnSFExtraction);
         //TestCode();
         //TestSerilizer();
         //TestDetectionDOCX();
-        CreateDetectorPDF();
-        CreateDetectorDOCX();
+        //CreateDetectorPDF();
+        //CreateDetectorDOCX();
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
         //TestDetectionPDF();
@@ -45,6 +54,7 @@ public class Tester {
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
+        String fileType = "pdf";
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         int topFeatures = 2000;
@@ -57,6 +67,7 @@ public class Tester {
         boolean generateTops = true;
 
         StringBuilder datasetCSV = DBFramework.GenerateTrainSet(
+                fileType,
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
@@ -73,15 +84,87 @@ public class Tester {
                 tops);
     }
 
-    private static void GenerateDocxDatasets() {
-        String benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassA_100";
-        String maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
+    private static void GenerateDocxDatasets1(boolean nnSFExtraction) {
+        String benignFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Benign_16108";
+        String maliciousFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Malicious_831";
+        String destinationFolder = "D:\\Dropbox\\DATASETS";
+        ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 2000));
+
+        String fileType = "docx";
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>(nnSFExtraction);
+        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
+        int topFeatures = 2000;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.TFIDF;
+        boolean createDatabaseCSV = true;
+        boolean addElementIDColumn = false;
+        boolean addClassificationColumn = true;
+        boolean printFileFeaturesFrequencies = false;
+        boolean printSelectedFeaturesScore = true;
+        boolean generateTops = true;
+
+        StringBuilder datasetCSV = DBFramework.GenerateTrainSet(
+                fileType,
+                benignFolder,
+                maliciousFolder,
+                destinationFolder,
+                featureExtractor,
+                featureSelector,
+                topFeatures,
+                featureRepresentation,
+                createDatabaseCSV,
+                addElementIDColumn,
+                addClassificationColumn,
+                printFileFeaturesFrequencies,
+                printSelectedFeaturesScore,
+                generateTops,
+                tops);
+    }
+
+    private static void GenerateDocxDatasets2(boolean nnSFExtraction) {
+        String benignFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Benign_16108";
+        String maliciousFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Malicious_831";
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
-        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>(false);
-        //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgramsString<>(3, 1);
+        String fileType = "docx";
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>(nnSFExtraction);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
+        int topFeatures = 2000;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.TFIDF;
+        boolean createDatabaseCSV = true;
+        boolean addElementIDColumn = false;
+        boolean addClassificationColumn = true;
+        boolean printFileFeaturesFrequencies = false;
+        boolean printSelectedFeaturesScore = true;
+        boolean generateTops = true;
+
+        StringBuilder datasetCSV = DBFramework.GenerateTrainSet(
+                fileType,
+                benignFolder,
+                maliciousFolder,
+                destinationFolder,
+                featureExtractor,
+                featureSelector,
+                topFeatures,
+                featureRepresentation,
+                createDatabaseCSV,
+                addElementIDColumn,
+                addClassificationColumn,
+                printFileFeaturesFrequencies,
+                printSelectedFeaturesScore,
+                generateTops,
+                tops);
+    }
+
+    private static void GenerateDocxDatasets3(boolean nnSFExtraction) {
+        String benignFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Benign_16108";
+        String maliciousFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Malicious_831";
+        String destinationFolder = "D:\\Dropbox\\DATASETS";
+        ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
+
+        String fileType = "docx";
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>(nnSFExtraction);
+        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGainRatio);
         int topFeatures = 2000;
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         boolean createDatabaseCSV = true;
@@ -92,6 +175,43 @@ public class Tester {
         boolean generateTops = true;
 
         StringBuilder datasetCSV = DBFramework.GenerateTrainSet(
+                fileType,
+                benignFolder,
+                maliciousFolder,
+                destinationFolder,
+                featureExtractor,
+                featureSelector,
+                topFeatures,
+                featureRepresentation,
+                createDatabaseCSV,
+                addElementIDColumn,
+                addClassificationColumn,
+                printFileFeaturesFrequencies,
+                printSelectedFeaturesScore,
+                generateTops,
+                tops);
+    }
+
+    private static void GenerateDocxDatasets4(boolean nnSFExtraction) {
+        String benignFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Benign_16108";
+        String maliciousFolder = "D:\\Nir_Aviad_DT_Shared\\DATASETS\\Office\\_OFFICE_DATASET_MERGED_SHA256\\DOCX_Malicious_831";
+        String destinationFolder = "D:\\Dropbox\\DATASETS";
+        ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
+
+        String fileType = "docx";
+        AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>(nnSFExtraction);
+        AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGainRatio);
+        int topFeatures = 2000;
+        FeatureRepresentation featureRepresentation = FeatureRepresentation.TFIDF;
+        boolean createDatabaseCSV = true;
+        boolean addElementIDColumn = false;
+        boolean addClassificationColumn = true;
+        boolean printFileFeaturesFrequencies = false;
+        boolean printSelectedFeaturesScore = true;
+        boolean generateTops = true;
+
+        StringBuilder datasetCSV = DBFramework.GenerateTrainSet(
+                fileType,
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,

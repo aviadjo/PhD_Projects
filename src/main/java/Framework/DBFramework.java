@@ -9,14 +9,14 @@ import DatasetCreation.DatasetCSVBuilder;
 import DatasetCreation.DatasetCreator;
 import static DatasetCreation.DatasetCreator.BuildDatasetCSV;
 import FeatureExtraction.AFeatureExtractor;
+import FeatureExtraction.FeatureExtractorOOXMLStructuralPaths;
 import FeatureExtraction.IFeatureExtractor;
 import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
 import FeatureSelection.AFeatureSelector;
-import IO.Console;
-import IO.Directories;
-import FeatureExtraction.FeatureExtractorOOXMLStructuralPaths;
 import FeatureSelection.FeatureSelectorInfoGainRatio;
 import FeatureSelection.FeatureSelectorInfoGainRatio.SelectionMethod;
+import IO.Console;
+import IO.Directories;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.util.Pair;
@@ -33,7 +33,7 @@ public class DBFramework {
     public static final String m_maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
     public static final String m_testFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
     public static final String m_destinationFolder = "D:\\Dropbox\\DATASETS";
-    public static final String m_datasetFilenameFormat = "Dataset_%s_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)";
+    public static final String m_datasetFilenameFormat = "Dataset_%s_Files(B%s_M%s)_Type(%s)_FE(%s)_FS(%s)_Rep(%s)";
     public static final ArrayList<Integer> m_tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
     public static final String m_classificationModelsFolder = "";
@@ -70,6 +70,7 @@ public class DBFramework {
     private static StringBuilder CreateTrainSetDefaultSettings() {
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorNgrams<>(3, 1);
         //AFeatureExtractor<String> featureExtractor = new FeatureExtractorDocStreamPaths();
+        String fileType = "";
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths(false);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(SelectionMethod.InformationGain);
         int topFeatures = 2000;
@@ -82,6 +83,7 @@ public class DBFramework {
         boolean generateTops = false;
 
         StringBuilder datasetCSV = BuildDatasetCSV(
+                fileType,
                 m_benignFolder,
                 m_maliciousFolder,
                 m_destinationFolder,
@@ -129,6 +131,7 @@ public class DBFramework {
      * @return CSV string which represent the dataset
      */
     public static StringBuilder GenerateTrainSet(
+            String fileType,
             String benignFolder,
             String maliciousFolder,
             String destinationFolder,
@@ -144,6 +147,7 @@ public class DBFramework {
             boolean generateTopsDatasets,
             ArrayList<Integer> tops) {
         StringBuilder datasetCSV = BuildDatasetCSV(
+                fileType,
                 benignFolder,
                 maliciousFolder,
                 destinationFolder,
