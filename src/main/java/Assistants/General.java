@@ -37,6 +37,7 @@ public class General {
     /**
      * return integer number in a string with ',' seperation on thousands
      *
+     * @param number the number
      * @return string which represent the given integer number with ','
      * seperation on thousands
      */
