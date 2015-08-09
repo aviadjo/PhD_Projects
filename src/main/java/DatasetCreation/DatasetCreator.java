@@ -33,6 +33,7 @@ public class DatasetCreator {
     /**
      * Return CSV string which represent the dataset
      *
+     * @param fileType the file type of the files in the collection
      * @param ClassAdirectory folder of elements from class A
      * @param ClassBdirectory folder of elements from class B
      * @param featureExtractor The feature extractor to use
@@ -83,6 +84,7 @@ public class DatasetCreator {
         Console.PrintLine(String.format("Benign elements: %s", GetStringNumber(classAelements.size())));
         Console.PrintLine(String.format("Malicious elements: %s", GetStringNumber(classBelements.size())));
         Console.PrintLine(String.format("Total elements: %s", GetStringNumber(totalElementsNum)));
+        Console.PrintLine(String.format("Top features selection: %s", GetStringNumber(topFeatures)));
 
         //FEATURE EXTRACTION
         MasterFeatureExtractor<String> MFE = new MasterFeatureExtractor<>();
@@ -95,7 +97,7 @@ public class DatasetCreator {
         Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABfeatures.size())));
         MapDB.m_db_off_heap_FE.commit();
 
-        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), classAelements.size(), classBelements.size(), fileType, featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
+        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), fileType,classAelements.size(), classBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
 
         //PRINT FILE - DOCUMENT FREQUENCY
         if (printFileFeaturesFrequencies) {

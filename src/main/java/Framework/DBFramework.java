@@ -33,7 +33,7 @@ public class DBFramework {
     public static final String m_maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
     public static final String m_testFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\DocX_ClassB_20";
     public static final String m_destinationFolder = "D:\\Dropbox\\DATASETS";
-    public static final String m_datasetFilenameFormat = "Dataset_%s_Files(B%s_M%s)_Type(%s)_FE(%s)_FS(%s)_Rep(%s)";
+    public static final String m_datasetFilenameFormat = "Dataset_%s_Type(%s)_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)";
     public static final ArrayList<Integer> m_tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
     public static final String m_classificationModelsFolder = "";

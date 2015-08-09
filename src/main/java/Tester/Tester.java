@@ -5,6 +5,7 @@
  */
 package Tester;
 
+import DatasetCreation.DatasetCSVBuilder;
 import Detectors.Detector;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.FeatureExtractorOOXMLStructuralPaths;
@@ -13,6 +14,8 @@ import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
 import FeatureSelection.AFeatureSelector;
 import FeatureSelection.FeatureSelectorInfoGainRatio;
 import Framework.DBFramework;
+import static Framework.DBFramework.m_tops;
+import IO.FileReader;
 import IO.FileWriter;
 import Weka.Weka.WekaClassifier;
 import java.util.ArrayList;
@@ -28,16 +31,17 @@ public class Tester {
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
         //GeneratePDFDatasets();
-        boolean nnSFExtraction = false;
-        GenerateDocxDatasets1(nnSFExtraction);
-        GenerateDocxDatasets2(nnSFExtraction);
-        GenerateDocxDatasets3(nnSFExtraction);
-        GenerateDocxDatasets4(nnSFExtraction);
-        nnSFExtraction = true;
-        GenerateDocxDatasets1(nnSFExtraction);
-        GenerateDocxDatasets2(nnSFExtraction);
-        GenerateDocxDatasets3(nnSFExtraction);
-        GenerateDocxDatasets4(nnSFExtraction);
+        GenerateTops();
+        //boolean nnSFExtraction = false;
+        //GenerateDocxDatasets1(nnSFExtraction);
+        //GenerateDocxDatasets2(nnSFExtraction);
+        //GenerateDocxDatasets3(nnSFExtraction);
+        //GenerateDocxDatasets4(nnSFExtraction);
+        //nnSFExtraction = true;
+        //GenerateDocxDatasets1(nnSFExtraction);
+        //GenerateDocxDatasets2(nnSFExtraction);
+        //GenerateDocxDatasets3(nnSFExtraction);
+        //GenerateDocxDatasets4(nnSFExtraction);
         //TestCode();
         //TestSerilizer();
         //TestDetectionDOCX();
@@ -286,6 +290,12 @@ public class Tester {
             sb.append(entry.getKey()).append(",").append("\n");
         }
         FileWriter.WriteFile(sb.toString(), destFilePath);
+    }
+
+    private static void GenerateTops() {
+        String dataCSVfilePath = "C:\\Users\\Aviad\\Desktop\\Fisher Score\\Dataset_2015.07.24_14.21.15_Files(B16108_M830)_Type(docx)_FE(OOXML Structural Paths)_FS(Fisher Score)_Rep(TFIDF)_u_Top(2000).csv";
+        StringBuilder datasetCSV = new StringBuilder(FileReader.ReadFile(dataCSVfilePath));
+        DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, "C:\\Users\\Aviad\\Desktop\\Fisher Score", "Dataset_2015.07.24_14.21.15_Files(B16108_M830)_Type(docx)_FE(OOXML Structural Paths)_FS(Fisher Score)_Rep(TFIDF)", false, true);
     }
 
 }
