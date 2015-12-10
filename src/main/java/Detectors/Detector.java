@@ -29,13 +29,30 @@ import weka.core.Instances;
  */
 public class Detector {
 
-    public static WekaTrainedClassifier GetTrainedClassifier(
+    public static void CreateAndSaveDetector(
+            String traningsetCSVFilePath,
+            String selectedFeaturesSerializedFilePath,
+            AFeatureExtractor<String> featureExtractor,
+            AFeatureSelector featureSelector,
+            FeatureRepresentation featureRepresentation,
+            WekaClassifier wekaClassifier,
+            String description,
+            double classificationThreshold,
+            String saveToDestinationPath
+    ) {
+        WekaTrainedClassifier trainedClassifier = GetTrainedClassifier(wekaClassifier, traningsetCSVFilePath, selectedFeaturesSerializedFilePath, featureExtractor, featureSelector, featureRepresentation, description, classificationThreshold);
+        trainedClassifier.SaveToDisk(saveToDestinationPath);
+    }
+
+    private static WekaTrainedClassifier GetTrainedClassifier(
             WekaClassifier wekaClassifier,
             String traningsetCSVFilePath,
             String selectedFeaturesSerializedFilePath,
             AFeatureExtractor<String> featureExtractor,
             AFeatureSelector featureSelector,
-            FeatureRepresentation featureRepresentation
+            FeatureRepresentation featureRepresentation,
+            String description,
+            double classificationThreshold
     ) {
         String csvDataset = FileReader.ReadFile(traningsetCSVFilePath);
         Instances trainset = Weka.GetInstancesFromCSV(csvDataset);
@@ -50,20 +67,7 @@ public class Detector {
         );
 
         Classifier classifier = Weka.GetClassifier(wekaClassifier);
-        return new WekaTrainedClassifier(classifier, trainset, datasetProperties);
-    }
-
-    public static void GenerateAndSaveDetector(
-            String traningsetCSVFilePath,
-            String selectedFeaturesSerializedFilePath,
-            AFeatureExtractor<String> featureExtractor,
-            AFeatureSelector featureSelector,
-            FeatureRepresentation featureRepresentation,
-            WekaClassifier wekaClassifier,
-            String saveToDestinationPath
-    ) {
-        WekaTrainedClassifier trainedClassifier = GetTrainedClassifier(wekaClassifier, traningsetCSVFilePath, selectedFeaturesSerializedFilePath, featureExtractor, featureSelector, featureRepresentation);
-        trainedClassifier.SaveToDisk(saveToDestinationPath);
+        return new WekaTrainedClassifier(classifier, trainset, datasetProperties, description, classificationThreshold);
     }
 
     public static void ApplyDetectorToTestFolder(String wekaTrainedClassifierFilePath, String testFolder) {

@@ -97,11 +97,11 @@ public class DatasetCreator {
         Console.PrintLine(String.format("Total unique features: %s", GetStringNumber(classesABfeatures.size())));
         MapDB.m_db_off_heap_FE.commit();
 
-        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), fileType,classAelements.size(), classBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
+        m_datasetFilename = String.format(datasetFilenameFormat, General.GetTimeStamp(), fileType, classAelements.size(), classBelements.size(), featureExtractor.GetName(), featureSelector.GetName(), featureRepresentation.toString());
 
-        //PRINT FILE - DOCUMENT FREQUENCY
+        //PRINT FILE - Features Document Frequencies
         if (printFileFeaturesFrequencies) {
-            PrintCSVFileFeaturesFrequencies(classesABfeatures, destinationFolderPath);
+            PrintCSVFileFeaturesDocumentFrequencies(classesABfeatures, destinationFolderPath);
         }
 
         //FEATURE SELECTION
@@ -109,7 +109,7 @@ public class DatasetCreator {
         ArrayList<Pair<String, Integer>> selectedFeatures = featureSelector.SelectTopFeatures(classesABfeatures, classAelements.size(), classBelements.size(), topFeatures, printSelectedFeaturesScore);
 
         //PRINT FILE - SELECTED FEATURES
-        PrintCSVFileSelectedFeatures(selectedFeatures, destinationFolderPath);
+        PrintCSVFileSelectedFeatures(selectedFeatures, classesABfeatures, destinationFolderPath);
         SerializeSelectedFeatures(selectedFeatures, destinationFolderPath);
 
         //DATASET CREATION
@@ -143,9 +143,9 @@ public class DatasetCreator {
      * @param destinationFolderPath path of the destination folder to print the
      * selected features file to
      */
-    private static void PrintCSVFileFeaturesFrequencies(Map<String, int[]> GetFeaturesDocumentFrequenciesCSV, String destinationFolderPath) {
+    private static void PrintCSVFileFeaturesDocumentFrequencies(Map<String, int[]> featuresDocumentFrequencies, String destinationFolderPath) {
         String featuresDocumentFrequenciesFilePath = destinationFolderPath + "\\" + m_datasetFilename + "_FeaturesDF" + ".csv";
-        StringBuilder sb = DatasetCSVBuilder.GetFeaturesDocumentFrequenciesCSV(GetFeaturesDocumentFrequenciesCSV);
+        StringBuilder sb = DatasetCSVBuilder.GetFeaturesDocumentFrequenciesCSV(featuresDocumentFrequencies);
         FileWriter.WriteFile(sb.toString(), featuresDocumentFrequenciesFilePath);
         Console.PrintLine(String.format("Features Document Frequencies saved to: %s", featuresDocumentFrequenciesFilePath));
     }
@@ -154,11 +154,13 @@ public class DatasetCreator {
      * Print CSV file contain list of selected features
      *
      * @param selectedFeatures ArrayList of selected features selected features
+     * @param featuresDocumentFrequencies all features document frequencies
+     * (Benign, Malicious)
      * @param destinationFolderPath path of the destination folder to print the
      * selected features file to
      */
-    private static void PrintCSVFileSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, String destinationFolderPath) {
-        StringBuilder sb = DatasetCSVBuilder.GetSelectedFeaturesCSV(selectedFeatures);
+    private static void PrintCSVFileSelectedFeatures(ArrayList<Pair<String, Integer>> selectedFeatures, Map<String, int[]> featuresDocumentFrequencies, String destinationFolderPath) {
+        StringBuilder sb = DatasetCSVBuilder.GetSelectedFeaturesCSV(selectedFeatures, featuresDocumentFrequencies);
         String featuresFilePath = String.format("%s\\%s__%s(%s).csv", destinationFolderPath, m_datasetFilename, "SelectedFeatures", selectedFeatures.size());
         FileWriter.WriteFile(sb.toString(), featuresFilePath);
         Console.PrintLine(String.format("Selected Features saved to: %s", featuresFilePath));

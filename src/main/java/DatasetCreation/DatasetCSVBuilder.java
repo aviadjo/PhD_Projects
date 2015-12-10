@@ -261,15 +261,21 @@ public class DatasetCSVBuilder<T> {
      * Print CSV string contain list of selected features
      *
      * @param selectedFeatures ArrayList of selected features selected features
+     * @param featuresDocumentFrequencies all features document frequencies
+     * (Benign, Malicious)
      * @return StringBuilder
      */
-    public static StringBuilder GetSelectedFeaturesCSV(ArrayList<Pair<String, Integer>> selectedFeatures) {
+    public static StringBuilder GetSelectedFeaturesCSV(ArrayList<Pair<String, Integer>> selectedFeatures, Map<String, int[]> featuresDocumentFrequencies) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#,Feature,DocumentFrequency\n");
+        sb.append("#,Feature,InBenignFiles,InMaliciousFiles,Total\n");
         Pair pair;
+        String feature;
+        int[] benignMaliciousFrequencies;
         for (int i = 0; i < selectedFeatures.size(); i++) {
             pair = selectedFeatures.get(i);
-            sb.append(String.format("f%s,%s,%s", i + 1, pair.getKey(), pair.getValue())).append("\n");
+            feature = pair.getKey().toString();
+            benignMaliciousFrequencies = featuresDocumentFrequencies.get(feature);
+            sb.append(String.format("f%s,%s,%s,%s,%s", i + 1, feature, benignMaliciousFrequencies[0], benignMaliciousFrequencies[1], pair.getValue())).append("\n");
         }
         return sb;
     }

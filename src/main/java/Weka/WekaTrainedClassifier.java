@@ -23,12 +23,16 @@ public class WekaTrainedClassifier implements Serializable {
     private final String m_classifierName;
     private final WekaDatasetProperties m_datasetProperties;
     private final String m_ID;
+    private final String m_description;
+    private double m_classificationThreshold;
 
-    public WekaTrainedClassifier(Classifier classifier, Instances dataset, WekaDatasetProperties datasetProperties) {
+    public WekaTrainedClassifier(Classifier classifier, Instances dataset, WekaDatasetProperties datasetProperties, String description, double classificationThreshold) {
         m_classifier = Weka.TrainClassifier(classifier, dataset);
         m_classifierName = Weka.GetClassifierName(classifier);
         m_datasetProperties = datasetProperties;
-        m_ID = SetID();
+        m_description = description;
+        SetClassificationThreshold(classificationThreshold);
+        m_ID = GenerateID();
     }
 
     /**
@@ -59,18 +63,21 @@ public class WekaTrainedClassifier implements Serializable {
     }
 
     /**
-     * Set the ID of this object
+     * return the classifier description includes the targeted type
      *
+     * @return the classifier description includes the targeted type
      */
-    private String SetID() {
-        return String.format("WekaTrainedClassifier(%s)_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)_Top(%s)",
-                GetClassifierName(),
-                m_datasetProperties.GetBenignNum(),
-                m_datasetProperties.GetMaliciousNum(),
-                m_datasetProperties.GetFeatureExtractor().GetName(),
-                m_datasetProperties.GetFeatureSelector().GetName(),
-                m_datasetProperties.GetFeatureRepresentation().toString(),
-                m_datasetProperties.GetTopFeatures());
+    public String GetDescription() {
+        return m_description;
+    }
+
+    /**
+     * return the classification threshold
+     *
+     * @return the classification threshold
+     */
+    public double GetClassificationTreshold() {
+        return m_classificationThreshold;
     }
 
     /**
@@ -135,6 +142,34 @@ public class WekaTrainedClassifier implements Serializable {
      */
     public double[] GetDistribution(Instance instance) {
         return Weka.GetDistribution(m_classifier, instance);
+    }
+
+    /**
+     * Set the ID of this object
+     *
+     */
+    private String GenerateID() {
+        return String.format("WekaTrainedClassifier(%s)_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)_Top(%s)",
+                GetClassifierName(),
+                m_datasetProperties.GetBenignNum(),
+                m_datasetProperties.GetMaliciousNum(),
+                m_datasetProperties.GetFeatureExtractor().GetName(),
+                m_datasetProperties.GetFeatureSelector().GetName(),
+                m_datasetProperties.GetFeatureRepresentation().toString(),
+                m_datasetProperties.GetTopFeatures());
+    }
+
+    /**
+     * Set the classifiers description
+     *
+     * @param threshold
+     */
+    public final void SetClassificationThreshold(double threshold) {
+        if (threshold > 0 && threshold < 1) {
+            m_classificationThreshold = threshold;
+        } else {
+            m_classificationThreshold = 0.5;
+        }
     }
 
     /**

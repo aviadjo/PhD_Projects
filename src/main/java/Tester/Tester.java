@@ -31,7 +31,7 @@ public class Tester {
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
         //GeneratePDFDatasets();
-        GenerateTops();
+        //GenerateTops();
         //boolean nnSFExtraction = false;
         //GenerateDocxDatasets1(nnSFExtraction);
         //GenerateDocxDatasets2(nnSFExtraction);
@@ -45,8 +45,8 @@ public class Tester {
         //TestCode();
         //TestSerilizer();
         //TestDetectionDOCX();
-        //CreateDetectorPDF();
-        //CreateDetectorDOCX();
+        CreateDetectorPDF();
+        CreateDetectorDOCX();
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
         //TestDetectionPDF();
@@ -239,14 +239,18 @@ public class Tester {
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         WekaClassifier wekaClassifier = WekaClassifier.J48;
+        String description = "Detection of Malicious PDF files";
+        double classificationTreshold = 0.5;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
-        Detector.GenerateAndSaveDetector(
+        Detector.CreateAndSaveDetector(
                 traningsetCSVFilePath,
                 selectedFeaturesSerializedFilePath,
                 featureExtractor,
                 featureSelector,
                 featureRepresentation,
                 wekaClassifier,
+                description,
+                classificationTreshold,
                 saveToDestinationPath
         );
     }
@@ -258,14 +262,18 @@ public class Tester {
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
         WekaClassifier wekaClassifier = WekaClassifier.J48;
+        String description = "Detection of Malicious DOCX files";
+        double classificationTreshold = 0.5;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
-        Detector.GenerateAndSaveDetector(
+        Detector.CreateAndSaveDetector(
                 traningsetCSVFilePath,
                 selectedFeaturesSerializedFilePath,
                 featureExtractor,
                 featureSelector,
                 featureRepresentation,
                 wekaClassifier,
+                description,
+                classificationTreshold,
                 saveToDestinationPath
         );
     }
@@ -293,9 +301,9 @@ public class Tester {
     }
 
     private static void GenerateTops() {
-        String dataCSVfilePath = "C:\\Users\\Aviad\\Desktop\\Fisher Score\\Dataset_2015.07.24_14.21.15_Files(B16108_M830)_Type(docx)_FE(OOXML Structural Paths)_FS(Fisher Score)_Rep(TFIDF)_u_Top(2000).csv";
+        String dataCSVfilePath = "C:\\Users\\Aviadjo\\Desktop\\A\\Dataset_2015.08.09_12.10.35_Type(docx)_Files(B16108_M830)_FE(OOXML Structural Paths NN)_FS(Fisher Score)_Rep(TFIDF).csv";
         StringBuilder datasetCSV = new StringBuilder(FileReader.ReadFile(dataCSVfilePath));
-        DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, "C:\\Users\\Aviad\\Desktop\\Fisher Score", "Dataset_2015.07.24_14.21.15_Files(B16108_M830)_Type(docx)_FE(OOXML Structural Paths)_FS(Fisher Score)_Rep(TFIDF)", false, true);
+        DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, "C:\\Users\\Aviadjo\\Desktop\\A\\", "Dataset_2015.08.09_12.10.35_Type(docx)_Files(B16108_M830)_FE(OOXML Structural Paths NN)_FS(Fisher Score)_Rep(TFIDF)", false, true);
     }
 
 }
