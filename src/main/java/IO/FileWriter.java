@@ -54,13 +54,28 @@ public class FileWriter {
      * Write a given string to file
      *
      * @param text some text
-     * @param destination_file_path the path of the destination file
+     * @param destinationFilePath the path of the destination file
      */
-    public static void WriteFile(String text, String destination_file_path) {
+    public static void WriteFile(String text, String destinationFilePath) {
         try {
-            FileUtils.writeStringToFile(new File(destination_file_path), text);
+            FileUtils.writeStringToFile(new File(destinationFilePath), text);
         } catch (IOException e) {
             Console.PrintException("Error writing string to file", e);
         }
     }
+
+    /**
+     * Append a given string to file
+     *
+     * @param text some text
+     * @param destinationFilePath the path of the destination file
+     */
+    public static void AppendFile(String text, String destinationFilePath) {
+        try (java.io.FileWriter fw = new java.io.FileWriter(destinationFilePath, true)) {
+            fw.write(text);
+        } catch (IOException ex) {
+            Console.PrintException(String.format("Error appending text to file: %s", destinationFilePath), ex);
+        }
+    }
+
 }

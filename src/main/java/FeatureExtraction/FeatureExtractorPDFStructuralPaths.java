@@ -48,8 +48,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         try {
             switch (m_parserType) {
                 case Sequential:
-                    try (PDDocument pdf = PDDocument.load(pdfFile)) {
-                        COSDocument pdfDocument = pdf.getDocument();
+                    try (PDDocument pdf = PDDocument.load(pdfFile); COSDocument pdfDocument = pdf.getDocument()) {
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     } catch (Exception e) {
@@ -59,8 +58,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                 case NonSequential:
                     File randomAccessFile = new File(filePath + ".ra");
                     RandomAccess randomAccess = new RandomAccessFile(randomAccessFile, "rwd");
-                    try (PDDocument pdf = PDDocument.loadNonSeq(pdfFile, randomAccess)) {
-                        COSDocument pdfDocument = pdf.getDocument();
+                    try (PDDocument pdf = PDDocument.loadNonSeq(pdfFile, randomAccess); COSDocument pdfDocument = pdf.getDocument()) {
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
                         //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     } catch (Exception e) {
@@ -70,12 +68,18 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                     }
                     break;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             Console.PrintException(String.format("Error parsing PDF file: '%s'", filePath), e);
         }
         return structuralPaths;
     }
 
+    /**
+     * Return true if the PDF is compatible
+     *
+     * @param filePath pdf file path
+     * @return true if the PDF is compatible
+     */
     public boolean IsCompatiblePDF(String filePath) {
         File pdfFile = new File(filePath);
         try (PDDocument pdf = PDDocument.load(pdfFile)) {
@@ -83,6 +87,36 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /**
+     * Return true if the PDF is compatible
+     *
+     * @param filePath pdf file path
+     * @return true if the PDF is compatible
+     */
+    public boolean IsCompatiblePDF2(String filePath) {
+        File pdfFile = new File(filePath);
+        Map<String, Integer> structuralPaths = new HashMap<>();
+        HashSet<COSBase> visitedObjects = new HashSet<>();
+        boolean compatible = true;
+        PDDocument pdf = new PDDocument();
+        COSDocument pdfDocument = new COSDocument();
+        try {
+            pdf = PDDocument.load(pdfFile);
+            pdfDocument = pdf.getDocument();
+            ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
+        } catch (IOException e) {
+            compatible = false;
+        } finally {
+            try {
+                pdf.close();
+                pdfDocument.close();
+            } catch (IOException e) {
+                Console.PrintException(String.format("Error closing PDF file: '%s'", filePath), e);
+            }
+        }
+        return compatible;
     }
 
     /**
@@ -95,60 +129,64 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
      */
     private void ExtractPDFStructuralPathsRecursively(COSBase pdfObject, String pdfObjectName, String parentPath, Map<String, Integer> structuralPaths, HashSet<COSBase> visitedObjects) {
         if (pdfObject != null) {
-            String objectPath = String.format("%s\\%s", parentPath, pdfObjectName);
-            visitedObjects.add(pdfObject);
+            try {
+                String objectPath = String.format("%s\\%s", parentPath, pdfObjectName);
+                visitedObjects.add(pdfObject);
 
-            switch (pdfObject.getClass().getName().replace("org.apache.pdfbox.cos.", "")) {
-                case "COSNull":
-                    break;
-                case "COSUnread":
-                    break;
-                case "COSBoolean":
-                    break;
-                case "COSInteger":
-                    break;
-                case "COSFloat":
-                    break;
-                case "COSNumber":
-                    break;
-                case "COSString":
-                    break;
-                case "COSName":
-                    AddPDFStructuralPath(objectPath, structuralPaths);
-                    break;
-                case "COSDocument":
-                    break;
-                case "COSArray":
-                    for (int i = 0; i < ((COSArray) pdfObject).size(); i++) {
-                        if (!visitedObjects.contains(((COSArray) pdfObject).get(i))) {
-                            ExtractPDFStructuralPathsRecursively(((COSArray) pdfObject).get(i), ".", objectPath, structuralPaths, visitedObjects);
+                switch (pdfObject.getClass().getName().replace("org.apache.pdfbox.cos.", "")) {
+                    case "COSNull":
+                        break;
+                    case "COSUnread":
+                        break;
+                    case "COSBoolean":
+                        break;
+                    case "COSInteger":
+                        break;
+                    case "COSFloat":
+                        break;
+                    case "COSNumber":
+                        break;
+                    case "COSString":
+                        break;
+                    case "COSName":
+                        AddPDFStructuralPath(objectPath, structuralPaths);
+                        break;
+                    case "COSDocument":
+                        break;
+                    case "COSArray":
+                        for (int i = 0; i < ((COSArray) pdfObject).size(); i++) {
+                            if (!visitedObjects.contains(((COSArray) pdfObject).get(i))) {
+                                ExtractPDFStructuralPathsRecursively(((COSArray) pdfObject).get(i), ".", objectPath, structuralPaths, visitedObjects);
+                            }
                         }
-                    }
-                    break;
-                case "COSStreamArray":
-                    break;
-                case "COSStream":
-                    break;
-                case "COSDictionaryLateBinding":
-                    break;
-                case "COSDictionary":
-                    AddPDFStructuralPath(objectPath, structuralPaths);
-                    for (Map.Entry<COSName, COSBase> objectEntry : ((COSDictionary) pdfObject).entrySet()) {
-                        if (!visitedObjects.contains(objectEntry.getValue())) {
-                            ExtractPDFStructuralPathsRecursively(objectEntry.getValue(), objectEntry.getKey().getName(), objectPath, structuralPaths, visitedObjects);
-                        }
-                        /*if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {
+                        break;
+                    case "COSStreamArray":
+                        break;
+                    case "COSStream":
+                        break;
+                    case "COSDictionaryLateBinding":
+                        break;
+                    case "COSDictionary":
+                        AddPDFStructuralPath(objectPath, structuralPaths);
+                        for (Map.Entry<COSName, COSBase> objectEntry : ((COSDictionary) pdfObject).entrySet()) {
+                            if (!visitedObjects.contains(objectEntry.getValue())) {
+                                ExtractPDFStructuralPathsRecursively(objectEntry.getValue(), objectEntry.getKey().getName(), objectPath, structuralPaths, visitedObjects);
+                            }
+                            /*if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {
 
                      }*/
-                    }
-                    break;
-                case "COSObject":
-                    if (!visitedObjects.contains(((COSObject) pdfObject).getObject())) {
-                        ExtractPDFStructuralPathsRecursively(((COSObject) pdfObject).getObject(), pdfObjectName, parentPath, structuralPaths, visitedObjects);
-                    }
-                    break;
-                default:
-                    break;
+                        }
+                        break;
+                    case "COSObject":
+                        if (!visitedObjects.contains(((COSObject) pdfObject).getObject())) {
+                            ExtractPDFStructuralPathsRecursively(((COSObject) pdfObject).getObject(), pdfObjectName, parentPath, structuralPaths, visitedObjects);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } catch (Exception e) {
+                throw e;
             }
         }
     }

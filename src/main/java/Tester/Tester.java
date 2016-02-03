@@ -15,8 +15,11 @@ import FeatureSelection.AFeatureSelector;
 import FeatureSelection.FeatureSelectorInfoGainRatio;
 import Framework.DBFramework;
 import static Framework.DBFramework.m_tops;
+import IO.Console;
+import IO.Directories;
 import IO.FileReader;
 import IO.FileWriter;
+import IO.Files;
 import Weka.Weka.WekaClassifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,8 +48,8 @@ public class Tester {
         //TestCode();
         //TestSerilizer();
         //TestDetectionDOCX();
-        CreateDetectorPDF();
-        CreateDetectorDOCX();
+        ////CreateDetectorPDF();
+        ////CreateDetectorDOCX();
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
         //TestDetectionPDF();
@@ -304,6 +307,34 @@ public class Tester {
         String dataCSVfilePath = "C:\\Users\\Aviadjo\\Desktop\\A\\Dataset_2015.08.09_12.10.35_Type(docx)_Files(B16108_M830)_FE(OOXML Structural Paths NN)_FS(Fisher Score)_Rep(TFIDF).csv";
         StringBuilder datasetCSV = new StringBuilder(FileReader.ReadFile(dataCSVfilePath));
         DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, "C:\\Users\\Aviadjo\\Desktop\\A\\", "Dataset_2015.08.09_12.10.35_Type(docx)_Files(B16108_M830)_FE(OOXML Structural Paths NN)_FS(Fisher Score)_Rep(TFIDF)", false, true);
+    }
+
+    private static void PDFCompatibilityCheck() {
+        String sourceFolderPath = "Z:\\Collections\\CiteseerX Scanning\\Malicious Only";
+        //String sourceFolderPath = "D:\\TEST\\TEST";
+        ArrayList<String> files = Directories.GetDirectoryFilesPaths(sourceFolderPath);
+        FeatureExtractorPDFStructuralPaths<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
+
+        int loopCounter = 0;
+        int compatibleCounter = 0;
+        int incompatibleCounter = 0;
+        String fileName;
+        boolean compatible;
+        for (String filePath : files) {
+            loopCounter++;
+            fileName = Files.GetFileNameWithExtension(filePath);
+            compatible = featureExtractor.IsCompatiblePDF(filePath);
+            if (compatible) {
+                compatibleCounter++;
+            } else {
+                incompatibleCounter++;
+                //compatible = featureExtractor.IsCompatiblePDF(filePath);
+            }
+            Console.PrintLine(String.format("%s. %s - %s", loopCounter, fileName, compatible));
+        }
+
+        Console.PrintLine(String.format("Total files: %s", files.size()));
+        Console.PrintLine(String.format("Compatible file: %s", compatibleCounter));
     }
 
 }

@@ -84,11 +84,13 @@ public class DatasetCreator {
         Console.PrintLine(String.format("Benign elements: %s", GetStringNumber(classAelements.size())));
         Console.PrintLine(String.format("Malicious elements: %s", GetStringNumber(classBelements.size())));
         Console.PrintLine(String.format("Total elements: %s", GetStringNumber(totalElementsNum)));
+        Console.PrintLine(String.format("Feature Extraction: %s", featureExtractor.GetName()));
+        Console.PrintLine(String.format("Feature Selection: %s", featureSelector.GetName()));
+        Console.PrintLine(String.format("Feature Representation: %s", featureRepresentation.toString()));
         Console.PrintLine(String.format("Top features selection: %s", GetStringNumber(topFeatures)));
 
         //FEATURE EXTRACTION
         MasterFeatureExtractor<String> MFE = new MasterFeatureExtractor<>();
-        Console.PrintLine(String.format("Feature Extraction: %s", featureExtractor.GetName()));
         Map<String, Integer> classAfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classAelements, featureExtractor);
         Console.PrintLine(String.format("Benign unique features: %s", GetStringNumber(classAfeatures.size())));
         Map<String, Integer> classBfeatures = MFE.ExtractFeaturesFrequenciesFromElements(classBelements, featureExtractor);
