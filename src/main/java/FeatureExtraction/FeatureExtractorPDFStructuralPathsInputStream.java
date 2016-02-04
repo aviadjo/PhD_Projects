@@ -5,7 +5,6 @@
  */
 package FeatureExtraction;
 
-import FeatureExtraction.AFeatureExtractor;
 import IO.Console;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +28,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  */
 public class FeatureExtractorPDFStructuralPathsInputStream<T> extends AFeatureExtractor<T> {
 
+    private final long serialVersionUID = 1L;
     public ParserType m_parserType;
 
     public FeatureExtractorPDFStructuralPathsInputStream(ParserType parserType) {

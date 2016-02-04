@@ -6,7 +6,6 @@
 package FeatureExtraction;
 
 import IO.Console;
-import FeatureExtraction.AFeatureExtractor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -27,6 +26,7 @@ import org.w3c.dom.NodeList;
  */
 public class FeatureExtractorOOXMLStructuralPaths<T> extends AFeatureExtractor<T> {
 
+    private final long serialVersionUID = 1L;
     private final boolean m_ignoreNumbersInFeatures;
 
     public FeatureExtractorOOXMLStructuralPaths(boolean ignoreNumbersInFeatures) {

@@ -5,7 +5,6 @@
  */
 package FeatureExtraction;
 
-import FeatureExtraction.AFeatureExtractor;
 import IO.Console;
 import IO.Directories;
 import java.nio.file.Files;
@@ -30,6 +29,7 @@ import org.w3c.dom.NodeList;
  */
 public class FeatureExtractorOOXMLStructuralPathsDisk<T> extends AFeatureExtractor<T> {
 
+    private final long serialVersionUID = 1L;
     private String m_OfficeFileTempFolderPath = "";
     private final boolean m_ignoreNumbersInFeatures;
 

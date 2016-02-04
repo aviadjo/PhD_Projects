@@ -5,7 +5,6 @@
  */
 package FeatureExtraction;
 
-import FeatureExtraction.AFeatureExtractor;
 import IO.FileReader;
 import java.io.File;
 import java.util.HashMap;
@@ -17,7 +16,8 @@ import java.util.Map;
  */
 public class FeatureExtractorNgramsString<T> extends AFeatureExtractor<T> {
 
-    private final int m_grams; //the gram size to be used    
+    private final long serialVersionUID = 1L;
+    private final int m_grams; //the gram size to be used
     private final int m_skip; //the skip to be used
 
     public FeatureExtractorNgramsString(int gram_size, int skip) {

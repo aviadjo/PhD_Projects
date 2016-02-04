@@ -11,4 +11,5 @@ package FeatureExtraction;
  */
 public class FeatureExtractorRTFStructuralPaths<T> /*extends AFeatureExtractor<T>*/ {
 
+    private final long serialVersionUID = 1L;
 }

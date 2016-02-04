@@ -5,7 +5,6 @@
  */
 package FeatureExtraction;
 
-import FeatureExtraction.AFeatureExtractor;
 import IO.Console;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,6 +29,7 @@ import org.w3c.dom.NodeList;
  */
 public class FeatureExtractorOOXMLStructuralPathsInputStream<T> extends AFeatureExtractor<T> {
 
+    private final long serialVersionUID = 1L;
     private final boolean m_ignoreNumbersInFeatures;
 
     public FeatureExtractorOOXMLStructuralPathsInputStream(boolean ignoreNumbersInFeatures) {

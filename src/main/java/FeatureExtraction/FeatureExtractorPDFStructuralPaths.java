@@ -27,6 +27,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  */
 public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> {
 
+    private final long serialVersionUID = 1L;
     public ParserType m_parserType;
 
     public FeatureExtractorPDFStructuralPaths(ParserType parserType) {

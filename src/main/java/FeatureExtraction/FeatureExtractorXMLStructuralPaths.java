@@ -6,7 +6,6 @@
 package FeatureExtraction;
 
 import IO.Console;
-import FeatureExtraction.AFeatureExtractor;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +22,8 @@ import org.xml.sax.SAXException;
  * @author Aviad
  */
 public class FeatureExtractorXMLStructuralPaths<T> extends AFeatureExtractor<T> {
+
+    private final long serialVersionUID = 1L;
 
     @Override
     public Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element) {

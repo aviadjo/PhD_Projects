@@ -6,7 +6,6 @@
 package FeatureExtraction;
 
 import IO.Console;
-import FeatureExtraction.AFeatureExtractor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,6 +22,8 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
  * @author Aviad
  */
 public class FeatureExtractorDocStreamPaths<T> extends AFeatureExtractor<T> {
+
+    private final long serialVersionUID = 1L;
 
     @Override
     public Map ExtractFeaturesFrequencyFromSingleElement(T element) {
@@ -51,16 +52,16 @@ public class FeatureExtractorDocStreamPaths<T> extends AFeatureExtractor<T> {
             Entry entry = entryIter.next();
             String entryName = entry.getName();
 
-            // Some entry names starts with binary value that are not printable - remove it 
+            // Some entry names starts with binary value that are not printable - remove it
             if (entryName.charAt(0) < 10) {
                 entryName = entryName.substring(1);
             }
 
-            // Recursively search for directory (storage) children 
+            // Recursively search for directory (storage) children
             if (entry instanceof DirectoryNode) {
                 GetStreamsPaths((DirectoryNode) entry, parentPath + "\\" + entryName, streamPaths);
             } else {
-                // Add stream path to set of paths 
+                // Add stream path to set of paths
                 String filePath = parentPath + "\\" + entryName;
                 AddStreamPath(filePath, streamPaths);
             }
