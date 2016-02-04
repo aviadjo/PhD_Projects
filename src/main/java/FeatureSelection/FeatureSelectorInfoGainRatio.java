@@ -5,9 +5,8 @@
  */
 package FeatureSelection;
 
-import IO.Console;
 import DataStructures.DataStructures;
-import FeatureSelection.AFeatureSelector;
+import IO.Console;
 import Math.Entropy;
 import Math.MathCalc;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import org.mapdb.Serializer;
  */
 public final class FeatureSelectorInfoGainRatio extends AFeatureSelector {
 
+    private final long serialVersionUID = 1L;
     private int m_Class_A_elements_num;
     private int m_Class_B_elements_num;
     private final SelectionMethod m_selectionMethod;
