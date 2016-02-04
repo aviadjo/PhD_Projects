@@ -20,6 +20,7 @@ import weka.core.Instances;
  */
 public class WekaDatasetProperties implements Serializable {
 
+    private final long serialVersionUID = 1L;
     private int m_benignNum;
     private int m_maliciousNum;
     private final int m_instancesNum;
