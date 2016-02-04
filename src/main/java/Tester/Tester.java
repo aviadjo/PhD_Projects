@@ -53,6 +53,7 @@ public class Tester {
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
         //TestDetectionPDF();
+        PDFCompatibilityCheck();
     }
 
     private static void GeneratePDFDatasets() {
@@ -310,7 +311,7 @@ public class Tester {
     }
 
     private static void PDFCompatibilityCheck() {
-        String sourceFolderPath = "Z:\\Collections\\CiteseerX Scanning\\Malicious Only";
+        String sourceFolderPath = "K:\\Collections\\CiteseerX Scanning\\Malicious Only";
         //String sourceFolderPath = "D:\\TEST\\TEST";
         ArrayList<String> files = Directories.GetDirectoryFilesPaths(sourceFolderPath);
         FeatureExtractorPDFStructuralPaths<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
