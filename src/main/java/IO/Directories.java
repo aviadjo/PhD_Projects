@@ -65,7 +65,8 @@ public class Directories {
     }
 
     /**
-     * Extract all the paths of the files and sub-folders of the given directory
+     * Extract all the paths of the files in given directory and its
+     * sub-directories
      *
      * @param directoryPath path of the destination directory to delete
      * @return true if the directory was deleted
@@ -73,11 +74,14 @@ public class Directories {
     public static ArrayList<String> GetDirectoryFilesPaths(String directoryPath) {
         ArrayList<String> directoryPaths = new ArrayList<>();
         try {
-            java.nio.file.Files.walk(Paths.get(directoryPath)).forEach(filePath -> {
-                directoryPaths.add(filePath.toString());
-            });
+            java.nio.file.Files
+                    .walk(Paths.get(directoryPath))
+                    .filter(filePath -> Files.IsFile(filePath.toString()))
+                    .forEach(filePath -> {
+                        directoryPaths.add(filePath.toString());
+                    });
         } catch (IOException e) {
-            Console.PrintException(String.format("Error getting directory paths: %s", directoryPath), e);
+            Console.PrintException(String.format("Error getting files' paths from directory: %s", directoryPath), e);
         }
         directoryPaths.remove(directoryPath);
         return directoryPaths;
@@ -91,16 +95,16 @@ public class Directories {
      * @return ArrayList<String> filed with the paths of the files in the given
      * folder
      */
-    private static ArrayList<String> GetFolderFilesPaths(String folder_path) {
-        ArrayList<String> files_paths_in_folder = new ArrayList<>();
-        File directory = new File(folder_path);
+    private static ArrayList<String> GetFolderFilesPaths(String folderPath) {
+        ArrayList<String> filesPaths = new ArrayList<>();
+        File directory = new File(folderPath);
         if (directory.exists()) {
-            File[] directory_files = directory.listFiles();
-            for (File file : directory_files) {
-                files_paths_in_folder.add(file.getPath());
+            File[] directoryFiles = directory.listFiles();
+            for (File file : directoryFiles) {
+                filesPaths.add(file.getPath());
             }
         }
-        return files_paths_in_folder;
+        return filesPaths;
     }
 
     /**
@@ -111,13 +115,13 @@ public class Directories {
      * @return ArrayList<File> filed with File objects represent the files in
      * the given folder
      */
-    public static ArrayList<File> GetFolderFiles(String folder_path) {
-        ArrayList<File> files_in_folder = new ArrayList<>();
-        File directory = new File(folder_path);
+    public static ArrayList<File> GetFolderFiles(String folderPath) {
+        ArrayList<File> filesPaths = new ArrayList<>();
+        File directory = new File(folderPath);
         if (directory.exists()) {
-            File[] directory_files = directory.listFiles();
-            files_in_folder.addAll(Arrays.asList(directory_files));
+            File[] directoryFiles = directory.listFiles();
+            filesPaths.addAll(Arrays.asList(directoryFiles));
         }
-        return files_in_folder;
+        return filesPaths;
     }
 }

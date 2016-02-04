@@ -11,6 +11,8 @@ package IO;
  */
 public class Console {
 
+    private static boolean m_outputToFile = false;
+
     /**
      * Print text to console
      *
@@ -24,6 +26,25 @@ public class Console {
     }
 
     public static void PrintException(String errorText, Exception exception) {
+        //
+        //Using Log4j - http://stackoverflow.com/questions/9362574/how-to-write-error-log-or-exception-into-file-in-java
+        //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
+
+        //StringBuilder sb = new StringBuilder();
+        //sb.append("\n");
+        //sb.append(String.format("Failure:   %s", errorText));
+        //if (exception != null) {
+        //    sb.append(String.format("Exception: %s:%s",
+        //            exception.getClass().getSimpleName(),
+        //            exception.getMessage()
+        //    ));
+        //}
+        //sb.append("\n");
+        //System.err.print(sb.toString());
+        //
+        //if (m_outputToFile){
+        //
+        //}
         System.err.println("");
         System.err.println(String.format("Failure:   %s", errorText));
         if (exception != null) {
@@ -33,7 +54,6 @@ public class Console {
             ));
         }
         System.err.println("");
-        //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     public static void PrintDebug(String text) {
