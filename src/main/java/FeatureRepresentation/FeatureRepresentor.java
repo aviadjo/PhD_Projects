@@ -11,6 +11,8 @@ package FeatureRepresentation;
  */
 public class FeatureRepresentor {
 
+    private final long serialVersionUID = 1L;
+
     public static enum FeatureRepresentation {
 
         Binary,
