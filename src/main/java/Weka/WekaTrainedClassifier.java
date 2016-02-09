@@ -5,6 +5,7 @@
  */
 package Weka;
 
+import IO.Console;
 import IO.Directories;
 import IO.Serializer;
 import java.io.Serializable;
@@ -149,10 +150,11 @@ public class WekaTrainedClassifier implements Serializable {
      *
      */
     private String GenerateID() {
-        return String.format("WekaTrainedClassifier(%s)_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)_Top(%s)",
+        return String.format("WekaTrainedClassifier(%s)_Files(B%s_M%s)_Type(%s)_FE(%s)_FS(%s)_Rep(%s)_Top(%s)",
                 GetClassifierName(),
                 m_datasetProperties.GetBenignNum(),
                 m_datasetProperties.GetMaliciousNum(),
+                m_datasetProperties.GetDatasetFilesType(),
                 m_datasetProperties.GetFeatureExtractor().GetName(),
                 m_datasetProperties.GetFeatureSelector().GetName(),
                 m_datasetProperties.GetFeatureRepresentation().toString(),
@@ -181,6 +183,9 @@ public class WekaTrainedClassifier implements Serializable {
     public void SaveToDisk(String destinationFolder) {
         if (Directories.IsDirectory(destinationFolder)) {
             Serializer.Serialize(this, destinationFolder + "\\" + m_ID);
+        } else {
+            Console.PrintLine("Error saving WekaTrainedClassifier serialized object to disk.");
+            Console.PrintLine(String.format("folder: '%s' does not exist!", destinationFolder));
         }
     }
 

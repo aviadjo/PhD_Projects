@@ -6,7 +6,7 @@
 package Tester;
 
 import DatasetCreation.DatasetCSVBuilder;
-import Detectors.Detector;
+import DetectorCreation.DetectorCreator;
 import FeatureExtraction.AFeatureExtractor;
 import FeatureExtraction.FeatureExtractorOOXMLStructuralPaths;
 import FeatureExtraction.FeatureExtractorPDFStructuralPaths;
@@ -53,7 +53,7 @@ public class Tester {
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
         //TestDetectionPDF();
-        PDFCompatibilityCheck();
+        //PDFCompatibilityCheck();
     }
 
     private static void GeneratePDFDatasets() {
@@ -246,8 +246,9 @@ public class Tester {
         String description = "Detection of Malicious PDF files";
         double classificationTreshold = 0.5;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
-        Detector.CreateAndSaveDetector(
+        DetectorCreator.CreateAndSaveDetector(
                 traningsetCSVFilePath,
+                "pdf",
                 selectedFeaturesSerializedFilePath,
                 featureExtractor,
                 featureSelector,
@@ -269,8 +270,9 @@ public class Tester {
         String description = "Detection of Malicious DOCX files";
         double classificationTreshold = 0.5;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
-        Detector.CreateAndSaveDetector(
+        DetectorCreator.CreateAndSaveDetector(
                 traningsetCSVFilePath,
+                "docx",
                 selectedFeaturesSerializedFilePath,
                 featureExtractor,
                 featureSelector,
@@ -283,14 +285,14 @@ public class Tester {
     }
 
     private static void TestDetectionDOCX() {
-        Detector.ApplyDetectorToTestFolder(
+        DetectorCreator.ApplyDetectorToTestFolder(
                 "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers\\WekaTrainedClassifier(J48)_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_Top(100).ser",
                 "D:\\TEST\\DocX_Malicious"
         );
     }
 
     private static void TestDetectionPDF() {
-        Detector.ApplyDetectorToTestFolder(
+        DetectorCreator.ApplyDetectorToTestFolder(
                 "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers\\WekaTrainedClassifier(J48)_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_Top(100).ser",
                 "D:\\TEST\\PDF_Benign"
         );

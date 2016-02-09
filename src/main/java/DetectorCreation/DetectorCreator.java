@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Detectors;
+package DetectorCreation;
 
 import FeatureExtraction.AFeatureExtractor;
 import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
@@ -27,10 +27,11 @@ import weka.core.Instances;
  *
  * @author Aviad
  */
-public class Detector {
+public class DetectorCreator {
 
     public static void CreateAndSaveDetector(
             String traningsetCSVFilePath,
+            String datasetFilesType,
             String selectedFeaturesSerializedFilePath,
             AFeatureExtractor<String> featureExtractor,
             AFeatureSelector featureSelector,
@@ -40,13 +41,14 @@ public class Detector {
             double classificationThreshold,
             String saveToDestinationPath
     ) {
-        WekaTrainedClassifier trainedClassifier = GetTrainedClassifier(wekaClassifier, traningsetCSVFilePath, selectedFeaturesSerializedFilePath, featureExtractor, featureSelector, featureRepresentation, description, classificationThreshold);
+        WekaTrainedClassifier trainedClassifier = GetTrainedClassifier(wekaClassifier, traningsetCSVFilePath, datasetFilesType, selectedFeaturesSerializedFilePath, featureExtractor, featureSelector, featureRepresentation, description, classificationThreshold);
         trainedClassifier.SaveToDisk(saveToDestinationPath);
     }
 
     private static WekaTrainedClassifier GetTrainedClassifier(
             WekaClassifier wekaClassifier,
             String traningsetCSVFilePath,
+            String datasetFilesType,
             String selectedFeaturesSerializedFilePath,
             AFeatureExtractor<String> featureExtractor,
             AFeatureSelector featureSelector,
@@ -60,6 +62,7 @@ public class Detector {
 
         WekaDatasetProperties datasetProperties = new WekaDatasetProperties(
                 trainset,
+                datasetFilesType,
                 selectedFeatures,
                 featureExtractor,
                 featureSelector,

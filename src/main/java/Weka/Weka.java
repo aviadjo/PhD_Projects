@@ -57,22 +57,29 @@ public class Weka {
         Classifier classifier = null;
         switch (classifierName) {
             case J48:
-                classifier = new J48();
+                J48 j48 = new J48();
+                classifier = j48;
                 break;
             case RandomForest:
-                classifier = new RandomForest();
+                RandomForest rf = new RandomForest();
+                rf.setNumTrees(500);
+                classifier = rf;
                 break;
             case NaiveBayes:
-                classifier = new NaiveBayes();
+                NaiveBayes nb = new NaiveBayes();
+                classifier = nb;
                 break;
             case BayesNet:
-                classifier = new BayesNet();
+                BayesNet bn = new BayesNet();
+                classifier = bn;
                 break;
             case Logistic:
-                classifier = new Logistic();
+                Logistic logistic = new Logistic();
+                classifier = logistic;
                 break;
             case LogitBoost:
-                classifier = new LogitBoost();
+                LogitBoost lb = new LogitBoost();
+                classifier = lb;
                 break;
         }
         return classifier;

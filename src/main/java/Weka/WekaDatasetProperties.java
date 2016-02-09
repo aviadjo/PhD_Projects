@@ -25,6 +25,7 @@ public class WekaDatasetProperties implements Serializable {
     private int m_maliciousNum;
     private final int m_instancesNum;
     private final int m_topFeatures;
+    private final String m_datasetFilesType;
     //private Map<Double, String> m_classes;
     private String[] m_classes;
     private final ArrayList<Pair<String, Integer>> m_selectedFeatures;
@@ -34,9 +35,10 @@ public class WekaDatasetProperties implements Serializable {
     private final AFeatureSelector m_featureSelector;
     private final FeatureRepresentation m_featureRepresentation;
 
-    public WekaDatasetProperties(Instances dataset, ArrayList<Pair<String, Integer>> selectedFeatures, AFeatureExtractor featureExtractor, AFeatureSelector featureSelector, FeatureRepresentation featureRepresentation) {
+    public WekaDatasetProperties(Instances dataset, String datasetFilesType, ArrayList<Pair<String, Integer>> selectedFeatures, AFeatureExtractor featureExtractor, AFeatureSelector featureSelector, FeatureRepresentation featureRepresentation) {
         SetClasses(dataset);
         SetBenignMaliciousInstancesNum(dataset);
+        m_datasetFilesType = datasetFilesType;
         m_instancesNum = dataset.numInstances();
         m_topFeatures = (dataset.classIndex() > 0) ? dataset.numAttributes() - 1 : dataset.numAttributes();
         m_selectedFeatures = selectedFeatures;
@@ -91,6 +93,10 @@ public class WekaDatasetProperties implements Serializable {
 
     public int GetTopFeatures() {
         return m_topFeatures;
+    }
+
+    public String GetDatasetFilesType() {
+        return m_datasetFilesType;
     }
 
     public ArrayList<Pair<String, Integer>> GetSelectedFeatures() {
