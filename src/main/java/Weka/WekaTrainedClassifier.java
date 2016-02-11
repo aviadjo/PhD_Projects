@@ -19,7 +19,8 @@ import weka.core.Instances;
  */
 public class WekaTrainedClassifier implements Serializable {
 
-    private final long serialVersionUID = 1L;
+    private final String m_wekaTrainedClassifierNameFormat = "WekaTrainedClassifier(%s)_Type(%s)_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)_Top(%s)";
+    private final long m_serialVersionUID = 1L;
     private final Classifier m_classifier;
     private final String m_classifierName;
     private final WekaDatasetProperties m_datasetProperties;
@@ -150,11 +151,11 @@ public class WekaTrainedClassifier implements Serializable {
      *
      */
     private String GenerateID() {
-        return String.format("WekaTrainedClassifier(%s)_Files(B%s_M%s)_Type(%s)_FE(%s)_FS(%s)_Rep(%s)_Top(%s)",
+        return String.format(m_wekaTrainedClassifierNameFormat,
                 GetClassifierName(),
+                m_datasetProperties.GetDatasetFilesType(),
                 m_datasetProperties.GetBenignNum(),
                 m_datasetProperties.GetMaliciousNum(),
-                m_datasetProperties.GetDatasetFilesType(),
                 m_datasetProperties.GetFeatureExtractor().GetName(),
                 m_datasetProperties.GetFeatureSelector().GetName(),
                 m_datasetProperties.GetFeatureRepresentation().toString(),

@@ -237,7 +237,8 @@ public class Tester {
     }
 
     private static void CreateDetectorPDF() {
-        String traningsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
+        String trainingsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
+        String trainingsetCSVFileType = "pdf";
         String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_FeaturesList.ser";
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
@@ -247,8 +248,8 @@ public class Tester {
         double classificationTreshold = 0.5;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
         DetectorCreator.CreateAndSaveDetector(
-                traningsetCSVFilePath,
-                "pdf",
+                trainingsetCSVFilePath,
+                trainingsetCSVFileType,
                 selectedFeaturesSerializedFilePath,
                 featureExtractor,
                 featureSelector,
@@ -261,7 +262,8 @@ public class Tester {
     }
 
     private static void CreateDetectorDOCX() {
-        String traningsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
+        String trainingsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
+        String trainingsetCSVFileType = "docx";
         String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.05.04_12.35.12_Files(B16108_M323)_FE(Docx Structural Paths)_FS(Information Gain)_Rep(Binary)_a_FeaturesList.ser";
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorOOXMLStructuralPaths<>(false);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
@@ -271,8 +273,8 @@ public class Tester {
         double classificationTreshold = 0.5;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";
         DetectorCreator.CreateAndSaveDetector(
-                traningsetCSVFilePath,
-                "docx",
+                trainingsetCSVFilePath,
+                trainingsetCSVFileType,
                 selectedFeaturesSerializedFilePath,
                 featureExtractor,
                 featureSelector,
