@@ -42,7 +42,9 @@ public class DetectorCreator {
             String saveToDestinationPath
     ) {
         WekaTrainedClassifier trainedClassifier = GetTrainedClassifier(wekaClassifier, traningsetCSVFilePath, datasetFilesType, selectedFeaturesSerializedFilePath, featureExtractor, featureSelector, featureRepresentation, description, classificationThreshold);
-        trainedClassifier.SaveToDisk(saveToDestinationPath);
+        if (trainedClassifier != null) {
+            trainedClassifier.SaveToDisk(saveToDestinationPath);
+        }
     }
 
     private static WekaTrainedClassifier GetTrainedClassifier(
@@ -56,21 +58,37 @@ public class DetectorCreator {
             String description,
             double classificationThreshold
     ) {
-        String csvDataset = FileReader.ReadFile(traningsetCSVFilePath);
-        Instances trainset = Weka.GetInstancesFromCSV(csvDataset);
-        ArrayList<Pair<String, Integer>> selectedFeatures = (ArrayList<Pair<String, Integer>>) Serializer.Deserialize(selectedFeaturesSerializedFilePath);
+        if (CheckParameters(traningsetCSVFilePath, selectedFeaturesSerializedFilePath)) {
+            String csvDataset = FileReader.ReadFile(traningsetCSVFilePath);
+            Instances trainset = Weka.GetInstancesFromCSV(csvDataset);
+            ArrayList<Pair<String, Integer>> selectedFeatures = (ArrayList<Pair<String, Integer>>) Serializer.Deserialize(selectedFeaturesSerializedFilePath);
 
-        WekaDatasetProperties datasetProperties = new WekaDatasetProperties(
-                trainset,
-                datasetFilesType,
-                selectedFeatures,
-                featureExtractor,
-                featureSelector,
-                featureRepresentation
-        );
+            WekaDatasetProperties datasetProperties = new WekaDatasetProperties(
+                    trainset,
+                    datasetFilesType,
+                    selectedFeatures,
+                    featureExtractor,
+                    featureSelector,
+                    featureRepresentation
+            );
 
-        Classifier classifier = Weka.GetClassifier(wekaClassifier);
-        return new WekaTrainedClassifier(classifier, trainset, datasetProperties, description, classificationThreshold);
+            Classifier classifier = Weka.GetClassifier(wekaClassifier);
+            return new WekaTrainedClassifier(classifier, trainset, datasetProperties, description, classificationThreshold);
+        }
+        return null;
+    }
+
+    private static boolean CheckParameters(String traningsetCSVFilePath, String selectedFeaturesSerializedFilePath) {
+        boolean valid = true;
+        if (!IO.Files.IsFile(traningsetCSVFilePath)) {
+            Console.PrintException(String.format("Training CSV file does not exist: %s", traningsetCSVFilePath), null);
+            valid = false;
+        }
+        if (!IO.Files.IsFile(selectedFeaturesSerializedFilePath)) {
+            Console.PrintException(String.format("Selected features serialized file does not exist: %s", selectedFeaturesSerializedFilePath), null);
+            valid = false;
+        }
+        return valid;
     }
 
     public static void ApplyDetectorToTestFolder(String wekaTrainedClassifierFilePath, String testFolder) {

@@ -8,6 +8,7 @@ package Weka;
 import Framework.DBFramework.Classification;
 import IO.Console;
 import Math.MathCalc;
+import static Weka.Weka.WekaClassifier.AdaBoost;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +22,7 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.Logistic;
+import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.meta.LogitBoost;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
@@ -44,7 +46,8 @@ public class Weka {
         NaiveBayes,
         BayesNet,
         Logistic,
-        LogitBoost
+        LogitBoost,
+        AdaBoost
     }
 
     /**
@@ -63,6 +66,7 @@ public class Weka {
             case RandomForest:
                 RandomForest rf = new RandomForest();
                 rf.setNumTrees(500);
+                rf.setNumExecutionSlots(8);
                 classifier = rf;
                 break;
             case NaiveBayes:
@@ -81,6 +85,11 @@ public class Weka {
                 LogitBoost lb = new LogitBoost();
                 classifier = lb;
                 break;
+            case AdaBoost:
+                AdaBoostM1 ab = new AdaBoostM1();
+                classifier = ab;
+                break;
+
         }
         return classifier;
     }
