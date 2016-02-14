@@ -28,8 +28,5 @@ public class DataStructures {
         return MapDB.GetMapStringDouble();
         //return GetMap();
     }
-    
-    private static Map GetMap(){
-        return new HashMap<>();
-    }
+
 }

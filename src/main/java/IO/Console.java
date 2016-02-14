@@ -6,6 +6,9 @@
 package IO;
 
 import Assistants.General;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 /**
  *
@@ -13,7 +16,7 @@ import Assistants.General;
  */
 public class Console {
 
-    private static final boolean m_outputToFile = true;
+    private static boolean m_outputToFile = true;
     private static final String m_outputLogFileFormat = "DatasetBuilderLog_%s.txt";
     private static final String m_outputLogFilePath = GetOutputLogFilePath();
 
@@ -27,6 +30,39 @@ public class Console {
     }
 
     /**
+     * Set output to file (true - output, false - do not output)
+     *
+     * @param bool true to output console to file
+     */
+    public static void SetOutputToFile(boolean bool) {
+        m_outputToFile = bool;
+    }
+
+    /**
+     * Redirect the console output to file
+     *
+     */
+    public static void RedirectOutputToFile() {
+        try {
+            System.setOut(new PrintStream(new FileOutputStream(m_outputLogFilePath)));
+            System.setErr(new PrintStream(new FileOutputStream(m_outputLogFilePath)));
+        } catch (FileNotFoundException ex) {
+            Console.PrintException(String.format("Error redirecting output to file: %s", m_outputLogFilePath), ex);
+        }
+        Console.PrintLine(String.format("Log file is written to: %s", m_outputLogFilePath));
+    }
+
+    /**
+     * return line separator string
+     *
+     * @return string which represent line separation
+     */
+    public static String GetLineSeparator() {
+        //return "\r\n";
+        return System.getProperty("line.separator");
+    }
+
+    /**
      * Print text to console
      *
      * @param text text to print
@@ -35,7 +71,7 @@ public class Console {
         System.err.println(text);
 
         if (m_outputToFile) {
-            FileWriter.AppendFile("\n" + text, m_outputLogFilePath);
+            FileWriter.AppendFile(text + GetLineSeparator(), m_outputLogFilePath);
         }
     }
 
@@ -84,16 +120,17 @@ public class Console {
      */
     public static void PrintExceptionSB(String errorText, Exception exception) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n");
+        sb.append(GetLineSeparator());
         sb.append(String.format("Failure:   %s", errorText));
         if (exception != null) {
-            sb.append("\n");
+            sb.append(GetLineSeparator());
             sb.append(String.format("Exception: %s:%s",
                     exception.getClass().getSimpleName(),
                     exception.getMessage()
             ));
+            sb.append(GetLineSeparator());
         }
-        sb.append("\n\n");
+        sb.append(GetLineSeparator());
         System.err.print(sb.toString());
 
         if (m_outputToFile) {

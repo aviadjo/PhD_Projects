@@ -328,7 +328,7 @@ public class Tester {
         for (String filePath : files) {
             loopCounter++;
             fileName = Files.GetFileNameWithExtension(filePath);
-            compatible = featureExtractor.IsCompatiblePDF(filePath);
+            compatible = featureExtractor.IsCompatiblePDF2(filePath);
             if (compatible) {
                 compatibleCounter++;
             } else {

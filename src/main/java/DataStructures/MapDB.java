@@ -13,6 +13,8 @@ import org.mapdb.*;
 /**
  *
  * @author Aviad
+ *
+ * TODO: Move to MapDB 3.0 - http://www.mapdb.org/
  */
 public class MapDB {
 
