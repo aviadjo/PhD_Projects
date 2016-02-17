@@ -77,44 +77,6 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         return structuralPaths;
     }
 
-    public boolean IsCompatiblePDF(File pdfFile) {
-        try (PDDocument pdf = PDDocument.load(pdfFile)) {
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Return true if the PDF is compatible
-     *
-     * @param filePath pdf file path
-     * @return true if the PDF is compatible
-     */
-    public boolean IsCompatiblePDF2(String filePath) {
-        File pdfFile = new File(filePath);
-        Map<String, Integer> structuralPaths = new HashMap<>();
-        HashSet<COSBase> visitedObjects = new HashSet<>();
-        boolean compatible = true;
-        PDDocument pdf = new PDDocument();
-        COSDocument pdfDocument = new COSDocument();
-        try {
-            pdf = PDDocument.load(pdfFile);
-            pdfDocument = pdf.getDocument();
-            ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
-        } catch (IOException e) {
-            compatible = false;
-        } finally {
-            try {
-                pdf.close();
-                pdfDocument.close();
-            } catch (IOException e) {
-                Console.PrintException(String.format("Error closing PDF file: '%s'", filePath), e);
-            }
-        }
-        return compatible;
-    }
-
     /**
      * Extract the PDF structural paths recursively
      *
@@ -183,6 +145,44 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         } else {
             structuralPaths.put(structuralPath, structuralPaths.get(structuralPath) + 1);
         }
+    }
+
+    public boolean IsCompatiblePDF(File pdfFile) {
+        try (PDDocument pdf = PDDocument.load(pdfFile)) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Return true if the PDF is compatible
+     *
+     * @param filePath pdf file path
+     * @return true if the PDF is compatible
+     */
+    public boolean IsCompatiblePDF2(String filePath) {
+        File pdfFile = new File(filePath);
+        Map<String, Integer> structuralPaths = new HashMap<>();
+        HashSet<COSBase> visitedObjects = new HashSet<>();
+        boolean compatible = true;
+        PDDocument pdf = new PDDocument();
+        COSDocument pdfDocument = new COSDocument();
+        try {
+            pdf = PDDocument.load(pdfFile);
+            pdfDocument = pdf.getDocument();
+            ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
+        } catch (IOException e) {
+            compatible = false;
+        } finally {
+            try {
+                pdf.close();
+                pdfDocument.close();
+            } catch (IOException e) {
+                Console.PrintException(String.format("Error closing PDF file: '%s'", filePath), e);
+            }
+        }
+        return compatible;
     }
 
     /*private class PDFObject {
