@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  *
  * @author Aviad
- * @param <T>
+ * @param <T> An element used by the feature extractor
  */
 public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T>, Serializable {
 
@@ -26,6 +26,10 @@ public abstract class AFeatureExtractor<T> implements IFeatureExtractor<T>, Seri
     @Override
     public abstract Map<String, Integer> ExtractFeaturesFrequencyFromSingleElement(T element);
 
+    /**
+     *
+     * @return the features extractor name
+     */
     @Override
     public abstract String GetName();
 }
