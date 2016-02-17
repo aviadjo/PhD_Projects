@@ -5,7 +5,6 @@
  */
 package IO;
 
-import Console.Console;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,16 +28,15 @@ public class Serializer {
      * @param destinationFilename destination file name (serialized object file)
      * @return true if the given object was serialized successfully
      */
-    public static boolean Serialize(Object object, String destinationFolder, String destinationFilename) {
+    public static boolean Serialize(Object object, String serializedFilePath) {
         boolean serializedSuccessfully = false;
-        if (Directories.IsDirectory(destinationFolder)) {
-            String serializedFilename = String.format("%s\\%s.%s", destinationFolder, destinationFilename, m_serializedFileExtension);
-            try (FileOutputStream fos = new FileOutputStream(serializedFilename); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(object);
-                serializedSuccessfully = true;
-            } catch (IOException ex) {
-                Console.PrintLine(String.format("Error serilizing object '%s': %s", destinationFilename, ex.getMessage()), true, false);
-            }
+        serializedFilePath += "." + m_serializedFileExtension;
+        try (FileOutputStream fos = new FileOutputStream(serializedFilePath); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(object);
+            serializedSuccessfully = true;
+            Console.PrintLine(String.format("%s was serialized and saved to: %s", object.getClass().getSimpleName(), serializedFilePath));
+        } catch (IOException ex) {
+            Console.PrintException(String.format("Error serilizing object '%s'", serializedFilePath), ex);
         }
         return serializedSuccessfully;
     }
@@ -51,17 +49,17 @@ public class Serializer {
      * @param deleteSerializedFile whether to delete the serialized file
      * @return Deserialized object
      */
-    public static Object Deserialize(String serializedFilePath, boolean deleteSerializedFile) {
+    public static Object Deserialize(String serializedFilePath/*, boolean deleteSerializedFile*/) {
         Object serialized = null;
         if (Files.IsFile(serializedFilePath)) {
             try (FileInputStream fin = new FileInputStream(serializedFilePath); ObjectInputStream ois = new ObjectInputStream(fin)) {
                 serialized = ois.readObject();
             } catch (IOException | ClassNotFoundException ex) {
-                Console.PrintLine(String.format("Error deserilizing file '%s': %s", serializedFilePath, ex.getMessage()), true, false);
+                Console.PrintException(String.format("Error deserilizing file '%s'", serializedFilePath), ex);
             }
-            if (deleteSerializedFile) {
-                Files.DeleteFile(serializedFilePath);
-            }
+            /*if (deleteSerializedFile) {
+             Files.DeleteFile(serializedFilePath);
+             }*/
         }
         return serialized;
     }
