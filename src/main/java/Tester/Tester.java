@@ -33,7 +33,7 @@ public class Tester {
 
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
-        //GeneratePDFDatasets();
+        GeneratePDFDatasets();
         //GenerateTops();
         //boolean nnSFExtraction = false;
         //GenerateDocxDatasets1(nnSFExtraction);
@@ -48,7 +48,7 @@ public class Tester {
         //TestCode();
         //TestSerilizer();
         //TestDetectionDOCX();
-        ////CreateDetectorPDF();
+        //CreateDetectorPDF();
         ////CreateDetectorDOCX();
         //TestDetectionPDF();
         //TestUnzipFileInMemory();
@@ -57,8 +57,8 @@ public class Tester {
     }
 
     private static void GeneratePDFDatasets() {
-        String benignFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\PDF_ClassA";
-        String maliciousFolder = "D:\\Dropbox\\TESTS\\FeatureExtractionData\\PDF_ClassB";
+        String benignFolder = "D:\\TEST";
+        String maliciousFolder = "D:\\TEST";
         String destinationFolder = "D:\\Dropbox\\DATASETS";
         ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
 
@@ -237,13 +237,13 @@ public class Tester {
     }
 
     private static void CreateDetectorPDF() {
-        String trainingsetCSVFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100).csv";
+        String trainingsetCSVFilePath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiersData\\Dataset_2016.02.17_17.38.31_Type(pdf)_Files(B225591_M34044)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_j_Top(100)-AL.csv";
         String trainingsetCSVFileType = "pdf";
-        String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\TESTS\\DATASET_2015.04.16_14.40.42_Files(B8928_M36307)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)_FeaturesList.ser";
+        String selectedFeaturesSerializedFilePath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiersData\\Dataset_2016.02.17_17.38.31_Type(pdf)_Files(B225591_M34044)_FE(PDF Structural Paths)_FS(Information Gain)_Rep(Binary)__SelectedFeaturesArrayList(2000).ser";
         AFeatureExtractor<String> featureExtractor = new FeatureExtractorPDFStructuralPaths(FeatureExtractorPDFStructuralPaths.ParserType.Sequential);
         AFeatureSelector featureSelector = new FeatureSelectorInfoGainRatio(FeatureSelectorInfoGainRatio.SelectionMethod.InformationGain);
         FeatureRepresentation featureRepresentation = FeatureRepresentation.Binary;
-        WekaClassifier wekaClassifier = WekaClassifier.J48;
+        WekaClassifier wekaClassifier = WekaClassifier.RandomForest;
         String description = "Detection of Malicious PDF files";
         double classificationTreshold = 0.5;
         String saveToDestinationPath = "D:\\Dropbox\\DATASETS\\WekaTrainedClassifiers";

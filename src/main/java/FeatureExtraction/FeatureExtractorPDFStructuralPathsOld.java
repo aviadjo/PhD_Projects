@@ -41,6 +41,11 @@ public class FeatureExtractorPDFStructuralPathsOld<T> extends AFeatureExtractor<
     }
 
     @Override
+    public String GetName() {
+        return "PDF Structural Paths";
+    }
+
+    @Override
     public Map ExtractFeaturesFrequencyFromSingleElement(T element) {
         Map<String, Integer> structuralPaths = new HashMap<>();
         HashSet<COSBase> visitedObjects = new HashSet<>();
@@ -52,7 +57,6 @@ public class FeatureExtractorPDFStructuralPathsOld<T> extends AFeatureExtractor<
                     try (PDDocument pdf = PDDocument.load(pdfFile)) {
                         COSDocument pdfDocument = pdf.getDocument();
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
-                        //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     } catch (Exception e) {
                         Console.PrintException(String.format("Error parsing PDF file: '%s'", filePath), e);
                     }
@@ -63,7 +67,6 @@ public class FeatureExtractorPDFStructuralPathsOld<T> extends AFeatureExtractor<
                     try (PDDocument pdf = PDDocument.loadNonSeq(pdfFile, randomAccess)) {
                         COSDocument pdfDocument = pdf.getDocument();
                         ExtractPDFStructuralPathsRecursively(pdfDocument.getTrailer().getCOSObject(), "Trailer", "", structuralPaths, visitedObjects);
-                        //ExtractPDFStructuralPathsQUEUE(pdfDocument.getTrailer().getCOSObject(), structuralPaths);
                     } catch (Exception e) {
                         Console.PrintException(String.format("Error parsing PDF file: '%s'", filePath), e);
                     } finally {
@@ -118,9 +121,7 @@ public class FeatureExtractorPDFStructuralPathsOld<T> extends AFeatureExtractor<
                     if (!visitedObjects.contains(objectEntry.getValue())) {
                         ExtractPDFStructuralPathsRecursively(objectEntry.getValue(), objectEntry.getKey().getName(), objectPath, structuralPaths, visitedObjects);
                     }
-                    /*if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {
-
-                     }*/
+                    /*if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {}*/
                 }
                 break;
             case "COSObject":
@@ -263,8 +264,4 @@ public class FeatureExtractorPDFStructuralPathsOld<T> extends AFeatureExtractor<
      }
      }
      }*/
-    @Override
-    public String GetName() {
-        return "PDF Structural Paths";
-    }
 }

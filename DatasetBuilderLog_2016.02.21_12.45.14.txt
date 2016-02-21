@@ -1,0 +1,10 @@
+File type: pdf
+Benign folder: D:\TEST
+Malicious folder: D:\TEST
+Benign elements: 26
+Malicious elements: 26
+Total elements: 52
+Feature Extraction: PDF Structural Paths
+Feature Selection: Information Gain
+Feature Representation: Binary
+Top features selection: 2,000
