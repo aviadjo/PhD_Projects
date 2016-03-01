@@ -55,13 +55,16 @@ public class Directories {
      * @return true if the directory was deleted
      */
     public static boolean DeleteDirectory(String directoryPath) {
+        boolean deleted = false;
         try {
-            FileUtils.deleteDirectory(new File(directoryPath));
-            return true;
+            if (Directories.IsDirectory(directoryPath)) {
+                FileUtils.deleteDirectory(new File(directoryPath));
+                deleted = true;
+            }
         } catch (IOException e) {
             Console.PrintException(String.format("Error deleting directory: %s", directoryPath), e);
-            return false;
         }
+        return deleted;
     }
 
     /**

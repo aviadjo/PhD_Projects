@@ -17,7 +17,7 @@ import java.io.PrintStream;
 public class Console {
 
     private static boolean m_outputToFile = true;
-    private static final String m_outputLogFileFormat = "DatasetBuilderLog_%s.txt";
+    private static final String m_outputLogFileFormat = "Logs\\DatasetBuilderLog_%s.txt";
     private static final String m_outputLogFilePath = GetOutputLogFilePath();
 
     /**
@@ -91,34 +91,6 @@ public class Console {
      * @param exception an exception object
      */
     public static void PrintException(String errorText, Exception exception) {
-        PrintExceptionSB(errorText, exception);
-    }
-
-    /**
-     * Print text to console
-     *
-     * @param errorText error message as text
-     * @param exception an exception object
-     */
-    public static void PrintExceptionRegularly(String errorText, Exception exception) {
-        System.err.println("");
-        System.err.println(String.format("Failure:   %s", errorText));
-        if (exception != null) {
-            System.err.println(String.format("Exception: %s:%s",
-                    exception.getClass().getSimpleName(),
-                    exception.getMessage()
-            ));
-        }
-        System.err.println("");
-    }
-
-    /**
-     * Print text to console
-     *
-     * @param errorText error message as text
-     * @param exception an exception object
-     */
-    public static void PrintExceptionSB(String errorText, Exception exception) {
         StringBuilder sb = new StringBuilder();
         sb.append(GetLineSeparator());
         sb.append(String.format("Failure:   %s", errorText));
@@ -148,7 +120,7 @@ public class Console {
         new Thread() {
             @Override
             public void run() {
-                PrintExceptionRegularly(errorText, exception);
+                PrintException(errorText, exception);
             }
         }.start();
     }

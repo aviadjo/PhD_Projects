@@ -41,10 +41,6 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         NonSequential
     }
 
-    /**
-     *
-     * @return the features extractor name
-     */
     @Override
     public String GetName() {
         return "PDF Structural Paths";
@@ -80,7 +76,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                     break;
             }
         } catch (IOException e) {
-            //AddPDFStructuralPath("General Parsing Error", structuralPaths); //Canceled
+            //AddPDFStructuralPath("General Parsing Error", structuralPaths);
             Console.PrintException(String.format("Error parsing PDF file: '%s'", filePath), e);
         }
         return structuralPaths;
@@ -134,7 +130,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
                             if (!visitedObjects.contains(objectEntry.getValue())) {
                                 ExtractPDFStructuralPathsRecursively(objectEntry.getValue(), objectEntry.getKey().getName(), objectPath, structuralPaths, visitedObjects, recursionIteration + 1);
                             }
-                            /*if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {}*/
+                            //if (!Arrays.asList("Parent", "P", "ParentTree", "StructTreeRoot").contains(objectEntry.getKey().getName())) {}
                         }
                         break;
                     case "COSObject":
@@ -175,14 +171,7 @@ public class FeatureExtractorPDFStructuralPaths<T> extends AFeatureExtractor<T> 
         }
     }
 
-    /**
-     * Return true if the PDF is compatible
-     *
-     * @param filePath pdf file path
-     * @return true if the PDF is compatible
-     */
-    public boolean IsCompatiblePDF(String filePath) {
-        File pdfFile = new File(filePath);
+    public boolean IsCompatiblePDF(File pdfFile) {
         try (PDDocument pdf = PDDocument.load(pdfFile)) {
             return true;
         } catch (Exception e) {

@@ -14,7 +14,6 @@ import FeatureRepresentation.FeatureRepresentor.FeatureRepresentation;
 import FeatureSelection.AFeatureSelector;
 import FeatureSelection.FeatureSelectorInfoGainRatio;
 import Framework.DBFramework;
-import static Framework.DBFramework.m_tops;
 import IO.Console;
 import IO.Directories;
 import IO.FileReader;
@@ -33,7 +32,7 @@ public class Tester {
 
     public static void main(String[] args) {
         //TestExtractPDFStructuralFeatures();
-        GeneratePDFDatasets();
+        //GeneratePDFDatasets();
         //GenerateTops();
         //boolean nnSFExtraction = false;
         //GenerateDocxDatasets1(nnSFExtraction);
@@ -309,9 +308,19 @@ public class Tester {
     }
 
     private static void GenerateTops() {
-        String dataCSVfilePath = "C:\\Users\\Aviadjo\\Desktop\\A\\Dataset_2015.08.09_12.10.35_Type(docx)_Files(B16108_M830)_FE(OOXML Structural Paths NN)_FS(Fisher Score)_Rep(TFIDF).csv";
+        String dataCSVfilePath = "C:\\Users\\aviadd\\Desktop\\PCA\\PCA_2000_v.csv";
         StringBuilder datasetCSV = new StringBuilder(FileReader.ReadFile(dataCSVfilePath));
-        DatasetCSVBuilder.GenerateTopDatasets(datasetCSV, m_tops, "C:\\Users\\Aviadjo\\Desktop\\A\\", "Dataset_2015.08.09_12.10.35_Type(docx)_Files(B16108_M830)_FE(OOXML Structural Paths NN)_FS(Fisher Score)_Rep(TFIDF)", false, true);
+        ArrayList<Integer> tops = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000));
+        String destinationDirectory = "C:\\Users\\aviadd\\Desktop\\PCA";
+        String distinationFileFormat = "Dataset_Type(docx)_Files(B16108_M830)_FE(OOXML Structural Paths NN)_FS(Information Gain)_Rep(Binary)_PCA";
+        DatasetCSVBuilder.GenerateTopDatasets(
+                datasetCSV,
+                tops,
+                destinationDirectory,
+                distinationFileFormat,
+                false,
+                true
+        );
     }
 
     private static void PDFCompatibilityCheck() {

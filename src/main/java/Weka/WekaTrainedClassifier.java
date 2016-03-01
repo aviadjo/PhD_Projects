@@ -20,7 +20,7 @@ import weka.core.Instances;
 public class WekaTrainedClassifier implements Serializable {
 
     private final String m_wekaTrainedClassifierNameFormat = "WekaTrainedClassifier(%s)_Type(%s)_Files(B%s_M%s)_FE(%s)_FS(%s)_Rep(%s)_Top(%s)";
-    private final long m_serialVersionUID = 1L;
+    private final long serialVersionUID = 1L;
     private final Classifier m_classifier;
     private final String m_classifierName;
     private final WekaDatasetProperties m_datasetProperties;
@@ -96,10 +96,12 @@ public class WekaTrainedClassifier implements Serializable {
      *
      * @return the classifier specification (string)
      */
-    public String GetClassifierSpecification() {
+    public String GetSpecification() {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\n");
         stringBuilder.append("Trained classifier specification").append("\n");
         stringBuilder.append("--------------------------------").append("\n");
+        stringBuilder.append(String.format("Description: %s", m_description)).append("\n");
         stringBuilder.append(String.format("Classifier: %s", m_classifierName)).append("\n");
         stringBuilder.append(String.format("Benign instances: %s", m_datasetProperties.GetBenignNum())).append("\n");
         stringBuilder.append(String.format("Malicious instances: %s", m_datasetProperties.GetMaliciousNum())).append("\n");
@@ -108,6 +110,7 @@ public class WekaTrainedClassifier implements Serializable {
         stringBuilder.append(String.format("Feature Selector: %s", m_datasetProperties.GetFeatureSelector().GetName())).append("\n");
         stringBuilder.append(String.format("Feature Representation: %s", m_datasetProperties.GetFeatureRepresentation().toString())).append("\n");
         stringBuilder.append(String.format("Top Feature Selection: %s", m_datasetProperties.GetTopFeatures())).append("\n");
+        stringBuilder.append("\n");
         return stringBuilder.toString();
     }
 
@@ -189,5 +192,4 @@ public class WekaTrainedClassifier implements Serializable {
             Console.PrintLine(String.format("folder: '%s' does not exist!", destinationFolder));
         }
     }
-
 }
